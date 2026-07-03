@@ -6,14 +6,23 @@ module.exports = {
     extend: {
       colors: {
         chatr: {
-          green: '#00A651',
-          'green-dark': '#008542',
-          yellow: '#FFD100',
-          'yellow-light': '#FFF3B0',
-          gray: '#F5F5F5',
-          'gray-dark': '#666666',
-          black: '#1A1A1A',
+          purple: '#5F3296',
+          'purple-dark': '#4B2882',
+          charcoal: '#2D263B',
+          'purple-light': '#7B4BB9',
+          accent: '#FFB81C',
+          lavender: '#F3F0FF',
+          'lavender-mid': '#E8E0F5',
+          muted: '#6B6280',
         },
+      },
+      borderRadius: {
+        card: '20px',
+        button: '10px',
+        pill: '9999px',
+      },
+      fontFamily: {
+        sans: ['Poppins_400Regular', 'system-ui', 'sans-serif'],
       },
     },
   },

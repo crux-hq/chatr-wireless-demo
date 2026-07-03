@@ -2,9 +2,11 @@ import { View, Text, Pressable } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useAppStore } from '@/lib/store';
 import i18n from '@/lib/i18n';
-import { colors, spacing } from '@/lib/theme/colors';
+import { ChatrLogo } from '@/components/ui/ChatrLogo';
+import { colors, spacing, radius } from '@/lib/theme/colors';
+import { fonts } from '@/lib/theme/typography';
 
-export function LanguageToggle() {
+export function LanguageToggle({ onDark = true }: { onDark?: boolean }) {
   const locale = useAppStore((s) => s.locale);
   const setLocale = useAppStore((s) => s.setLocale);
   const { t } = useTranslation();
@@ -19,13 +21,18 @@ export function LanguageToggle() {
     <Pressable
       onPress={toggle}
       style={{
-        paddingHorizontal: spacing.sm,
-        paddingVertical: 4,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: colors.green,
+        paddingHorizontal: spacing.sm + 2,
+        paddingVertical: 6,
+        borderRadius: radius.pill,
+        borderWidth: 1.5,
+        borderColor: onDark ? 'rgba(255,255,255,0.7)' : colors.primary,
       }}>
-      <Text style={{ color: colors.green, fontWeight: '600', fontSize: 13 }}>
+      <Text
+        style={{
+          color: onDark ? colors.white : colors.primary,
+          fontFamily: fonts.semiBold,
+          fontSize: 13,
+        }}>
         {locale === 'en' ? t('language.fr') : t('language.en')}
       </Text>
     </Pressable>
@@ -36,20 +43,31 @@ export function Header({ title, right }: { title?: string; right?: React.ReactNo
   return (
     <View
       style={{
-        backgroundColor: colors.green,
-        paddingHorizontal: spacing.md,
-        paddingVertical: spacing.md,
+        backgroundColor: colors.primary,
+        paddingHorizontal: spacing.lg,
+        paddingVertical: spacing.md + 4,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
       }}>
       <View>
-        <Text style={{ color: colors.white, fontWeight: '800', fontSize: 22 }}>chatr</Text>
-        {title ? <Text style={{ color: colors.white, opacity: 0.9, fontSize: 14 }}>{title}</Text> : null}
+        <ChatrLogo height={30} />
+        {title ? (
+          <Text
+            style={{
+              color: colors.white,
+              opacity: 0.92,
+              fontSize: 14,
+              marginTop: 6,
+              fontFamily: fonts.medium,
+            }}>
+            {title}
+          </Text>
+        ) : null}
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
         {right}
-        <LanguageToggle />
+        <LanguageToggle onDark />
       </View>
     </View>
   );
@@ -59,13 +77,42 @@ export function PromoBanner({ title, subtitle }: { title: string; subtitle: stri
   return (
     <View
       style={{
-        backgroundColor: colors.yellow,
-        padding: spacing.md,
-        borderRadius: 12,
-        marginBottom: spacing.md,
+        backgroundColor: colors.primaryDark,
+        padding: spacing.lg,
+        borderRadius: radius.lg,
+        marginBottom: spacing.lg,
       }}>
-      <Text style={{ fontWeight: '800', fontSize: 16, color: colors.black }}>{title}</Text>
-      <Text style={{ color: colors.black, marginTop: 4, opacity: 0.8 }}>{subtitle}</Text>
+      <Text
+        style={{
+          fontFamily: fonts.extraBold,
+          fontSize: 18,
+          color: colors.white,
+          lineHeight: 24,
+        }}>
+        {title}
+      </Text>
+      <Text
+        style={{
+          color: colors.white,
+          marginTop: spacing.sm,
+          opacity: 0.88,
+          fontFamily: fonts.regular,
+          fontSize: 14,
+          lineHeight: 20,
+        }}>
+        {subtitle}
+      </Text>
+      <View
+        style={{
+          marginTop: spacing.md,
+          alignSelf: 'flex-start',
+          backgroundColor: colors.accent,
+          paddingHorizontal: spacing.md,
+          paddingVertical: spacing.xs + 2,
+          borderRadius: radius.pill,
+        }}>
+        <Text style={{ fontFamily: fonts.bold, fontSize: 13, color: colors.textOnAccent }}>Auto-Pay bonus</Text>
+      </View>
     </View>
   );
 }
@@ -82,14 +129,19 @@ export function QuickLinkGrid({
           key={item.label}
           onPress={item.onPress}
           style={{
-            backgroundColor: colors.gray,
-            borderRadius: 12,
+            backgroundColor: colors.surfaceElevated,
+            borderRadius: radius.lg,
             padding: spacing.md,
             width: '47%',
-            minHeight: 72,
+            minHeight: 76,
             justifyContent: 'center',
+            shadowColor: colors.primaryCharcoal,
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.06,
+            shadowRadius: 8,
+            elevation: 2,
           }}>
-          <Text style={{ fontWeight: '700', color: colors.green, fontSize: 15 }}>{item.label}</Text>
+          <Text style={{ fontFamily: fonts.semiBold, color: colors.primary, fontSize: 15 }}>{item.label}</Text>
         </Pressable>
       ))}
     </View>

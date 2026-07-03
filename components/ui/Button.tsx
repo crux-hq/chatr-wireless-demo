@@ -1,5 +1,6 @@
 import { View, Text, Pressable, ActivityIndicator } from 'react-native';
 import { colors, radius, spacing } from '@/lib/theme/colors';
+import { fonts } from '@/lib/theme/typography';
 
 type ButtonProps = {
   title: string;
@@ -10,15 +11,21 @@ type ButtonProps = {
 };
 
 export function Button({ title, onPress, variant = 'primary', loading, disabled }: ButtonProps) {
-  const bg =
-    variant === 'primary'
-      ? colors.green
-      : variant === 'secondary'
-        ? colors.yellow
-        : 'transparent';
-  const textColor =
-    variant === 'secondary' ? colors.black : variant === 'outline' || variant === 'ghost' ? colors.green : colors.white;
-  const borderWidth = variant === 'outline' ? 2 : 0;
+  const isPrimary = variant === 'primary';
+  const isSecondary = variant === 'secondary';
+  const isOutline = variant === 'outline';
+  const isGhost = variant === 'ghost';
+
+  const bg = isPrimary ? colors.accent : isSecondary ? colors.primary : 'transparent';
+  const textColor = isPrimary
+    ? colors.textOnAccent
+    : isSecondary
+      ? colors.textOnPrimary
+      : isOutline || isGhost
+        ? colors.primary
+        : colors.textOnPrimary;
+  const borderWidth = isOutline || isGhost ? 2 : 0;
+  const borderColor = isGhost ? colors.white : colors.primary;
 
   return (
     <Pressable
@@ -27,8 +34,8 @@ export function Button({ title, onPress, variant = 'primary', loading, disabled 
       style={{
         backgroundColor: bg,
         borderWidth,
-        borderColor: colors.green,
-        borderRadius: radius.md,
+        borderColor,
+        borderRadius: radius.pill,
         paddingVertical: spacing.md,
         paddingHorizontal: spacing.lg,
         alignItems: 'center',
@@ -37,7 +44,7 @@ export function Button({ title, onPress, variant = 'primary', loading, disabled 
       {loading ? (
         <ActivityIndicator color={textColor} />
       ) : (
-        <Text style={{ color: textColor, fontWeight: '700', fontSize: 16 }}>{title}</Text>
+        <Text style={{ color: textColor, fontFamily: fonts.bold, fontSize: 16 }}>{title}</Text>
       )}
     </Pressable>
   );
@@ -47,13 +54,13 @@ export function Card({ children, style }: { children: React.ReactNode; style?: o
   return (
     <View
       style={{
-        backgroundColor: colors.white,
+        backgroundColor: colors.surfaceElevated,
         borderRadius: radius.lg,
-        padding: spacing.md,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        padding: spacing.lg,
+        shadowColor: colors.primaryCharcoal,
+        shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.08,
-        shadowRadius: 8,
+        shadowRadius: 12,
         elevation: 3,
         ...style,
       }}>
@@ -62,24 +69,30 @@ export function Card({ children, style }: { children: React.ReactNode; style?: o
   );
 }
 
-export function Badge({ label, color = colors.green }: { label: string; color?: string }) {
+export function Badge({ label, color = colors.primary }: { label: string; color?: string }) {
   return (
     <View
       style={{
         backgroundColor: color + '22',
-        paddingHorizontal: 10,
-        paddingVertical: 4,
-        borderRadius: radius.full,
+        paddingHorizontal: 12,
+        paddingVertical: 5,
+        borderRadius: radius.pill,
         alignSelf: 'flex-start',
       }}>
-      <Text style={{ color, fontWeight: '600', fontSize: 12 }}>{label}</Text>
+      <Text style={{ color, fontFamily: fonts.semiBold, fontSize: 12 }}>{label}</Text>
     </View>
   );
 }
 
 export function SectionTitle({ children }: { children: string }) {
   return (
-    <Text style={{ fontSize: 18, fontWeight: '700', color: colors.black, marginBottom: spacing.sm }}>
+    <Text
+      style={{
+        fontFamily: fonts.bold,
+        fontSize: 18,
+        color: colors.text,
+        marginBottom: spacing.sm,
+      }}>
       {children}
     </Text>
   );

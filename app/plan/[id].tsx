@@ -31,7 +31,7 @@ export default function PlanDetailScreen() {
     <>
       <Stack.Screen options={{ title: locale === 'fr' ? plan.nameFr : plan.nameEn, headerShown: true }} />
       <ScrollView style={{ flex: 1, backgroundColor: colors.gray }} contentContainerStyle={{ padding: spacing.md }}>
-        {plan.featured ? <Badge label="35 GB for $29" color={colors.yellow} /> : null}
+        {plan.featured ? <Badge label="35 GB for $29" color={colors.accent} /> : null}
         <Text style={{ fontSize: 36, fontWeight: '800', marginTop: spacing.md }}>
           {plan.baseDataGb > 0 ? `${totalGb} GB` : locale === 'fr' ? plan.nameFr : plan.nameEn}
         </Text>

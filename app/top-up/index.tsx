@@ -6,6 +6,7 @@ import { Button, Card } from '@/components/ui/Button';
 import { useAppStore } from '@/lib/store';
 import { formatCurrency } from '@/lib/i18n';
 import { colors, spacing } from '@/lib/theme/colors';
+import { fonts } from '@/lib/theme/typography';
 
 const AMOUNTS = [15, 19, 25, 29, 45];
 
@@ -27,12 +28,12 @@ export default function TopUpScreen() {
   return (
     <>
       <Stack.Screen options={{ title: t('topUp.title'), headerShown: true }} />
-      <ScrollView style={{ flex: 1, backgroundColor: colors.gray }} contentContainerStyle={{ padding: spacing.md }}>
+      <ScrollView style={{ flex: 1, backgroundColor: colors.surface }} contentContainerStyle={{ padding: spacing.md }}>
         <Pressable onPress={() => router.push('/top-up/auto-pay')}>
-          <Card style={{ marginBottom: spacing.md, backgroundColor: colors.yellowLight }}>
-            <Text style={{ fontWeight: '700' }}>{t('topUp.autoPay')}</Text>
-            <Text style={{ color: colors.grayDark, marginTop: 4 }}>{t('topUp.autoPayDesc')}</Text>
-            <Text style={{ color: colors.green, fontWeight: '700', marginTop: 8 }}>
+          <Card style={{ marginBottom: spacing.md, backgroundColor: colors.lavenderMid }}>
+            <Text style={{ fontFamily: fonts.bold }}>{t('topUp.autoPay')}</Text>
+            <Text style={{ color: colors.textMuted, marginTop: 4, fontFamily: fonts.regular }}>{t('topUp.autoPayDesc')}</Text>
+            <Text style={{ color: colors.primary, fontFamily: fonts.bold, marginTop: 8 }}>
               {user?.autoPayEnabled ? t('topUp.autoPayActive') : t('topUp.enrollAutoPay')} →
             </Text>
           </Card>
@@ -49,7 +50,7 @@ export default function TopUpScreen() {
               style={{
                 padding: spacing.md,
                 borderRadius: 12,
-                backgroundColor: selected === amt ? colors.green : colors.white,
+                backgroundColor: selected === amt ? colors.primary : colors.surfaceElevated,
                 minWidth: 80,
                 alignItems: 'center',
               }}>

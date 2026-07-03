@@ -2,6 +2,7 @@ import { Tabs } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Home, BarChart3, Smartphone, Puzzle, Menu } from 'lucide-react-native';
 import { colors } from '@/lib/theme/colors';
+import { fonts } from '@/lib/theme/typography';
 
 export default function TabLayout() {
   const { t } = useTranslation();
@@ -10,9 +11,15 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.green,
-        tabBarInactiveTintColor: colors.grayDark,
-        tabBarStyle: { borderTopColor: colors.grayMid },
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textMuted,
+        tabBarLabelStyle: { fontFamily: fonts.medium, fontSize: 11 },
+        tabBarStyle: {
+          backgroundColor: colors.white,
+          borderTopColor: colors.grayMid,
+          paddingTop: 4,
+          height: 60,
+        },
       }}>
       <Tabs.Screen
         name="index"

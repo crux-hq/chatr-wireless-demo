@@ -1,6 +1,7 @@
 import Svg, { Circle, G } from 'react-native-svg';
 import { View, Text } from 'react-native';
 import { colors } from '@/lib/theme/colors';
+import { fonts } from '@/lib/theme/typography';
 
 type ProgressRingProps = {
   percent: number;
@@ -18,14 +19,14 @@ export function ProgressRing({
   strokeWidth = 10,
   label,
   sublabel,
-  color = colors.green,
+  color = colors.primary,
   alert,
 }: ProgressRingProps) {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const clamped = Math.min(100, Math.max(0, percent));
   const strokeDashoffset = circumference - (clamped / 100) * circumference;
-  const ringColor = alert && clamped >= 75 ? (clamped >= 90 ? colors.red : colors.orange) : color;
+  const ringColor = alert && clamped >= 75 ? (clamped >= 90 ? colors.red : colors.warning) : color;
 
   return (
     <View style={{ alignItems: 'center' }}>
@@ -53,10 +54,12 @@ export function ProgressRing({
             />
           </G>
         </Svg>
-        <Text style={{ fontSize: 20, fontWeight: '800', color: colors.black }}>{clamped}%</Text>
+        <Text style={{ fontFamily: fonts.extraBold, fontSize: 20, color: colors.text }}>{clamped}%</Text>
       </View>
-      <Text style={{ fontWeight: '700', marginTop: 8, color: colors.black }}>{label}</Text>
-      {sublabel ? <Text style={{ color: colors.grayDark, fontSize: 12 }}>{sublabel}</Text> : null}
+      <Text style={{ fontFamily: fonts.bold, marginTop: 8, color: colors.text }}>{label}</Text>
+      {sublabel ? (
+        <Text style={{ color: colors.textMuted, fontSize: 12, fontFamily: fonts.regular }}>{sublabel}</Text>
+      ) : null}
     </View>
   );
 }

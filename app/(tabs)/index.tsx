@@ -32,14 +32,7 @@ export default function DashboardScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.gray }}>
-      <Header
-        title={t('dashboard.greeting', { name: user.firstName })}
-        right={
-          <Pressable onLongPress={() => router.push('/demo')}>
-            <Text style={{ color: colors.white, fontWeight: '800', fontSize: 18 }}>●</Text>
-          </Pressable>
-        }
-      />
+      <Header title={t('dashboard.greeting', { name: user.firstName })} />
       <ScrollView contentContainerStyle={{ padding: spacing.md }}>
         <PromoBanner title={t('plans.featuredDeal')} subtitle={t('common.noContract')} />
 

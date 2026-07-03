@@ -39,7 +39,7 @@ export default function ProfileScreen() {
           </Pressable>
         ))}
 
-        <Card style={{ marginTop: spacing.md, backgroundColor: colors.yellowLight }}>
+        <Card style={{ marginTop: spacing.md, backgroundColor: colors.lavenderMid }}>
           <Text style={{ fontWeight: '600' }}>{t('profile.inStoreOnly')}</Text>
           <Text style={{ color: colors.grayDark, marginTop: 4 }}>{t('profile.birthdate')}</Text>
           <Text style={{ color: colors.grayDark, marginTop: 4 }}>{t('profile.authorizedContact')}</Text>

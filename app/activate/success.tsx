@@ -8,7 +8,7 @@ export default function ActivateSuccessScreen() {
   const { t } = useTranslation();
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.green, justifyContent: 'center', alignItems: 'center', padding: spacing.xl }}>
+    <View style={{ flex: 1, backgroundColor: colors.primary, justifyContent: 'center', alignItems: 'center', padding: spacing.xl }}>
       <Text style={{ fontSize: 64, color: colors.white }}>✓</Text>
       <Text style={{ fontSize: 28, fontWeight: '800', color: colors.white, marginTop: spacing.md, textAlign: 'center' }}>
         {t('activate.success')}

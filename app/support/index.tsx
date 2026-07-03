@@ -39,7 +39,7 @@ export default function SupportScreen() {
       <ScrollView style={{ flex: 1, backgroundColor: colors.gray }} contentContainerStyle={{ padding: spacing.md }}>
         <Text style={{ fontWeight: '800', fontSize: 18, marginBottom: spacing.md }}>{t('support.contact')}</Text>
         <View style={{ flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.lg }}>
-          <Pressable style={{ flex: 1, backgroundColor: colors.green, padding: spacing.md, borderRadius: 12, alignItems: 'center' }}>
+          <Pressable style={{ flex: 1, backgroundColor: colors.accent, padding: spacing.md, borderRadius: 16, alignItems: 'center' }}>
             <MessageCircle color={colors.white} size={24} />
             <Text style={{ color: colors.white, fontWeight: '600', marginTop: 4 }}>{t('support.chat')}</Text>
           </Pressable>

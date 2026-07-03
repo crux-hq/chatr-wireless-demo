@@ -1,7 +1,7 @@
 import { ScrollView, View, Text, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { ChevronRight, MapPin, Globe, HelpCircle, User, Smartphone, FlaskConical } from 'lucide-react-native';
+import { ChevronRight, MapPin, Globe, HelpCircle, User, Smartphone } from 'lucide-react-native';
 import { Header } from '@/components/layout/Header';
 import { Card } from '@/components/ui/Button';
 import { useAppStore } from '@/lib/store';
@@ -35,12 +35,11 @@ export default function MoreScreen() {
   const locale = useAppStore((s) => s.locale);
 
   const items = [
-    { icon: <User color={colors.green} size={22} />, label: t('more.profile'), route: '/profile' },
-    { icon: <HelpCircle color={colors.green} size={22} />, label: t('more.support'), route: '/support' },
-    { icon: <Globe color={colors.green} size={22} />, label: t('more.coverage'), route: '/coverage' },
-    { icon: <MapPin color={colors.green} size={22} />, label: t('more.stores'), route: '/stores' },
-    { icon: <Smartphone color={colors.green} size={22} />, label: t('more.activate'), route: '/activate' },
-    { icon: <FlaskConical color={colors.green} size={22} />, label: t('more.demoMode'), route: '/demo' },
+    { icon: <User color={colors.primary} size={22} />, label: t('more.profile'), route: '/profile' },
+    { icon: <HelpCircle color={colors.primary} size={22} />, label: t('more.support'), route: '/support' },
+    { icon: <Globe color={colors.primary} size={22} />, label: t('more.coverage'), route: '/coverage' },
+    { icon: <MapPin color={colors.primary} size={22} />, label: t('more.stores'), route: '/stores' },
+    { icon: <Smartphone color={colors.primary} size={22} />, label: t('more.activate'), route: '/activate' },
   ];
 
   return (
