@@ -37,7 +37,7 @@ export default function AddOnsScreen() {
                         <Text style={{ fontWeight: '700', fontSize: 16 }}>
                           {locale === 'fr' ? addOn.nameFr : addOn.nameEn}
                         </Text>
-                        <Text style={{ color: colors.grayDark, marginTop: 4, fontSize: 13 }}>
+                        <Text style={{ color: colors.grayDark, marginTop: 4, fontSize: 16 }}>
                           {locale === 'fr' ? addOn.descriptionFr : addOn.descriptionEn}
                         </Text>
                         {addOn.dataGb ? (

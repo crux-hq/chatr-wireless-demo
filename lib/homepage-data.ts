@@ -1,3 +1,5 @@
+export const HERO_BADGE = "Canada's #1 Prepaid Mobile Phone Provider";
+
 export const HERO_SLIDES = [
   {
     id: '50gb',
@@ -77,7 +79,7 @@ export const TESTIMONIALS = [
     quote:
       'I am very happy with the Chatr product. It\'s easy to use and the customer service is very helpful.',
     name: 'John Doe',
-    role: 'Customer',
+    role: 'Student',
     avatar: require('@/assets/images/homepage/testimonial-avatar.png'),
     rating: 5,
   },

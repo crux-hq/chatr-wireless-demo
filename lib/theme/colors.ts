@@ -1,13 +1,14 @@
 /** Chatr brand palette — aligned with chatrwireless.com marketing reference */
 export const colors = {
-  primary: '#5F3296',
-  primaryDark: '#4B2882',
+  primary: '#542E91',
+  primaryDark: '#432474',
   primaryCharcoal: '#2D263B',
-  primaryLight: '#7B4BB9',
+  primaryLight: '#6E46B0',
   accent: '#FFB81C',
   accentDark: '#E5A400',
   accentMuted: '#FFF4D6',
   lavender: '#F3F0FF',
+  lavenderLight: '#F3EBFF',
   lavenderMid: '#E8E0F5',
   surface: '#F3F0FF',
   surfaceElevated: '#FFFFFF',
@@ -23,9 +24,9 @@ export const colors = {
   red: '#E53935',
   warning: '#FF9800',
   /** @deprecated Use colors.primary */
-  green: '#5F3296',
+  green: '#542E91',
   /** @deprecated Use colors.primaryDark */
-  greenDark: '#4B2882',
+  greenDark: '#432474',
   /** @deprecated Use colors.accent */
   yellow: '#FFB81C',
   /** @deprecated Use colors.accentMuted */
@@ -43,10 +44,16 @@ export const spacing = {
   xxl: 48,
 };
 
+export const sizes = {
+  buttonHeight: 55,
+  buttonHeightCompact: 48,
+};
+
 export const radius = {
   sm: 10,
   md: 12,
   lg: 20,
+  button: 16,
   pill: 9999,
   full: 9999,
 };

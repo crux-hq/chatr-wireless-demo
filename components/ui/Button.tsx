@@ -1,16 +1,34 @@
-import { View, Text, Pressable, ActivityIndicator } from 'react-native';
-import { colors, radius, spacing } from '@/lib/theme/colors';
-import { fonts } from '@/lib/theme/typography';
+import { View, Text, Pressable, ActivityIndicator, StyleProp, ViewStyle } from 'react-native';
+import { ChevronRight } from 'lucide-react-native';
+import { colors, radius, spacing, sizes } from '@/lib/theme/colors';
+import { fonts, typography } from '@/lib/theme/typography';
+
+const getButtonLayout = (size: 'default' | 'compact' = 'default'): ViewStyle => ({
+  height: size === 'compact' ? sizes.buttonHeightCompact : sizes.buttonHeight,
+  paddingHorizontal: spacing.lg,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: radius.button,
+  boxSizing: 'border-box',
+});
 
 type ButtonProps = {
   title: string;
   onPress: () => void;
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  size?: 'default' | 'compact';
   loading?: boolean;
   disabled?: boolean;
 };
 
-export function Button({ title, onPress, variant = 'primary', loading, disabled }: ButtonProps) {
+export function Button({
+  title,
+  onPress,
+  variant = 'primary',
+  size = 'default',
+  loading,
+  disabled,
+}: ButtonProps) {
   const isPrimary = variant === 'primary';
   const isSecondary = variant === 'secondary';
   const isOutline = variant === 'outline';
@@ -22,29 +40,74 @@ export function Button({ title, onPress, variant = 'primary', loading, disabled 
     : isSecondary
       ? colors.textOnPrimary
       : isOutline || isGhost
-        ? colors.primary
+        ? colors.accent
         : colors.textOnPrimary;
   const borderWidth = isOutline || isGhost ? 2 : 0;
-  const borderColor = isGhost ? colors.white : colors.primary;
+  const borderColor = isOutline || isGhost ? colors.accent : colors.primary;
 
   return (
     <Pressable
       onPress={onPress}
       disabled={disabled || loading}
       style={{
+        ...getButtonLayout(size),
         backgroundColor: bg,
         borderWidth,
         borderColor,
-        borderRadius: radius.pill,
-        paddingVertical: spacing.md,
-        paddingHorizontal: spacing.lg,
-        alignItems: 'center',
         opacity: disabled || loading ? 0.6 : 1,
       }}>
       {loading ? (
         <ActivityIndicator color={textColor} />
       ) : (
-        <Text style={{ color: textColor, fontFamily: fonts.bold, fontSize: 16 }}>{title}</Text>
+        <Text style={{ ...typography.button, color: textColor }}>{title}</Text>
+      )}
+    </Pressable>
+  );
+}
+
+type CtaButtonProps = {
+  title: string;
+  onPress: () => void;
+  variant?: 'primary' | 'outline';
+  size?: 'default' | 'compact';
+  loading?: boolean;
+  style?: StyleProp<ViewStyle>;
+};
+
+export function CtaButton({
+  title,
+  onPress,
+  variant = 'primary',
+  size = 'default',
+  loading,
+  style,
+}: CtaButtonProps) {
+  const isPrimary = variant === 'primary';
+  const accentColor = isPrimary ? colors.textOnAccent : colors.accent;
+
+  return (
+    <Pressable
+      onPress={onPress}
+      disabled={loading}
+      style={[
+        {
+          ...getButtonLayout(size),
+          backgroundColor: isPrimary ? colors.accent : 'transparent',
+          borderWidth: isPrimary ? 0 : 2,
+          borderColor: colors.accent,
+          flexDirection: 'row',
+          gap: 4,
+          opacity: loading ? 0.7 : 1,
+        },
+        style,
+      ]}>
+      {loading ? (
+        <ActivityIndicator color={accentColor} />
+      ) : (
+        <>
+          <Text style={{ ...typography.button, color: accentColor }}>{title}</Text>
+          <ChevronRight size={16} color={accentColor} />
+        </>
       )}
     </Pressable>
   );
@@ -88,12 +151,21 @@ export function SectionTitle({ children }: { children: string }) {
   return (
     <Text
       style={{
-        fontFamily: fonts.bold,
+        fontFamily: fonts.semiBold,
         fontSize: 18,
         color: colors.text,
-        marginBottom: spacing.sm,
+        marginBottom: spacing.md,
       }}>
       {children}
     </Text>
+  );
+}
+
+export function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <View style={{ marginBottom: spacing.lg }}>
+      <SectionTitle>{title}</SectionTitle>
+      {children}
+    </View>
   );
 }

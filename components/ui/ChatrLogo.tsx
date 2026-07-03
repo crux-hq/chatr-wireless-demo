@@ -1,41 +1,47 @@
-import { View, Text } from 'react-native';
+import { View, Pressable } from 'react-native';
+import { useRouter, useSegments } from 'expo-router';
+import ChattrLogoSvg from '@/assets/images/chattr-logo.svg';
 import { colors } from '@/lib/theme/colors';
-import { fonts } from '@/lib/theme/typography';
 
 type ChatrLogoProps = {
-  height?: number;
-  /** Use light (white) wordmark for purple/dark backgrounds */
+  width?: number;
   variant?: 'light' | 'dark';
 };
 
-export function ChatrLogo({ height = 30, variant = 'light' }: ChatrLogoProps) {
-  const scale = height / 36;
-  const wordmarkColor = variant === 'light' ? colors.white : colors.primary;
+const LOGO_ASPECT = 107 / 50;
+
+function isPublicPage(segments: string[]) {
+  const root = segments[0];
+  return root === 'home' || root === '(auth)' || root === 'activate' || root === 'demo';
+}
+
+export function ChatrLogo({ width = 94 }: ChatrLogoProps) {
+  const height = width / LOGO_ASPECT;
 
   return (
-    <View style={{ height, justifyContent: 'center' }} accessibilityLabel="chatr">
-      <Text
-        style={{
-          fontFamily: fonts.extraBold,
-          fontSize: 22 * scale,
-          lineHeight: 24 * scale,
-          color: wordmarkColor,
-          letterSpacing: -0.5,
-          textTransform: 'lowercase',
-        }}>
-        chatr
-      </Text>
-      <Text
-        style={{
-          fontFamily: fonts.bold,
-          fontSize: 7.5 * scale,
-          lineHeight: 9 * scale,
-          color: colors.accent,
-          letterSpacing: 1.8,
-          marginTop: -1 * scale,
-        }}>
-        MOBILE
-      </Text>
+    <View style={{ width, height, justifyContent: 'center' }} accessibilityLabel="chatr">
+      <ChattrLogoSvg width={width} height={height} color={colors.primary} />
     </View>
+  );
+}
+
+export function ChatrLogoLink({ onNavigate, ...props }: ChatrLogoProps & { onNavigate?: () => void }) {
+  const router = useRouter();
+  const segments = useSegments();
+
+  if (!isPublicPage(segments)) {
+    return <ChatrLogo {...props} />;
+  }
+
+  return (
+    <Pressable
+      onPress={() => {
+        onNavigate?.();
+        router.replace('/home');
+      }}
+      accessibilityRole="link"
+      accessibilityLabel="Go to homepage">
+      <ChatrLogo {...props} />
+    </Pressable>
   );
 }

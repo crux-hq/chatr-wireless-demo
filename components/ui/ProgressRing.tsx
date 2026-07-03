@@ -54,11 +54,11 @@ export function ProgressRing({
             />
           </G>
         </Svg>
-        <Text style={{ fontFamily: fonts.extraBold, fontSize: 20, color: colors.text }}>{clamped}%</Text>
+        <Text style={{ fontFamily: fonts.bold, fontSize: 20, color: colors.text }}>{clamped}%</Text>
       </View>
       <Text style={{ fontFamily: fonts.bold, marginTop: 8, color: colors.text }}>{label}</Text>
       {sublabel ? (
-        <Text style={{ color: colors.textMuted, fontSize: 12, fontFamily: fonts.regular }}>{sublabel}</Text>
+        <Text style={{ color: colors.textMuted, fontSize: 16, fontFamily: fonts.regular }}>{sublabel}</Text>
       ) : null}
     </View>
   );

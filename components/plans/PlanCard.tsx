@@ -45,7 +45,7 @@ export function PlanCard({ plan, isCurrent, onSelect }: PlanCardProps) {
       ) : null}
       <Text
         style={{
-          fontFamily: fonts.extraBold,
+          fontFamily: fonts.bold,
           fontSize: 32,
           color: colors.text,
           marginTop: 8,
@@ -53,13 +53,13 @@ export function PlanCard({ plan, isCurrent, onSelect }: PlanCardProps) {
         {plan.baseDataGb > 0 ? `${totalGb} GB` : name}
       </Text>
       {plan.baseDataGb > 0 ? (
-        <Text style={{ color: colors.textMuted, fontSize: 13, marginTop: 4, fontFamily: fonts.regular }}>
+        <Text style={{ color: colors.textMuted, fontSize: 16, marginTop: 4, fontFamily: fonts.regular }}>
           {plan.baseDataGb} GB base + {plan.autoPayBonusGb} GB Auto-Pay
         </Text>
       ) : null}
-      <Text style={{ fontFamily: fonts.extraBold, fontSize: 26, color: colors.primary, marginTop: spacing.sm }}>
+      <Text style={{ fontFamily: fonts.bold, fontSize: 26, color: colors.primary, marginTop: spacing.sm }}>
         {formatCurrency(plan.price, locale)}
-        <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.textMuted }}>/mo</Text>
+        <Text style={{ fontSize: 16, fontFamily: fonts.regular, color: colors.textMuted }}>/mo</Text>
       </Text>
       <Text style={{ color: colors.text, marginTop: spacing.sm, fontFamily: fonts.regular }}>{talk}</Text>
       <Text style={{ color: colors.text, marginTop: 4, fontFamily: fonts.regular }}>{text}</Text>

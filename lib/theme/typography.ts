@@ -1,29 +1,40 @@
+export const fontAssets = {
+  SantralRegular: require('@/assets/fonts/Santral-Regular.woff2'),
+  SantralMedium: require('@/assets/fonts/Santral-Medium.woff2'),
+  SantralSemiBold: require('@/assets/fonts/Santral-SemiBold.woff2'),
+  SantralBold: require('@/assets/fonts/Santral-Bold.woff2'),
+  SantralExtraBold: require('@/assets/fonts/Santral-ExtraBold.woff2'),
+};
+
 export const fonts = {
-  regular: 'Poppins_400Regular',
-  medium: 'Poppins_500Medium',
-  semiBold: 'Poppins_600SemiBold',
-  bold: 'Poppins_700Bold',
-  extraBold: 'Poppins_800ExtraBold',
+  regular: 'SantralRegular',
+  medium: 'SantralMedium',
+  semiBold: 'SantralSemiBold',
+  bold: 'SantralBold',
+  extraBold: 'SantralExtraBold',
 };
 
 export const typography = {
   hero: {
-    fontFamily: fonts.extraBold,
-    fontSize: 28,
-    lineHeight: 34,
+    fontFamily: fonts.bold,
+    fontSize: 32,
+    lineHeight: 40,
     color: '#2D263B',
+    marginBottom: 16,
   },
   h1: {
     fontFamily: fonts.bold,
     fontSize: 24,
     lineHeight: 30,
     color: '#2D263B',
+    marginBottom: 16,
   },
   h2: {
-    fontFamily: fonts.bold,
+    fontFamily: fonts.semiBold,
     fontSize: 18,
     lineHeight: 24,
     color: '#2D263B',
+    marginBottom: 12,
   },
   body: {
     fontFamily: fonts.regular,
@@ -33,8 +44,8 @@ export const typography = {
   },
   bodySmall: {
     fontFamily: fonts.regular,
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 16,
+    lineHeight: 24,
     color: '#6B6280',
   },
   label: {
@@ -44,18 +55,18 @@ export const typography = {
     color: '#2D263B',
   },
   button: {
-    fontFamily: fonts.bold,
+    fontFamily: fonts.medium,
     fontSize: 16,
-    lineHeight: 20,
+    lineHeight: 24,
   },
   price: {
-    fontFamily: fonts.extraBold,
+    fontFamily: fonts.bold,
     fontSize: 28,
     lineHeight: 32,
-    color: '#5F3296',
+    color: '#542E91',
   },
   priceAccent: {
-    fontFamily: fonts.extraBold,
+    fontFamily: fonts.bold,
     fontSize: 28,
     lineHeight: 32,
     color: '#FFB81C',

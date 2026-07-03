@@ -84,10 +84,10 @@ export function JourneyFab() {
                 borderBottomWidth: 1,
                 borderBottomColor: colors.grayMid,
               }}>
-              <Text style={{ fontFamily: fonts.extraBold, fontSize: 20, color: colors.text }}>
+              <Text style={{ fontFamily: fonts.bold, fontSize: 20, color: colors.text }}>
                 Demo journeys
               </Text>
-              <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: colors.textMuted, marginTop: 4 }}>
+              <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.textMuted, marginTop: 4 }}>
                 Tap a journey to sign in and go there instantly.
               </Text>
             </View>
@@ -118,10 +118,10 @@ export function JourneyFab() {
                     <Text
                       style={{
                         fontFamily: fonts.regular,
-                        fontSize: 13,
+                        fontSize: 16,
                         color: colors.textMuted,
                         marginTop: 4,
-                        lineHeight: 18,
+                        lineHeight: 24,
                       }}>
                       {journey.description}
                     </Text>

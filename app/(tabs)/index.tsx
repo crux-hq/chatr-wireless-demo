@@ -2,7 +2,7 @@ import { ScrollView, View, Text, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Header, PromoBanner, QuickLinkGrid } from '@/components/layout/Header';
-import { Card, Badge, SectionTitle } from '@/components/ui/Button';
+import { Card, Badge, Section, SectionTitle } from '@/components/ui/Button';
 import { ProgressRing } from '@/components/ui/ProgressRing';
 import { useAppStore, useDataUsagePercent } from '@/lib/store';
 import { getPlanById } from '@/lib/mock/plans';
@@ -51,7 +51,7 @@ export default function DashboardScreen() {
               <Text style={{ fontSize: 28, fontWeight: '800', color: colors.black }}>
                 {formatCurrency(user.balance, locale)}
               </Text>
-              <Text style={{ color: colors.grayDark, marginTop: 4, fontSize: 13 }}>
+              <Text style={{ color: colors.grayDark, marginTop: 4, fontSize: 16 }}>
                 {t('dashboard.anniversary')}: {formatDate(user.anniversaryDate, locale)}
               </Text>
             </View>
@@ -89,7 +89,7 @@ export default function DashboardScreen() {
               return (
                 <View key={a.addOnId} style={{ marginBottom: 8 }}>
                   <Text style={{ fontWeight: '600' }}>{locale === 'fr' ? addOn.nameFr : addOn.nameEn}</Text>
-                  <Text style={{ color: colors.grayDark, fontSize: 12 }}>
+                  <Text style={{ color: colors.grayDark, fontSize: 16 }}>
                     {t('addons.activeUntil', { date: formatDate(a.expiresAt, locale) })}
                   </Text>
                 </View>
@@ -98,23 +98,25 @@ export default function DashboardScreen() {
           </Card>
         ) : null}
 
-        <SectionTitle>{t('dashboard.quickLinks')}</SectionTitle>
-        <QuickLinkGrid items={quickLinks} />
+        <Section title={t('dashboard.quickLinks')}>
+          <QuickLinkGrid items={quickLinks} />
+        </Section>
 
-        <SectionTitle>{t('dashboard.promos')}</SectionTitle>
-        {PROMOS.map((promo) => (
-          <Pressable key={promo.id} onPress={() => router.push(promo.route as '/support')}>
-            <Card style={{ marginBottom: spacing.sm }}>
-              <Text style={{ fontWeight: '700' }}>{locale === 'fr' ? promo.titleFr : promo.titleEn}</Text>
-              <Text style={{ color: colors.grayDark, marginTop: 4 }}>
-                {locale === 'fr' ? promo.subtitleFr : promo.subtitleEn}
-              </Text>
-              <Text style={{ color: colors.green, fontWeight: '700', marginTop: 8 }}>
-                {locale === 'fr' ? promo.ctaFr : promo.ctaEn} →
-              </Text>
-            </Card>
-          </Pressable>
-        ))}
+        <Section title={t('dashboard.promos')}>
+          {PROMOS.map((promo) => (
+            <Pressable key={promo.id} onPress={() => router.push(promo.route as '/support')}>
+              <Card style={{ marginBottom: spacing.sm }}>
+                <Text style={{ fontWeight: '700' }}>{locale === 'fr' ? promo.titleFr : promo.titleEn}</Text>
+                <Text style={{ color: colors.grayDark, marginTop: 4 }}>
+                  {locale === 'fr' ? promo.subtitleFr : promo.subtitleEn}
+                </Text>
+                <Text style={{ color: colors.green, fontWeight: '700', marginTop: 8 }}>
+                  {locale === 'fr' ? promo.ctaFr : promo.ctaEn} →
+                </Text>
+              </Card>
+            </Pressable>
+          ))}
+        </Section>
       </ScrollView>
     </View>
   );

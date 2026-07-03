@@ -1,5 +1,4 @@
 import { View, Text, Pressable } from 'react-native';
-import { ChatrLogo } from '@/components/ui/ChatrLogo';
 import { FOOTER_LINKS } from '@/lib/homepage-data';
 import { colors, spacing } from '@/lib/theme/colors';
 import { fonts } from '@/lib/theme/typography';
@@ -24,7 +23,7 @@ function FooterColumn({
       </Text>
       {links.map((link) => (
         <Pressable key={link.label} onPress={() => onLaunch(link.journeyId)} style={{ paddingVertical: 4 }}>
-          <Text style={{ fontFamily: fonts.regular, fontSize: 13, color: colors.lavenderMid }}>{link.label}</Text>
+          <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.lavenderMid }}>{link.label}</Text>
         </Pressable>
       ))}
     </View>
@@ -41,8 +40,7 @@ export function HomeFooter({ onLaunchJourney }: HomeFooterProps) {
         <FooterColumn title="About" links={FOOTER_LINKS.about} onLaunch={onLaunchJourney} />
       </View>
       <View style={{ marginTop: spacing.lg, paddingTop: spacing.lg, borderTopWidth: 1, borderTopColor: colors.primaryLight }}>
-        <ChatrLogo height={28} />
-        <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.lavenderMid, marginTop: spacing.sm }}>
+        <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.lavenderMid }}>
           © {new Date().getFullYear()} chatr mobile. Demo app — mock data only.
         </Text>
       </View>

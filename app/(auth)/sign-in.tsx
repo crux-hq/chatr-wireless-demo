@@ -27,8 +27,8 @@ export default function SignInScreen() {
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: colors.surface }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <Header />
       <ScrollView contentContainerStyle={{ padding: spacing.lg }}>
-        <Text style={{ fontFamily: fonts.extraBold, fontSize: 28, color: colors.text }}>{t('auth.welcome')}</Text>
-        <Text style={{ color: colors.textMuted, marginTop: 8, marginBottom: spacing.lg, fontFamily: fonts.regular, lineHeight: 22 }}>
+        <Text style={{ fontFamily: fonts.bold, fontSize: 32, lineHeight: 40, color: colors.text, marginBottom: spacing.md }}>{t('auth.welcome')}</Text>
+        <Text style={{ color: colors.textMuted, marginTop: 8, marginBottom: spacing.lg, fontFamily: fonts.regular, fontSize: 16, lineHeight: 24 }}>
           {t('auth.signInSubtitle')}
         </Text>
 

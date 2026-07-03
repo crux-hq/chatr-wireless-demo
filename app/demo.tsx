@@ -52,7 +52,7 @@ export default function DemoScreen() {
               <Text style={{ fontWeight: '800', fontSize: 16 }}>
                 {locale === 'fr' ? scenario.labelFr : scenario.labelEn}
               </Text>
-              <Text style={{ color: colors.grayDark, marginTop: 4, fontSize: 13 }}>
+              <Text style={{ color: colors.grayDark, marginTop: 4, fontSize: 16 }}>
                 {locale === 'fr' ? scenario.descriptionFr : scenario.descriptionEn}
               </Text>
               {currentScenario === scenario.id ? (

@@ -6,18 +6,12 @@ import { I18nextProvider } from 'react-i18next';
 import { View, ActivityIndicator } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
-import {
-  Poppins_400Regular,
-  Poppins_500Medium,
-  Poppins_600SemiBold,
-  Poppins_700Bold,
-  Poppins_800ExtraBold,
-} from '@expo-google-fonts/poppins';
 import * as SplashScreen from 'expo-splash-screen';
 import i18n from '@/lib/i18n';
+import { applyDefaultFontFamily } from '@/lib/setup-fonts';
 import { useAppStore } from '@/lib/store';
 import { colors } from '@/lib/theme/colors';
-import { fonts } from '@/lib/theme/typography';
+import { fontAssets, fonts } from '@/lib/theme/typography';
 import { JourneyFab } from '@/components/layout/JourneyFab';
 
 SplashScreen.preventAutoHideAsync();
@@ -29,9 +23,9 @@ const stackScreenOptions = {
 
 const stackHeaderOptions = {
   ...stackScreenOptions,
-  headerStyle: { backgroundColor: colors.primary },
-  headerTintColor: colors.white,
-  headerTitleStyle: { fontFamily: fonts.semiBold, fontSize: 17 },
+  headerStyle: { backgroundColor: colors.white },
+  headerTintColor: colors.primary,
+  headerTitleStyle: { fontFamily: fonts.semiBold, fontSize: 17, color: colors.text },
   headerShadowVisible: false,
   headerShown: true,
 };
@@ -72,13 +66,7 @@ export default function RootLayout() {
   const hydrate = useAppStore((s) => s.hydrate);
   const locale = useAppStore((s) => s.locale);
 
-  const [fontsLoaded, fontError] = useFonts({
-    Poppins_400Regular,
-    Poppins_500Medium,
-    Poppins_600SemiBold,
-    Poppins_700Bold,
-    Poppins_800ExtraBold,
-  });
+  const [fontsLoaded, fontError] = useFonts(fontAssets);
 
   useEffect(() => {
     void hydrate();
@@ -90,6 +78,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (fontsLoaded || fontError) {
+      applyDefaultFontFamily();
       void SplashScreen.hideAsync();
     }
   }, [fontsLoaded, fontError]);

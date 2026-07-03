@@ -2,7 +2,7 @@ import { View, Text, Pressable } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useAppStore } from '@/lib/store';
 import i18n from '@/lib/i18n';
-import { ChatrLogo } from '@/components/ui/ChatrLogo';
+import { ChatrLogoLink } from '@/components/ui/ChatrLogo';
 import { colors, spacing, radius } from '@/lib/theme/colors';
 import { fonts } from '@/lib/theme/typography';
 
@@ -43,7 +43,7 @@ export function Header({ title, right }: { title?: string; right?: React.ReactNo
   return (
     <View
       style={{
-        backgroundColor: colors.primary,
+        backgroundColor: colors.white,
         paddingHorizontal: spacing.lg,
         paddingVertical: spacing.md + 4,
         flexDirection: 'row',
@@ -51,13 +51,13 @@ export function Header({ title, right }: { title?: string; right?: React.ReactNo
         justifyContent: 'space-between',
       }}>
       <View>
-        <ChatrLogo height={30} />
+        <ChatrLogoLink />
         {title ? (
           <Text
             style={{
-              color: colors.white,
+              color: colors.text,
               opacity: 0.92,
-              fontSize: 14,
+              fontSize: 16,
               marginTop: 6,
               fontFamily: fonts.medium,
             }}>
@@ -67,7 +67,7 @@ export function Header({ title, right }: { title?: string; right?: React.ReactNo
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
         {right}
-        <LanguageToggle onDark />
+        <LanguageToggle onDark={false} />
       </View>
     </View>
   );
@@ -84,7 +84,7 @@ export function PromoBanner({ title, subtitle }: { title: string; subtitle: stri
       }}>
       <Text
         style={{
-          fontFamily: fonts.extraBold,
+          fontFamily: fonts.bold,
           fontSize: 18,
           color: colors.white,
           lineHeight: 24,
@@ -97,8 +97,8 @@ export function PromoBanner({ title, subtitle }: { title: string; subtitle: stri
           marginTop: spacing.sm,
           opacity: 0.88,
           fontFamily: fonts.regular,
-          fontSize: 14,
-          lineHeight: 20,
+          fontSize: 16,
+          lineHeight: 24,
         }}>
         {subtitle}
       </Text>

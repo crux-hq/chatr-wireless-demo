@@ -6,10 +6,10 @@ module.exports = {
     extend: {
       colors: {
         chatr: {
-          purple: '#5F3296',
-          'purple-dark': '#4B2882',
+          purple: '#542E91',
+          'purple-dark': '#432474',
           charcoal: '#2D263B',
-          'purple-light': '#7B4BB9',
+          'purple-light': '#6E46B0',
           accent: '#FFB81C',
           lavender: '#F3F0FF',
           'lavender-mid': '#E8E0F5',
@@ -18,11 +18,11 @@ module.exports = {
       },
       borderRadius: {
         card: '20px',
-        button: '10px',
+        button: '16px',
         pill: '9999px',
       },
       fontFamily: {
-        sans: ['Poppins_400Regular', 'system-ui', 'sans-serif'],
+        sans: ['SantralRegular', 'system-ui', 'sans-serif'],
       },
     },
   },
