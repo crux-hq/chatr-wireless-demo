@@ -1,113 +1,133 @@
 import { useState } from 'react';
-import { ScrollView, View, Text, TextInput, Pressable, Linking } from 'react-native';
-import { Stack } from 'expo-router';
+import { ScrollView, View, Text, Pressable } from 'react-native';
+import { router, type Href } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { MessageCircle, Phone, MapPin } from 'lucide-react-native';
-import { Card, Button } from '@/components/ui/Button';
-import { FAQ_ITEMS } from '@/lib/mock/stores';
+import { Header, PageTitle } from '@/components/layout/Header';
+import { Button, Card, CtaButton } from '@/components/ui/Button';
+import { SupportCategoryCard } from '@/components/support/SupportCategoryCard';
+import { SubmitTicketDialog } from '@/components/support/SubmitTicketDialog';
+import { HomeAccordion } from '@/components/homepage/HomeAccordion';
+import { SUPPORT_CATEGORIES, SUPPORT_FAQS, FEATURED_FAQ_IDS } from '@/lib/mock/support';
+import { launchPublicJourney } from '@/lib/nav-public';
 import { useAppStore } from '@/lib/store';
-import { colors, spacing } from '@/lib/theme/colors';
+import { PublicHomeFooter } from '@/components/layout/PublicHomeFooter';
+import { colors, spacing, radius } from '@/lib/theme/colors';
+import { fonts } from '@/lib/theme/typography';
 
 export default function SupportScreen() {
   const { t } = useTranslation();
   const locale = useAppStore((s) => s.locale);
-  const [search, setSearch] = useState('');
-  const [expanded, setExpanded] = useState<string | null>(null);
-  const [chatMessages, setChatMessages] = useState<{ role: 'user' | 'bot'; text: string }[]>([
-    { role: 'bot', text: t('support.chatWelcome') },
-  ]);
-  const [chatInput, setChatInput] = useState('');
+  const [ticketVisible, setTicketVisible] = useState(false);
+  const [featuredExpanded, setFeaturedExpanded] = useState<string | null>(null);
 
-  const filtered = FAQ_ITEMS.filter((f) => {
-    const q = locale === 'fr' ? f.questionFr : f.questionEn;
-    return q.toLowerCase().includes(search.toLowerCase());
+  const featuredItems = FEATURED_FAQ_IDS.map((id) => {
+    const faq = SUPPORT_FAQS[id];
+    return {
+      id,
+      title: locale === 'fr' ? faq.questionFr : faq.questionEn,
+      body: locale === 'fr' ? faq.answerFr : faq.answerEn,
+    };
   });
 
-  const sendChat = () => {
-    if (!chatInput.trim()) return;
-    setChatMessages([
-      ...chatMessages,
-      { role: 'user', text: chatInput },
-      { role: 'bot', text: t('support.chatResponse') },
-    ]);
-    setChatInput('');
-  };
-
   return (
-    <>
-      <Stack.Screen options={{ title: t('support.title'), headerShown: true }} />
-      <ScrollView style={{ flex: 1, backgroundColor: colors.gray }} contentContainerStyle={{ padding: spacing.md }}>
-        <Text style={{ fontWeight: '800', fontSize: 18, marginBottom: spacing.md }}>{t('support.contact')}</Text>
-        <View style={{ flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.lg }}>
-          <Pressable style={{ flex: 1, backgroundColor: colors.accent, padding: spacing.md, borderRadius: 16, alignItems: 'center' }}>
-            <MessageCircle color={colors.white} size={24} />
-            <Text style={{ color: colors.white, fontWeight: '600', marginTop: 4 }}>{t('support.chat')}</Text>
-          </Pressable>
-          <Pressable
-            onPress={() => Linking.openURL('tel:611')}
-            style={{ flex: 1, backgroundColor: colors.white, padding: spacing.md, borderRadius: 12, alignItems: 'center' }}>
-            <Phone color={colors.green} size={24} />
-            <Text style={{ color: colors.green, fontWeight: '600', marginTop: 4 }}>{t('support.phone')}</Text>
-          </Pressable>
-          <Pressable style={{ flex: 1, backgroundColor: colors.white, padding: spacing.md, borderRadius: 12, alignItems: 'center' }}>
-            <MapPin color={colors.green} size={24} />
-            <Text style={{ color: colors.green, fontWeight: '600', marginTop: 4 }}>{t('support.visitStore')}</Text>
-          </Pressable>
-        </View>
+    <View style={{ flex: 1, backgroundColor: colors.gray }}>
+      <SubmitTicketDialog visible={ticketVisible} onClose={() => setTicketVisible(false)} />
+      <Header />
+      <PageTitle>{t('support.pageTitle')}</PageTitle>
+      <ScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: 100 }}>
+        <Text style={{ fontFamily: fonts.extraBold, fontSize: 20, marginBottom: spacing.md }}>
+          {t('support.browseByCategory')}
+        </Text>
 
-        <Card style={{ marginBottom: spacing.lg }}>
-          {chatMessages.map((msg, i) => (
-            <View
-              key={i}
-              style={{
-                alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                backgroundColor: msg.role === 'user' ? colors.green : colors.gray,
-                padding: spacing.sm,
-                borderRadius: 12,
-                marginBottom: spacing.sm,
-                maxWidth: '85%',
-              }}>
-              <Text style={{ color: msg.role === 'user' ? colors.white : colors.black }}>{msg.text}</Text>
-            </View>
-          ))}
-          <TextInput
-            value={chatInput}
-            onChangeText={setChatInput}
-            placeholder={t('support.chat')}
-            style={{ borderWidth: 1, borderColor: colors.grayMid, borderRadius: 8, padding: spacing.sm, marginTop: spacing.sm }}
+        <Card style={{ marginBottom: spacing.lg, borderWidth: 1, borderColor: colors.grayMid }}>
+          <Text style={{ fontFamily: fonts.semiBold, fontSize: 16, lineHeight: 24, marginBottom: spacing.md }}>
+            {t('support.featuredBanner')}
+          </Text>
+          <Button
+            title={t('support.findAnswers')}
+            onPress={() => setFeaturedExpanded(featuredExpanded ? null : FEATURED_FAQ_IDS[0])}
+            variant="secondary"
+            size="compact"
           />
-          <View style={{ marginTop: spacing.sm }}>
-            <Button title={t('common.confirm')} onPress={sendChat} />
-          </View>
+          {featuredExpanded ? (
+            <View style={{ marginTop: spacing.md }}>
+              <HomeAccordion
+                items={featuredItems}
+                expandedId={featuredExpanded}
+                onToggle={(id) => setFeaturedExpanded(featuredExpanded === id ? null : id)}
+              />
+            </View>
+          ) : null}
         </Card>
 
-        <Text style={{ fontWeight: '800', fontSize: 18, marginBottom: spacing.sm }}>{t('support.faq')}</Text>
-        <TextInput
-          value={search}
-          onChangeText={setSearch}
-          placeholder={t('common.search')}
+        <View
           style={{
-            backgroundColor: colors.white,
-            borderRadius: 12,
-            padding: spacing.md,
-            marginBottom: spacing.md,
-          }}
-        />
-        {filtered.map((faq) => (
-          <Card key={faq.id} style={{ marginBottom: spacing.sm }}>
-            <Text
-              onPress={() => setExpanded(expanded === faq.id ? null : faq.id)}
-              style={{ fontWeight: '700' }}>
-              {locale === 'fr' ? faq.questionFr : faq.questionEn}
-            </Text>
-            {expanded === faq.id ? (
-              <Text style={{ color: colors.grayDark, marginTop: 8 }}>
-                {locale === 'fr' ? faq.answerFr : faq.answerEn}
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            rowGap: spacing.md,
+            marginBottom: spacing.xl,
+          }}>
+          {SUPPORT_CATEGORIES.map((category) => (
+            <SupportCategoryCard
+              key={category.id}
+              id={category.id}
+              title={locale === 'fr' ? category.titleFr : category.titleEn}
+              onPress={() => router.push(`/support/${category.id}` as Href)}
+            />
+          ))}
+        </View>
+
+        <Card style={{ marginBottom: spacing.lg, backgroundColor: colors.lavender }}>
+          <Text style={{ fontFamily: fonts.extraBold, fontSize: 18, marginBottom: spacing.sm }}>
+            {t('support.autoPayTitle')}
+          </Text>
+          <Text style={{ color: colors.grayDark, lineHeight: 22, marginBottom: spacing.md }}>
+            {t('support.autoPayBody')}
+          </Text>
+          <CtaButton
+            title={t('support.autoPayCta')}
+            onPress={() => launchPublicJourney('auto-pay')}
+            size="compact"
+          />
+        </Card>
+
+        <Card
+          style={{
+            marginBottom: spacing.lg,
+            backgroundColor: colors.primary,
+            borderWidth: 0,
+          }}>
+          <Text
+            style={{
+              fontFamily: fonts.extraBold,
+              fontSize: 18,
+              color: colors.white,
+              marginBottom: spacing.sm,
+            }}>
+            {t('support.stillNeedHelp')}
+          </Text>
+          <Text style={{ color: colors.white, opacity: 0.9, lineHeight: 22, marginBottom: spacing.md }}>
+            {t('support.stillNeedHelpBody')}
+          </Text>
+          <Pressable onPress={() => setTicketVisible(true)}>
+            <View
+              style={{
+                alignSelf: 'flex-start',
+                backgroundColor: colors.accent,
+                borderRadius: radius.button,
+                paddingHorizontal: spacing.lg,
+                paddingVertical: spacing.sm + 4,
+              }}>
+              <Text style={{ fontFamily: fonts.bold, color: colors.textOnAccent }}>
+                {t('support.submitTicket')} ›
               </Text>
-            ) : null}
-          </Card>
-        ))}
+            </View>
+          </Pressable>
+        </Card>
+
+        <PublicHomeFooter />
       </ScrollView>
-    </>
+    </View>
   );
 }

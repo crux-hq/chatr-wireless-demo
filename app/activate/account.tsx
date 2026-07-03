@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Header } from '@/components/layout/Header';
+import { Header, PageTitle } from '@/components/layout/Header';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useAppStore } from '@/lib/store';
+import { PublicHomeFooter } from '@/components/layout/PublicHomeFooter';
 import { colors, spacing } from '@/lib/theme/colors';
 
 export default function ActivateAccountScreen() {
@@ -26,13 +27,15 @@ export default function ActivateAccountScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.gray }}>
-      <Header title={`4. ${t('activate.step4')}`} />
-      <ScrollView contentContainerStyle={{ padding: spacing.lg }}>
+      <Header />
+      <PageTitle>{`4. ${t('activate.step4')}`}</PageTitle>
+      <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: 100 }}>
         <Input label={t('auth.firstName')} value={firstName} onChangeText={setFirstName} />
         <Input label={t('auth.lastName')} value={lastName} onChangeText={setLastName} />
         <Input label={t('auth.email')} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" />
         <Input label={t('auth.password')} value={password} onChangeText={setPassword} secureTextEntry />
         <Button title={t('common.confirm')} onPress={handleComplete} loading={loading} />
+        <PublicHomeFooter bleedPadding={spacing.lg} />
       </ScrollView>
     </View>
   );

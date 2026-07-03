@@ -1,10 +1,11 @@
 import { ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Header } from '@/components/layout/Header';
+import { Header, PageTitle } from '@/components/layout/Header';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useAppStore } from '@/lib/store';
+import { PublicHomeFooter } from '@/components/layout/PublicHomeFooter';
 import { colors, spacing } from '@/lib/theme/colors';
 
 export default function ActivateSimScreen() {
@@ -14,8 +15,9 @@ export default function ActivateSimScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.gray }}>
-      <Header title={`2. ${t('activate.step2')}`} />
-      <ScrollView contentContainerStyle={{ padding: spacing.lg }}>
+      <Header />
+      <PageTitle>{`2. ${t('activate.step2')}`}</PageTitle>
+      <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: 100 }}>
         <Input
           label={t('activate.simNumber')}
           value={draft.simNumber}
@@ -36,6 +38,7 @@ export default function ActivateSimScreen() {
             router.push('/activate/plan');
           }}
         />
+        <PublicHomeFooter bleedPadding={spacing.lg} />
       </ScrollView>
     </View>
   );

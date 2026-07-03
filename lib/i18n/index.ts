@@ -29,11 +29,14 @@ export function formatCurrency(amount: number, locale: string): string {
 }
 
 export function formatDate(dateStr: string, locale: string): string {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  if (Number.isNaN(date.getTime())) return dateStr;
   return new Intl.DateTimeFormat(locale === 'fr' ? 'fr-CA' : 'en-CA', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  }).format(new Date(dateStr));
+  }).format(date);
 }
 
 export function formatGb(mb: number): string {

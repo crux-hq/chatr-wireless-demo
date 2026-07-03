@@ -132,7 +132,15 @@ export function Card({ children, style }: { children: React.ReactNode; style?: o
   );
 }
 
-export function Badge({ label, color = colors.primary }: { label: string; color?: string }) {
+export function Badge({
+  label,
+  color = colors.primary,
+  style,
+}: {
+  label: string;
+  color?: string;
+  style?: object;
+}) {
   return (
     <View
       style={{
@@ -141,8 +149,15 @@ export function Badge({ label, color = colors.primary }: { label: string; color?
         paddingVertical: 5,
         borderRadius: radius.pill,
         alignSelf: 'flex-start',
+        flexShrink: 1,
+        maxWidth: '100%',
+        ...style,
       }}>
-      <Text style={{ color, fontFamily: fonts.semiBold, fontSize: 12 }}>{label}</Text>
+      <Text
+        style={{ color, fontFamily: fonts.semiBold, fontSize: 12, flexShrink: 1 }}
+        numberOfLines={2}>
+        {label}
+      </Text>
     </View>
   );
 }

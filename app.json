@@ -30,6 +30,12 @@
       "expo-router",
       "expo-localization",
       [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Allow My chatr to use your location to find nearby stores."
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",

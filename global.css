@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root,
+  input,
+  textarea,
+  button,
+  select {
+    font-family: SantralRegular, system-ui, -apple-system, sans-serif;
+  }
+
+  [class*='css-text-'] {
+    font-family: SantralRegular, system-ui, -apple-system, sans-serif;
+  }
+}

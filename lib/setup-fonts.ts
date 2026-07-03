@@ -1,12 +1,16 @@
 import { Text, TextInput } from 'react-native';
 import { fonts } from '@/lib/theme/typography';
 
+const defaultFontStyle = { fontFamily: fonts.regular };
+
+type TextWithDefaults = typeof Text & {
+  defaultProps?: { style?: object };
+};
+
 export function applyDefaultFontFamily() {
-  const defaultStyle = { fontFamily: fonts.regular };
+  const RNText = Text as TextWithDefaults;
+  const RNTextInput = TextInput as TextWithDefaults;
 
-  Text.defaultProps = Text.defaultProps ?? {};
-  Text.defaultProps.style = defaultStyle;
-
-  TextInput.defaultProps = TextInput.defaultProps ?? {};
-  TextInput.defaultProps.style = defaultStyle;
+  RNText.defaultProps = { ...(RNText.defaultProps ?? {}), style: defaultFontStyle };
+  RNTextInput.defaultProps = { ...(RNTextInput.defaultProps ?? {}), style: defaultFontStyle };
 }

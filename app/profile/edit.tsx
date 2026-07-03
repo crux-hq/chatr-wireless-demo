@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { ScrollView } from 'react-native';
-import { router, Stack } from 'expo-router';
+import { ScrollView, View } from 'react-native';
+import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import { Header, PageTitle } from '@/components/layout/Header';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useAppStore } from '@/lib/store';
@@ -23,9 +24,10 @@ export default function ProfileEditScreen() {
   };
 
   return (
-    <>
-      <Stack.Screen options={{ title: t('profile.accountInfo'), headerShown: true }} />
-      <ScrollView style={{ flex: 1, backgroundColor: colors.gray }} contentContainerStyle={{ padding: spacing.md }}>
+    <View style={{ flex: 1, backgroundColor: colors.gray }}>
+      <Header />
+      <PageTitle>{t('profile.accountInfo')}</PageTitle>
+      <ScrollView contentContainerStyle={{ padding: spacing.md }}>
         <Input label={t('auth.firstName')} value={firstName} onChangeText={setFirstName} />
         <Input label={t('auth.lastName')} value={lastName} onChangeText={setLastName} />
         <Input label={t('profile.address')} value={address} onChangeText={setAddress} />
@@ -33,6 +35,6 @@ export default function ProfileEditScreen() {
         <Input label={t('profile.postalCode')} value={postalCode} onChangeText={setPostalCode} />
         <Button title={t('common.save')} onPress={handleSave} />
       </ScrollView>
-    </>
+    </View>
   );
 }

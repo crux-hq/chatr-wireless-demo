@@ -12,6 +12,7 @@
     "continue": "Continuer",
     "confirm": "Confirmer",
     "cancel": "Annuler",
+    "close": "Fermer",
     "save": "Enregistrer",
     "back": "Retour",
     "done": "Terminé",
@@ -38,7 +39,7 @@
     "noAccount": "Pas de compte?",
     "createAccount": "Créer un compte",
     "demoAccounts": "Comptes démo",
-    "registerTitle": "Créer un compte My chatr",
+    "registerTitle": "Créer un compte",
     "firstName": "Prénom",
     "lastName": "Nom",
     "phone": "Numéro de téléphone",
@@ -52,7 +53,7 @@
     "anniversary": "Date anniversaire",
     "yourPlan": "Votre forfait",
     "dataRemaining": "Données restantes",
-    "autoPayOn": "Paiement auto actif",
+    "autoPayOn": "Auto-Pay actif",
     "autoPayOff": "Paiement auto désactivé",
     "bonusData": "+{{gb}} Go bonus paiement auto",
     "quickLinks": "Liens rapides",
@@ -63,7 +64,10 @@
     "promos": "Offres pour vous",
     "usageAlert75": "Vous avez utilisé 75 % de vos données",
     "usageAlert90": "Vous avez utilisé 90 % de vos données — ajoutez des données",
-    "activeAddons": "Add-ons actifs"
+    "activeAddons": "Add-ons actifs",
+    "bonusClaimedTitle": "Bonus ajouté !",
+    "bonusClaimedMessage": "{{gb}} Go ont été ajoutés à votre compte.",
+    "bonusClaimedCta": "Super !"
   },
   "usage": {
     "title": "Utilisation",
@@ -86,7 +90,7 @@
     "filterData": "Appels, textos et données",
     "filterTalk": "Appels et textos",
     "basePlan": "Forfait de base",
-    "autoPayBonus": "Bonus paiement auto",
+    "autoPayBonus": "Réclamer 5 Go bonus",
     "totalData": "Total avec paiement auto",
     "viewDetails": "Détails du forfait",
     "compare": "Comparer les forfaits",
@@ -103,6 +107,24 @@
     "subtitle": "Améliorez votre forfait avec des add-ons pratiques",
     "purchase": "Acheter l'add-on",
     "purchased": "Add-on acheté!",
+    "purchasedDetail": "{{name}} est maintenant actif sur votre compte jusqu'au {{date}}.",
+    "viewAccount": "Voir mon compte",
+    "setupTitle": "Configurons votre add-on.",
+    "setupNewTitle": "Nouveau chez chatr?",
+    "setupNewDesc": "Vous devez d'abord activer votre forfait et sélectionner votre add-on.",
+    "setupExistingTitle": "Client existant?",
+    "setupExistingDesc": "Connectez-vous à Mon chatr pour vérifier la compatibilité de votre forfait.",
+    "setupActivate": "ACTIVER MAINTENANT",
+    "setupSignIn": "CONNEXION",
+    "confirmTitle": "Confirmer l'achat de l'add-on",
+    "confirmPrice": "Frais unique : {{price}} (déduit du solde de votre compte)",
+    "confirmActive": "Actif du {{start}} au {{end}}",
+    "confirmTermsDefault": "Cet add-on est valide 30 jours à partir de l'achat. Les frais ne sont pas remboursables une fois activés.",
+    "confirmTermsRoaming": "Les données en itinérance sont valides 30 jours dans les destinations admissibles. Les données ne sont pas reportées.",
+    "confirmTermsLd": "Les minutes interurbaines internationales sont valides 30 jours pour les destinations indiquées.",
+    "confirmTermsData": "Ajoute {{gb}} Go à votre forfait pendant 30 jours.",
+    "confirmTermsTalk": "Les minutes Économiseur d'appels sont valides 30 jours à partir de l'achat.",
+    "confirmTermsText": "Les textos en itinérance aux É.-U. sont valides 30 jours à partir de l'achat.",
     "activeUntil": "Actif jusqu'au {{date}}",
     "categories": {
       "roaming": "Itinérance",
@@ -133,7 +155,51 @@
     "billingAddress": "Adresse de facturation",
     "useForAutoPay": "Utiliser pour paiement auto",
     "deleteCard": "Supprimer la carte",
-    "editCard": "Modifier la carte"
+    "editCard": "Modifier la carte",
+    "landing": {
+      "pageTitle": "Recharger votre compte",
+      "intro": "Ajoutez des fonds à votre compte chatr pour garder votre service actif. Choisissez l'option qui vous convient.",
+      "guestTitle": "Recharge invité",
+      "guestBody": "Rechargez sans vous connecter. Entrez votre numéro de téléphone et payez avec une carte de crédit ou de débit.",
+      "guestCta": "Recharger",
+      "signInTitle": "Connexion et recharge",
+      "signInBody": "Connectez-vous à Mon chatr pour voir votre solde, gérer vos cartes et recharger votre compte.",
+      "signInCta": "Connexion et recharge",
+      "signedInTitle": "Recharger avec Mon chatr",
+      "signedInBody": "Vous êtes connecté. Rechargez votre compte, gérez vos cartes ou inscrivez-vous au paiement auto.",
+      "signedInCta": "Recharger maintenant",
+      "exploreTitle": "Découvrez les façons de recharger votre compte",
+      "autoPayBannerTitle": "Paiement auto : la façon la plus simple de recharger",
+      "autoPayBannerBody": "Ne manquez jamais un paiement. Le paiement auto recharge votre compte à la date de renouvellement et vous obtenez des données bonus.",
+      "learnMore": "En savoir plus",
+      "cardStoreTitle": "Appelez ou textez pour recharger avec une carte",
+      "cardStoreBody1": "À partir de votre téléphone chatr, textez votre NIP de carte de recharge à 12 chiffres au 611.",
+      "cardStoreBody2": "Si vous avez déjà une carte de recharge ou une carte de paiement sur votre compte, rechargez en composant *611 à partir de votre téléphone chatr.",
+      "cardStoreBody3": "Les cartes de recharge sont offertes chez certains détaillants.",
+      "findStore": "Trouver un magasin",
+      "remindersTitle": "Rechargez avec des rappels par texto",
+      "remindersBody": "Si vous avez une carte de paiement enregistrée sur votre compte Mon chatr, nous vous enverrons des rappels de recharge mensuels. Répondez simplement Oui au texto et nous débiterons automatiquement votre carte enregistrée.",
+      "remindersCta": "Connexion à Mon chatr",
+      "learnMoreTitle": "En savoir plus :",
+      "linkHelp": "Aide pour recharger votre compte",
+      "linkCards": "Gérer vos cartes enregistrées dans Mon chatr",
+      "linkAutoPayCard": "Changer la carte assignée au paiement auto dans Mon chatr"
+    },
+    "guest": {
+      "title": "Recharge en tant qu'invité",
+      "intro": "La recharge est rapide et facile! Vous n'avez même pas besoin de vous connecter. Entrez simplement le numéro chatr à recharger et continuez.",
+      "stepPhone": "numéro de téléphone chatr",
+      "stepPayment": "Mode de paiement",
+      "stepReview": "Révision",
+      "stepConfirmation": "Confirmation",
+      "phoneLabel": "Numéro de téléphone",
+      "phoneHint": "Assurez-vous que le numéro entré correspond au compte chatr que vous rechargez.",
+      "confirmPayment": "Confirmer le paiement",
+      "confirmationBody": "{{amount}} a été ajouté au {{phone}}. Votre solde mis à jour apparaîtra dans quelques minutes.",
+      "confirmationId": "No de confirmation : {{id}}",
+      "merchantTitle": "Adresse du marchand :",
+      "merchantAddress": "chatr mobile, 333 Bloor Street East, Toronto (Ontario) M4W 1G9, Canada"
+    }
   },
   "activate": {
     "title": "Activer votre téléphone",
@@ -150,7 +216,22 @@
     "successSubtitle": "Votre service chatr est maintenant actif",
     "nextSteps": "Prochaines étapes",
     "topUpNow": "Rechargez votre compte",
-    "exploreApp": "Explorez l'application"
+    "exploreApp": "Explorez l'application",
+    "needSim": "Vous n'avez pas encore de carte SIM?",
+    "buySimCta": "Acheter une carte SIM — 10 $, livraison gratuite"
+  },
+  "buySim": {
+    "title": "Passer commande",
+    "subtitlePrefix": "Vous avez déjà un téléphone? Achetez une",
+    "subtitleSuffix": "et choisissez l'un de nos forfaits abordables partout au pays. De plus, la livraison est gratuite.",
+    "productName": "carte SIM chatr",
+    "addToCart": "Ajouter au panier",
+    "freeShipping": "Livraison gratuite",
+    "orderSuccess": "Ajouté au panier!",
+    "orderSuccessDesc": "Votre carte SIM chatr sera expédiée gratuitement. Activez-la à réception.",
+    "activateWhenReady": "Activer quand prêt",
+    "browsePlans": "Voir les forfaits",
+    "findStore": "Ou trouver un magasin près de chez vous"
   },
   "profile": {
     "title": "Profil",
@@ -180,11 +261,34 @@
     "language": "Langue",
     "demoMode": "Mode démo",
     "activate": "Activer SIM",
+    "buySim": "Acheter une carte SIM",
     "signOut": "Déconnexion"
   },
   "coverage": {
     "title": "Couverture",
     "subtitle": "Couverture nationale d'un océan à l'autre",
+    "mapTitle": "Carte de couverture",
+    "mapSubtitle": "Consultez notre carte de couverture pour vous assurer d'être connecté. Recherchez un emplacement ou un code postal pour obtenir des informations sur notre réseau.",
+    "searchPlaceholder": "Entrez un emplacement ou un code postal",
+    "useLocation": "Utiliser ma position",
+    "filterAll": "Toutes les couches de couverture",
+    "filterNationWide": "Réseau et forfaits nationaux",
+    "filterExtended": "Couverture étendue",
+    "filterInZone": "Forfaits en zone",
+    "legendNationWide": "Réseau et forfaits nationaux",
+    "legendExtended": "Couverture étendue",
+    "legendInZone": "Forfaits en zone",
+    "lastUpdated": "Couverture mise à jour le 12/06/2026 (données démo)",
+    "notAvailable": "Non disponible",
+    "noCoverageMessage": "Couverture chatr limitée ou inexistante dans cette région. Revenez plus tard au fur et à mesure de l'expansion du réseau.",
+    "featureNationTitle": "Couverture nationale",
+    "featureNationBody": "Restez connecté avec un réseau qui vous couvre d'un océan à l'autre.",
+    "featureExtendedTitle": "Couverture étendue",
+    "featureExtendedBody": "Allez encore plus loin au Canada avec la couverture réseau étendue de chatr.",
+    "featurePlansTitle": "Nos forfaits",
+    "featurePlansBody": "Des forfaits nationaux abordables adaptés à votre budget. À partir de 15 $/mois.",
+    "fullDetails": "Voir tous les détails",
+    "fullDetailsBody": "Les cartes de couverture sont approximatives et représentent la portée du réseau Rogers de chatr à des fins de démonstration. La couverture réelle varie selon l'appareil, le terrain et les conditions du réseau. Les forfaits en zone sont offerts dans certaines zones de données — composez *#555# depuis votre téléphone chatr pour vérifier votre zone.",
     "excellent": "Excellente couverture",
     "good": "Bonne couverture",
     "available": "Couverture disponible"
@@ -192,12 +296,43 @@
   "stores": {
     "title": "Localisateur",
     "subtitle": "Plus de 3 000 magasins chatr",
+    "findTitle": "Trouver un magasin",
+    "searchPlaceholder": "Entrez un code postal ou une ville",
+    "useLocation": "Utiliser ma position",
+    "locationDenied": "L'accès à la position a été refusé. Recherchez par ville ou code postal.",
+    "locationError": "Impossible d'obtenir votre position. Essayez de rechercher par ville ou code postal.",
+    "filterAll": "Tous les types de magasins",
+    "filterChatr": "Magasins chatr",
+    "filterRetail": "Détaillants partenaires",
+    "legendChatr": "Magasins chatr",
+    "legendRetail": "Détaillants partenaires",
+    "chatrStore": "Magasin chatr",
+    "retailPartner": "Détaillant partenaire",
+    "sellsSim": "Cartes SIM",
+    "sellsTopUp": "Cartes de recharge",
+    "results": "{{count}} emplacements",
+    "topUpRetailTitle": "Les cartes de recharge sont offertes chez certains détaillants",
+    "topUpRetailBody": "Voici d'autres endroits où vous pouvez acheter des cartes de recharge. Vérifiez les heures d'ouverture de chaque détaillant.",
     "directions": "Itinéraire",
     "call": "Appeler",
     "hours": "Heures"
   },
   "support": {
     "title": "Nous pouvons vous aider",
+    "pageTitle": "Soutien chatr",
+    "browseByCategory": "Parcourir par catégorie",
+    "featuredBanner": "Vous avez acheté votre téléphone chatr chez TSC? Apprenez comment suivre votre commande et obtenir des mises à jour de livraison.",
+    "findAnswers": "Trouver des réponses",
+    "autoPayTitle": "S'inscrire au paiement automatique",
+    "autoPayBody": "Configurez le paiement automatique avec une carte de crédit et recevez des données bonus sur les forfaits admissibles chaque mois — sans recharge manuelle.",
+    "autoPayCta": "S'inscrire au paiement automatique",
+    "stillNeedHelp": "Besoin d'aide supplémentaire?",
+    "stillNeedHelpBody": "Nous sommes là pour vous. Notre équipe peut répondre à toutes vos questions sur votre compte ou vos services.",
+    "submitTicket": "Soumettre un billet",
+    "ticketTitle": "Billet de soutien",
+    "ticketBody": "Dans cette démo, les billets de soutien ne sont pas envoyés à une équipe en direct. Parcourez les catégories ci-dessus ou composez le 611 depuis votre téléphone chatr pour une assistance réelle.",
+    "backToSupport": "Retour au soutien",
+    "categoryNotFound": "Cette catégorie de soutien est introuvable.",
     "faq": "Questions fréquentes",
     "contact": "Nous contacter",
     "chat": "Clavardage",
@@ -210,7 +345,210 @@
     "title": "Mode démo",
     "subtitle": "Changez de scénario pour votre présentation",
     "apply": "Appliquer le scénario",
-    "current": "Scénario actuel"
+    "current": "Scénario actuel",
+    "resetState": "Réinitialiser l'état",
+    "audienceNew": "Nouveaux utilisateurs",
+    "audienceExisting": "Utilisateurs existants",
+    "noJourneysAudience": "Aucun parcours pour ce public.",
+    "searchPlaceholder": "Parcours démo",
+    "noSearchResults": "Aucun parcours ne correspond à votre recherche. Essayez d'autres mots-clés ou effacez la recherche.",
+    "viewAppState": "État de l'app",
+    "appStateTitle": "État de l'app",
+    "backToJourneys": "Parcours démo",
+    "stateSession": "Session",
+    "stateAuthenticated": "Connecté",
+    "stateLocale": "Langue",
+    "stateScenario": "Scénario",
+    "statePending": "Actions en attente",
+    "stateSelectedPlan": "Forfait sélectionné",
+    "statePendingPlan": "Changement de forfait",
+    "statePendingAddOn": "Add-on en attente",
+    "stateActivation": "Brouillon d'activation",
+    "stateSimNumber": "Numéro SIM",
+    "statePhone": "Téléphone",
+    "stateDraftPlan": "Forfait brouillon",
+    "stateDraftAutoPay": "Paiement auto brouillon",
+    "stateUser": "Profil utilisateur",
+    "statePlan": "Forfait",
+    "stateBalance": "Solde",
+    "stateAutoPay": "Paiement auto",
+    "stateBonusClaimed": "Bonus réclamé",
+    "stateAddOns": "Add-ons actifs",
+    "stateCards": "Cartes enregistrées",
+    "stateUsage": "Utilisation",
+    "stateData": "Données utilisées",
+    "stateCycle": "Cycle de facturation",
+    "stateTransactions": "Transactions",
+    "stateNoUser": "Aucun utilisateur connecté. Lancez un parcours ou connectez-vous pour remplir l'état du profil."
+  },
+  "header": {
+    "openAccountMenu": "Ouvrir le menu du compte",
+    "dashboard": "Tableau de bord"
+  },
+  "nav": {
+    "plans": "Forfaits",
+    "buySim": "Acheter une SIM",
+    "activateSim": "Activer la SIM",
+    "topUp": "Recharger",
+    "coverage": "Couverture",
+    "stores": "Trouver un magasin",
+    "support": "Soutien et FAQ",
+    "signIn": "Connexion",
+    "createAccount": "Créer un compte",
+    "or": "ou"
+  },
+  "homepage": {
+    "hero": {
+      "badge": "Fournisseur de téléphonie mobile prépayée #1 au Canada",
+      "shopNow": "Magasiner",
+      "viewDetails": "Voir les détails",
+      "slides": {
+        "50gb": {
+          "title": "Obtenez 50 Go de données et appels illimités aux É.-U. pour 34 $!!*",
+          "subtitle": "De plus, profitez de données illimitées pour le reste de votre cycle de facturation."
+        },
+        "2gb": {
+          "title": "2 Go de données — pour 10 $!",
+          "subtitle": "Un ajout simple pour rester connecté quand vous en avez besoin."
+        }
+      }
+    },
+    "promo": {
+      "sim": {
+        "title": "Obtenez une nouvelle SIM aujourd'hui",
+        "body": "Commandez une carte SIM en ligne ou dans un magasin près de chez vous.",
+        "cta": "Acheter une SIM"
+      },
+      "topup": {
+        "title": "Rechargez votre compte",
+        "body": "Ajoutez des fonds à votre compte rapidement et facilement.",
+        "cta": "Recharger maintenant"
+      }
+    },
+    "howItWorks": {
+      "title": "Comment ça marche",
+      "step1": {
+        "title": "Commandez votre carte SIM",
+        "body": "Commandez une carte SIM en ligne ou dans un magasin près de chez vous.",
+        "cta": "Commencer"
+      },
+      "step2": {
+        "title": "Choisissez votre forfait",
+        "body": "Parcourez des forfaits abordables sans vérification de crédit ni contrat.",
+        "cta": "Voir les forfaits"
+      },
+      "step3": {
+        "title": "Activez et rechargez",
+        "body": "Activez votre SIM, ajoutez des fonds et commencez à utiliser chatr immédiatement.",
+        "cta": "Activer maintenant"
+      }
+    },
+    "whyChatr": {
+      "title": "Pourquoi chatr?",
+      "getStarted": "Commencer",
+      "credit": {
+        "title": "Sans vérification de crédit",
+        "body": "Connectez-vous sans vérification de crédit — tout le monde est le bienvenu chez chatr."
+      },
+      "contracts": {
+        "title": "Sans contrat à durée déterminée",
+        "body": "Restez flexible avec des forfaits prépayés que vous pouvez changer en tout temps."
+      },
+      "hidden": {
+        "title": "Sans frais cachés",
+        "body": "Ce que vous voyez est ce que vous payez. Aucun frais surprise sur votre facture."
+      },
+      "affordable": {
+        "title": "Abordable",
+        "body": "Des forfaits à partir de seulement 10 $/mois avec des données bonus au paiement auto."
+      }
+    },
+    "testimonials": {
+      "label": "Témoignages",
+      "title": "Ce que nos clients disent de nous",
+      "allReviews": "Tous les avis",
+      "items": {
+        "1": {
+          "quote": "Je suis très satisfait du produit Chatr. C'est facile à utiliser et le service à la clientèle est très utile.",
+          "name": "Jean Dupont",
+          "role": "Étudiant"
+        },
+        "2": {
+          "quote": "Passer à chatr a été simple. Excellente couverture et l'application rend la recharge facile.",
+          "name": "Marie L.",
+          "role": "Cliente"
+        }
+      }
+    },
+    "coverage": {
+      "label": "Notre couverture",
+      "title": "Notre couverture réseau exceptionnelle",
+      "subtitle": "Profitez d'une couverture fiable partout au pays.",
+      "cta": "Couverture réseau",
+      "nationwide": {
+        "title": "Couverture nationale",
+        "body": "Service fiable partout au Canada."
+      },
+      "reliable": {
+        "title": "Connexion fiable",
+        "body": "Restez connecté là où ça compte le plus."
+      }
+    },
+    "faq": {
+      "titlePurple": "Vous avez des questions?",
+      "titleBlack": "Nous avons les réponses",
+      "items": {
+        "purchase-sim": {
+          "question": "Comment puis-je acheter une carte SIM?",
+          "answer": "Commandez une SIM chatr en ligne pour 10 $ avec livraison gratuite, ou visitez n'importe quel magasin chatr d'un océan à l'autre."
+        },
+        "activate-sim": {
+          "question": "Comment activer une carte SIM?",
+          "answer": "Insérez votre SIM chatr, puis suivez l'assistant d'activation dans l'application ou en ligne. Vous choisirez un forfait et créerez votre compte Mon chatr."
+        },
+        "roaming": {
+          "question": "Puis-je utiliser chatr à l'étranger?",
+          "answer": "Oui — ajoutez un forfait voyage de l'itinérance dans la boutique d'ajouts avant de partir. Gérez tout depuis Mon chatr."
+        },
+        "payment": {
+          "question": "Quels sont les modes de paiement disponibles?",
+          "answer": "Rechargez avec Visa, Mastercard ou American Express. Inscrivez-vous au paiement auto pour des données bonus et des renouvellements sans tracas."
+        },
+        "change-plan": {
+          "question": "Comment changer mon forfait chatr?",
+          "answer": "Connectez-vous à Mon chatr, parcourez les forfaits et confirmez votre nouveau forfait. Les changements prennent effet à votre prochain cycle de facturation."
+        }
+      }
+    },
+    "footer": {
+      "shop": "Magasinage et forfaits",
+      "support": "Soutien",
+      "myChatr": "Mon chatr",
+      "about": "À propos",
+      "copyright": "© {{year}} Application démo par Tech Mahindra",
+      "links": {
+        "plans": "Forfaits",
+        "phones": "Téléphones",
+        "simCards": "Cartes SIM",
+        "helpCenter": "Centre d'aide",
+        "contactUs": "Nous joindre",
+        "storeLocator": "Trouver un magasin",
+        "login": "Connexion",
+        "register": "S'inscrire",
+        "topUp": "Recharge",
+        "aboutUs": "À propos de nous",
+        "careers": "Carrières",
+        "legal": "Mentions légales"
+      }
+    }
+  },
+  "errors": {
+    "planNotFound": "Forfait introuvable",
+    "addonNotFound": "Ajout introuvable",
+    "noUsageData": "Aucune donnée d'utilisation",
+    "notFoundTitle": "Oups!",
+    "notFoundBody": "Cet écran n'existe pas.",
+    "goHome": "Retour à l'accueil!"
   },
   "language": {
     "en": "English",

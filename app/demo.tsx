@@ -7,6 +7,7 @@ import { Button, Card } from '@/components/ui/Button';
 import { DEMO_SCENARIOS } from '@/lib/demo-scenarios';
 import { useAppStore } from '@/lib/store';
 import { colors, spacing } from '@/lib/theme/colors';
+import { fonts } from '@/lib/theme/typography';
 
 export default function DemoScreen() {
   const { t } = useTranslation();
@@ -33,7 +34,7 @@ export default function DemoScreen() {
           padding: spacing.md,
           backgroundColor: colors.green,
         }}>
-        <Text style={{ color: colors.white, fontWeight: '800', fontSize: 20 }}>{t('demo.title')}</Text>
+        <Text style={{ color: colors.white, fontFamily: fonts.extraBold, fontSize: 20 }}>{t('demo.title')}</Text>
         <Pressable onPress={() => router.back()}>
           <X color={colors.white} size={28} />
         </Pressable>
@@ -49,14 +50,14 @@ export default function DemoScreen() {
                 borderWidth: selected === scenario.id ? 2 : 0,
                 borderColor: colors.green,
               }}>
-              <Text style={{ fontWeight: '800', fontSize: 16 }}>
+              <Text style={{ fontFamily: fonts.extraBold, fontSize: 16 }}>
                 {locale === 'fr' ? scenario.labelFr : scenario.labelEn}
               </Text>
               <Text style={{ color: colors.grayDark, marginTop: 4, fontSize: 16 }}>
                 {locale === 'fr' ? scenario.descriptionFr : scenario.descriptionEn}
               </Text>
               {currentScenario === scenario.id ? (
-                <Text style={{ color: colors.green, fontWeight: '600', marginTop: 8 }}>{t('demo.current')}</Text>
+                <Text style={{ color: colors.green, fontFamily: fonts.semiBold, marginTop: 8 }}>{t('demo.current')}</Text>
               ) : null}
             </Card>
           </Pressable>

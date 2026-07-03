@@ -86,6 +86,7 @@ export type UserProfile = {
   balance: number;
   anniversaryDate: string;
   autoPayEnabled: boolean;
+  autoPayBonusClaimed: boolean;
   activeAddOns: ActiveAddOn[];
   paymentMethods: PaymentMethod[];
   transactions: Transaction[];
@@ -99,17 +100,25 @@ export type DemoScenarioId =
   | 'roaming-trip'
   | 'plan-upgrade';
 
+export type StoreType = 'chatr' | 'retail-partner';
+export type RetailCategory = 'grocery' | 'drug' | 'gas' | 'convenience';
+
 export type Store = {
   id: string;
   name: string;
   address: string;
   city: string;
   province: string;
+  postalCode?: string;
   lat: number;
   lng: number;
   hoursEn: string;
   hoursFr: string;
   phone: string;
+  storeType: StoreType;
+  retailCategory?: RetailCategory;
+  sellsSim?: boolean;
+  sellsTopUp?: boolean;
 };
 
 export type FaqItem = {

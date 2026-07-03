@@ -1,4 +1,5 @@
 import { View, Text, Pressable } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Plus, Minus, ThumbsUp } from 'lucide-react-native';
 import { colors, spacing, radius } from '@/lib/theme/colors';
 import { fonts } from '@/lib/theme/typography';
@@ -27,6 +28,7 @@ export function HomeAccordion({
   showThumbsUp = false,
   onLaunchJourney,
 }: HomeAccordionProps) {
+  const { t } = useTranslation();
   const isDark = variant === 'dark';
 
   return (
@@ -109,7 +111,7 @@ export function HomeAccordion({
                 </Text>
                 {item.journeyId && onLaunchJourney ? (
                   <Pressable onPress={() => onLaunchJourney(item.journeyId!)} style={{ marginTop: spacing.sm }}>
-                    <Text style={{ fontFamily: fonts.bold, fontSize: 14, color: colors.accent }}>Learn more ›</Text>
+                    <Text style={{ fontFamily: fonts.bold, fontSize: 14, color: colors.accent }}>{t('common.learnMore')} ›</Text>
                   </Pressable>
                 ) : null}
               </>

@@ -1,13 +1,14 @@
-import { ScrollView, View, Text, Pressable, Dimensions } from 'react-native';
+import { ScrollView, View, Text, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { BarChart } from 'react-native-gifted-charts';
-import { Header } from '@/components/layout/Header';
+import { Header, PageTitle } from '@/components/layout/Header';
 import { Card, SectionTitle, Button } from '@/components/ui/Button';
 import { ProgressRing } from '@/components/ui/ProgressRing';
+import { DailyUsageChart } from '@/components/usage/DailyUsageChart';
 import { useAppStore, useDataUsagePercent } from '@/lib/store';
 import { formatCurrency, formatDate, formatGb } from '@/lib/i18n';
 import { colors, spacing } from '@/lib/theme/colors';
+import { fonts } from '@/lib/theme/typography';
 
 export default function UsageScreen() {
   const { t } = useTranslation();
@@ -30,11 +31,12 @@ export default function UsageScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.gray }}>
-      <Header title={t('usage.title')} />
+      <Header />
+      <PageTitle>{t('usage.title')}</PageTitle>
       <ScrollView contentContainerStyle={{ padding: spacing.md }}>
         {usagePercent >= 75 ? (
           <Card style={{ marginBottom: spacing.md, backgroundColor: usagePercent >= 90 ? '#FFEBEE' : '#FFF3E0' }}>
-            <Text style={{ fontWeight: '700', marginBottom: spacing.sm }}>
+            <Text style={{ fontFamily: fonts.bold, marginBottom: spacing.sm }}>
               {usagePercent >= 90 ? t('dashboard.usageAlert90') : t('dashboard.usageAlert75')}
             </Text>
             <Button
@@ -45,9 +47,9 @@ export default function UsageScreen() {
           </Card>
         ) : null}
 
-        <Card style={{ marginBottom: spacing.md }}>
+        <Card style={{ marginBottom: spacing.xl }}>
           <Text style={{ color: colors.grayDark }}>{t('usage.cycle')}</Text>
-          <Text style={{ fontWeight: '600' }}>
+          <Text style={{ fontFamily: fonts.semiBold }}>
             {formatDate(usage.cycleStart, locale)} — {formatDate(usage.cycleEnd, locale)}
           </Text>
           <Text style={{ color: colors.grayDark, marginTop: 4 }}>
@@ -61,6 +63,8 @@ export default function UsageScreen() {
             label={t('usage.data')}
             sublabel={`${formatGb(usage.dataUsedMb)} / ${formatGb(usage.dataLimitMb)}`}
             alert
+            delay={0}
+            replayOnFocus
           />
           <ProgressRing
             percent={usage.minutesLimit ? talkPercent : 15}
@@ -71,31 +75,22 @@ export default function UsageScreen() {
                 : t('usage.unlimited')
             }
             color={colors.greenDark}
+            delay={110}
+            replayOnFocus
           />
         </View>
 
         <Card style={{ marginBottom: spacing.md, alignItems: 'center' }}>
           <SectionTitle>{t('usage.dailyUsage')}</SectionTitle>
           {chartData.length > 0 ? (
-            <BarChart
-              data={chartData}
-              width={Dimensions.get('window').width - 80}
-              height={180}
-              barWidth={16}
-              spacing={8}
-              roundedTop
-              yAxisThickness={0}
-              xAxisThickness={0}
-              noOfSections={4}
-              maxValue={800}
-            />
+            <DailyUsageChart data={chartData} />
           ) : (
-            <Text style={{ color: colors.grayDark }}>No usage data yet</Text>
+            <Text style={{ color: colors.grayDark }}>{t('errors.noUsageData')}</Text>
           )}
         </Card>
 
         <Card>
-          <Text style={{ fontWeight: '700', fontSize: 16 }}>{t('usage.text')}</Text>
+          <Text style={{ fontFamily: fonts.bold, fontSize: 16 }}>{t('usage.text')}</Text>
           <Text style={{ color: colors.grayDark, marginTop: 4 }}>
             {usage.textsLimit
               ? t('usage.textsUsed', { used: usage.textsUsed })

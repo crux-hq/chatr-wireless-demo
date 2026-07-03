@@ -23,6 +23,11 @@ module.exports = {
       },
       fontFamily: {
         sans: ['SantralRegular', 'system-ui', 'sans-serif'],
+        regular: ['SantralRegular', 'system-ui', 'sans-serif'],
+        medium: ['SantralMedium', 'system-ui', 'sans-serif'],
+        semibold: ['SantralSemiBold', 'system-ui', 'sans-serif'],
+        bold: ['SantralBold', 'system-ui', 'sans-serif'],
+        extrabold: ['SantralExtraBold', 'system-ui', 'sans-serif'],
       },
     },
   },

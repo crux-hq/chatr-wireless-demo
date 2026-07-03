@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import i18n from '@/lib/i18n';
 import type { DemoScenarioId, UserProfile } from '../mock/types';
 import { getUserForScenario, getUserByEmail } from '../demo-scenarios';
 import { mockApiCall } from '../mock/api';
@@ -14,6 +15,7 @@ type AppState = {
   currentScenario: DemoScenarioId;
   selectedPlanId: string | null;
   pendingPlanChangeId: string | null;
+  pendingAddOnId: string | null;
   activationDraft: {
     simNumber: string;
     phoneNumber: string;
@@ -33,9 +35,12 @@ type AppState = {
   confirmPlanChange: () => Promise<void>;
   topUp: (amount: number) => Promise<void>;
   toggleAutoPay: (enabled: boolean) => void;
+  claimAutoPayBonus: () => Promise<void>;
   addPaymentMethod: (card: { brand: string; last4: string; expiryMonth: number; expiryYear: number; isAutoPay: boolean }) => void;
   removePaymentMethod: (id: string) => void;
-  purchaseAddOn: (addOnId: string) => Promise<void>;
+  purchaseAddOn: (addOnId: string) => Promise<{ expiresAt: string } | null>;
+  setPendingAddOn: (addOnId: string | null) => void;
+  resetDemoState: () => Promise<void>;
   setActivationDraft: (updates: Partial<AppState['activationDraft']>) => void;
   completeActivation: (profile: Partial<UserProfile>) => Promise<void>;
 };
@@ -50,6 +55,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   currentScenario: 'happy-path',
   selectedPlanId: null,
   pendingPlanChangeId: null,
+  pendingAddOnId: null,
   activationDraft: {
     simNumber: '',
     phoneNumber: '',
@@ -70,7 +76,10 @@ export const useAppStore = create<AppState>((set, get) => ({
       const raw = await AsyncStorage.getItem(STORAGE_KEY);
       if (raw) {
         const saved = JSON.parse(raw);
-        if (saved.locale) set({ locale: saved.locale });
+        if (saved.locale) {
+          set({ locale: saved.locale });
+          void i18n.changeLanguage(saved.locale);
+        }
         if (saved.currentScenario) set({ currentScenario: saved.currentScenario });
         if (saved.isAuthenticated && saved.userEmail) {
           const user = getUserByEmail(saved.userEmail);
@@ -84,6 +93,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   setLocale: (locale) => {
     set({ locale });
+    void i18n.changeLanguage(locale);
     void get().persist();
   },
 
@@ -124,12 +134,14 @@ export const useAppStore = create<AppState>((set, get) => ({
     const plan = getPlanById(pendingPlanChangeId);
     if (!plan) return;
     await mockApiCall(null);
-    const dataLimitMb = (plan.baseDataGb + (user.autoPayEnabled ? plan.autoPayBonusGb : 0)) * 1024;
+    const dataLimitMb =
+      (plan.baseDataGb + (user.autoPayEnabled && (user.autoPayBonusClaimed ?? false) ? plan.autoPayBonusGb : 0)) * 1024;
     set({
       user: {
         ...user,
         planId: pendingPlanChangeId,
         balance: plan.price,
+        autoPayBonusClaimed: false,
         usage: { ...user.usage, dataLimitMb },
       },
       pendingPlanChangeId: null,
@@ -165,13 +177,33 @@ export const useAppStore = create<AppState>((set, get) => ({
     const { user } = get();
     if (!user) return;
     const plan = getPlanById(user.planId);
-    const bonusMb = plan && enabled ? plan.autoPayBonusGb * 1024 : 0;
+    const bonusMb = plan && enabled && (user.autoPayBonusClaimed ?? false) ? plan.autoPayBonusGb * 1024 : 0;
     const baseMb = plan ? plan.baseDataGb * 1024 : user.usage.dataLimitMb;
     set({
       user: {
         ...user,
         autoPayEnabled: enabled,
         usage: { ...user.usage, dataLimitMb: baseMb + bonusMb },
+      },
+    });
+    void get().persist();
+  },
+
+  claimAutoPayBonus: async () => {
+    const { user } = get();
+    if (!user || (user.autoPayBonusClaimed ?? false)) return;
+    const plan = getPlanById(user.planId);
+    if (!plan || plan.autoPayBonusGb <= 0) return;
+    await mockApiCall(null);
+    set({
+      user: {
+        ...user,
+        autoPayEnabled: true,
+        autoPayBonusClaimed: true,
+        usage: {
+          ...user.usage,
+          dataLimitMb: user.usage.dataLimitMb + plan.autoPayBonusGb * 1024,
+        },
       },
     });
     void get().persist();
@@ -202,12 +234,14 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   purchaseAddOn: async (addOnId) => {
     const { user } = get();
-    if (!user) return;
+    if (!user) return null;
     const addOn = getAddOnById(addOnId);
-    if (!addOn) return;
+    if (!addOn) return null;
     await mockApiCall(null);
     const expires = new Date();
     expires.setDate(expires.getDate() + 30);
+    const purchasedAt = new Date().toISOString().split('T')[0];
+    const expiresAt = expires.toISOString().split('T')[0];
     let usage = { ...user.usage };
     if (addOn.dataGb && addOn.category === 'extra-data') {
       usage = { ...usage, dataLimitMb: usage.dataLimitMb + addOn.dataGb * 1024 };
@@ -215,20 +249,20 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({
       user: {
         ...user,
-        balance: Math.max(0, user.balance),
+        balance: user.balance - addOn.price,
         usage,
         activeAddOns: [
           ...user.activeAddOns,
           {
             addOnId,
-            purchasedAt: new Date().toISOString().split('T')[0],
-            expiresAt: expires.toISOString().split('T')[0],
+            purchasedAt,
+            expiresAt,
           },
         ],
         transactions: [
           {
             id: `tx-${Date.now()}`,
-            date: new Date().toISOString().split('T')[0],
+            date: purchasedAt,
             amount: addOn.price,
             type: 'add-on',
             descriptionEn: addOn.nameEn,
@@ -239,6 +273,29 @@ export const useAppStore = create<AppState>((set, get) => ({
       },
     });
     void get().persist();
+    return { expiresAt };
+  },
+
+  setPendingAddOn: (addOnId) => {
+    set({ pendingAddOnId: addOnId });
+  },
+
+  resetDemoState: async () => {
+    await AsyncStorage.removeItem(STORAGE_KEY);
+    set({
+      isAuthenticated: false,
+      user: null,
+      currentScenario: 'happy-path',
+      selectedPlanId: null,
+      pendingPlanChangeId: null,
+      pendingAddOnId: null,
+      activationDraft: {
+        simNumber: '',
+        phoneNumber: '',
+        planId: '35gb',
+        autoPay: true,
+      },
+    });
   },
 
   setActivationDraft: (updates) => {
@@ -266,6 +323,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       balance: 0,
       anniversaryDate: new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
       autoPayEnabled: activationDraft.autoPay,
+      autoPayBonusClaimed: activationDraft.autoPay,
       activeAddOns: [],
       paymentMethods: [],
       transactions: [],

@@ -1,18 +1,18 @@
-export const HERO_BADGE = "Canada's #1 Prepaid Mobile Phone Provider";
+export const HERO_BADGE_KEY = 'homepage.hero.badge';
 
 export const HERO_SLIDES = [
   {
     id: '50gb',
-    title: 'Get 50GB of Data and Unlimited US Calling for $34!!*',
-    subtitle: 'Plus, enjoy unlimited data for the rest of your billing cycle.',
+    titleKey: 'homepage.hero.slides.50gb.title',
+    subtitleKey: 'homepage.hero.slides.50gb.subtitle',
     image: require('@/assets/images/homepage/hero-speech.png'),
     shopJourneyId: 'browse-plans',
     detailsJourneyId: 'change-plan',
   },
   {
     id: '2gb',
-    title: '2GB of data — for $10!',
-    subtitle: 'A simple add-on to keep you connected when you need it.',
+    titleKey: 'homepage.hero.slides.2gb.title',
+    subtitleKey: 'homepage.hero.slides.2gb.subtitle',
     image: require('@/assets/images/homepage/promo-phone.png'),
     shopJourneyId: 'browse-plans',
     detailsJourneyId: 'addon-purchase',
@@ -23,17 +23,17 @@ export const PROMO_CARDS = [
   {
     id: 'sim',
     icon: require('@/assets/images/homepage/icon-sim.png'),
-    title: 'Get a new Sim today',
-    body: 'Order a SIM card online or at a store near you.',
-    cta: 'Shop SIM',
-    journeyId: 'activate',
+    titleKey: 'homepage.promo.sim.title',
+    bodyKey: 'homepage.promo.sim.body',
+    ctaKey: 'homepage.promo.sim.cta',
+    journeyId: 'buy-sim',
   },
   {
     id: 'topup',
     icon: require('@/assets/images/homepage/icon-wallet.png'),
-    title: 'Top-up your account',
-    body: 'Add funds to your account quickly and easily.',
-    cta: 'Top up now',
+    titleKey: 'homepage.promo.topup.title',
+    bodyKey: 'homepage.promo.topup.body',
+    ctaKey: 'homepage.promo.topup.cta',
     journeyId: 'top-up',
   },
 ] as const;
@@ -41,113 +41,121 @@ export const PROMO_CARDS = [
 export const HOW_IT_WORKS_STEPS = [
   {
     step: 1,
-    title: 'Order your SIM card',
-    body: 'Order a SIM card online or at a store near you.',
-    cta: 'Get started',
-    journeyId: 'activate',
+    titleKey: 'homepage.howItWorks.step1.title',
+    bodyKey: 'homepage.howItWorks.step1.body',
+    ctaKey: 'homepage.howItWorks.step1.cta',
+    journeyId: 'buy-sim',
   },
   {
     step: 2,
-    title: 'Pick your plan',
-    body: 'Browse affordable plans with no credit checks or contracts.',
-    cta: 'View plans',
+    titleKey: 'homepage.howItWorks.step2.title',
+    bodyKey: 'homepage.howItWorks.step2.body',
+    ctaKey: 'homepage.howItWorks.step2.cta',
     journeyId: 'browse-plans',
   },
   {
     step: 3,
-    title: 'Activate and top up',
-    body: 'Activate your SIM, add funds, and start using chatr right away.',
-    cta: 'Activate now',
+    titleKey: 'homepage.howItWorks.step3.title',
+    bodyKey: 'homepage.howItWorks.step3.body',
+    ctaKey: 'homepage.howItWorks.step3.cta',
     journeyId: 'activate',
   },
 ] as const;
 
 export const WHY_CHATR_ITEMS = [
-  { id: 'credit', title: 'No credit checks', body: 'Get connected without a credit check — everyone is welcome at chatr.' },
-  { id: 'contracts', title: 'No term contracts', body: 'Stay flexible with prepaid plans you can change anytime.' },
-  { id: 'hidden', title: 'No hidden charges', body: 'What you see is what you pay. No surprise fees on your bill.' },
+  { id: 'credit', titleKey: 'homepage.whyChatr.credit.title', bodyKey: 'homepage.whyChatr.credit.body' },
+  { id: 'contracts', titleKey: 'homepage.whyChatr.contracts.title', bodyKey: 'homepage.whyChatr.contracts.body' },
+  { id: 'hidden', titleKey: 'homepage.whyChatr.hidden.title', bodyKey: 'homepage.whyChatr.hidden.body' },
   {
     id: 'affordable',
-    title: 'Affordable',
-    body: 'Plans starting from just $10/month with bonus data on Auto-Pay.',
+    titleKey: 'homepage.whyChatr.affordable.title',
+    bodyKey: 'homepage.whyChatr.affordable.body',
   },
 ] as const;
 
 export const TESTIMONIALS = [
   {
     id: '1',
-    quote:
-      'I am very happy with the Chatr product. It\'s easy to use and the customer service is very helpful.',
-    name: 'John Doe',
-    role: 'Student',
+    quoteKey: 'homepage.testimonials.items.1.quote',
+    nameKey: 'homepage.testimonials.items.1.name',
+    roleKey: 'homepage.testimonials.items.1.role',
     avatar: require('@/assets/images/homepage/testimonial-avatar.png'),
     rating: 5,
   },
   {
     id: '2',
-    quote: 'Switching to chatr was simple. Great coverage and the app makes topping up effortless.',
-    name: 'Marie L.',
-    role: 'Customer',
+    quoteKey: 'homepage.testimonials.items.2.quote',
+    nameKey: 'homepage.testimonials.items.2.name',
+    roleKey: 'homepage.testimonials.items.2.role',
     avatar: require('@/assets/images/homepage/testimonial-avatar.png'),
     rating: 5,
   },
 ] as const;
 
 export const COVERAGE_FEATURES = [
-  { id: 'nationwide', title: 'Nationwide coverage', body: 'Reliable service across Canada.' },
-  { id: 'reliable', title: 'Reliable connection', body: 'Stay connected where it matters most.' },
+  { id: 'nationwide', titleKey: 'homepage.coverage.nationwide.title', bodyKey: 'homepage.coverage.nationwide.body' },
+  { id: 'reliable', titleKey: 'homepage.coverage.reliable.title', bodyKey: 'homepage.coverage.reliable.body' },
 ] as const;
 
 export const HOMEPAGE_FAQ = [
   {
+    id: 'purchase-sim',
+    questionKey: 'homepage.faq.items.purchase-sim.question',
+    answerKey: 'homepage.faq.items.purchase-sim.answer',
+    journeyId: 'buy-sim',
+  },
+  {
     id: 'activate-sim',
-    question: 'How do I activate a SIM card?',
-    answer:
-      'Insert your chatr SIM, then follow the activation wizard in the app or online. You\'ll pick a plan and create your My chatr account.',
+    questionKey: 'homepage.faq.items.activate-sim.question',
+    answerKey: 'homepage.faq.items.activate-sim.answer',
     journeyId: 'activate',
   },
   {
     id: 'roaming',
-    question: 'Can I use Chatr while traveling abroad?',
-    answer:
-      'Yes — add a roaming travel pack from the add-ons marketplace before you travel. Manage everything from My chatr.',
+    questionKey: 'homepage.faq.items.roaming.question',
+    answerKey: 'homepage.faq.items.roaming.answer',
     journeyId: 'addons',
   },
   {
     id: 'payment',
-    question: 'What are the available payment methods?',
-    answer:
-      'Top up with Visa, Mastercard, or American Express. Enroll in Auto-Pay for bonus data and hassle-free renewals.',
-    journeyId: 'auto-pay',
+    questionKey: 'homepage.faq.items.payment.question',
+    answerKey: 'homepage.faq.items.payment.answer',
+    journeyId: 'top-up',
   },
   {
     id: 'change-plan',
-    question: 'How do I change my Chatr plan?',
-    answer:
-      'Sign in to My chatr, browse plans, and confirm your new plan. Changes take effect on your next billing cycle.',
-    journeyId: 'change-plan',
+    questionKey: 'homepage.faq.items.change-plan.question',
+    answerKey: 'homepage.faq.items.change-plan.answer',
+    journeyId: 'browse-plans',
   },
 ] as const;
 
 export const FOOTER_LINKS = {
   shop: [
-    { label: 'Plans', journeyId: 'browse-plans' },
-    { label: 'Phones', journeyId: 'browse-plans' },
-    { label: 'SIM cards', journeyId: 'activate' },
+    { labelKey: 'homepage.footer.links.plans', journeyId: 'browse-plans' },
+    { labelKey: 'homepage.footer.links.phones', journeyId: 'browse-plans' },
+    { labelKey: 'homepage.footer.links.simCards', journeyId: 'buy-sim' },
   ],
   support: [
-    { label: 'Help center', journeyId: 'support' },
-    { label: 'Contact us', journeyId: 'support' },
-    { label: 'Store locator', journeyId: 'stores' },
+    { labelKey: 'homepage.footer.links.helpCenter', journeyId: 'support' },
+    { labelKey: 'homepage.footer.links.contactUs', journeyId: 'support' },
+    { labelKey: 'homepage.footer.links.storeLocator', journeyId: 'stores' },
   ],
   myChatr: [
-    { label: 'Login', journeyId: 'sign-in' },
-    { label: 'Register', journeyId: 'register' },
-    { label: 'Top-up', journeyId: 'top-up' },
+    { labelKey: 'homepage.footer.links.login', journeyId: 'sign-in' },
+    { labelKey: 'homepage.footer.links.register', journeyId: 'register' },
+    { labelKey: 'homepage.footer.links.topUp', journeyId: 'top-up' },
   ],
   about: [
-    { label: 'About us', journeyId: 'support' },
-    { label: 'Careers', journeyId: 'support' },
-    { label: 'Legal', journeyId: 'support' },
+    { labelKey: 'homepage.footer.links.aboutUs', journeyId: 'support' },
+    { labelKey: 'homepage.footer.links.careers', journeyId: 'support' },
+    { labelKey: 'homepage.footer.links.legal', journeyId: 'support' },
   ],
 } as const;
+
+export const FOOTER_SECTIONS = [
+  { titleKey: 'homepage.footer.shop', linksKey: 'shop' as const },
+  { titleKey: 'homepage.footer.support', linksKey: 'support' as const },
+  { titleKey: 'homepage.footer.myChatr', linksKey: 'myChatr' as const },
+  { titleKey: 'homepage.footer.about', linksKey: 'about' as const },
+] as const;

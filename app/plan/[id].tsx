@@ -1,22 +1,26 @@
 import { ScrollView, View, Text } from 'react-native';
-import { useLocalSearchParams, router, Stack } from 'expo-router';
+import { useLocalSearchParams, router, type Href } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import { Header, PageTitle } from '@/components/layout/Header';
 import { Button, Card, Badge } from '@/components/ui/Button';
 import { getPlanById, getTotalDataGb } from '@/lib/mock/plans';
 import { useAppStore } from '@/lib/store';
 import { formatCurrency, formatDate } from '@/lib/i18n';
+import { PublicHomeFooter } from '@/components/layout/PublicHomeFooter';
 import { colors, spacing } from '@/lib/theme/colors';
+import { fonts } from '@/lib/theme/typography';
 
 export default function PlanDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { t } = useTranslation();
   const locale = useAppStore((s) => s.locale);
   const user = useAppStore((s) => s.user);
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
   const setPendingPlanChange = useAppStore((s) => s.setPendingPlanChange);
   const confirmPlanChange = useAppStore((s) => s.confirmPlanChange);
 
   const plan = getPlanById(id ?? '');
-  if (!plan) return <Text>Plan not found</Text>;
+  if (!plan) return <Text>{t('errors.planNotFound')}</Text>;
 
   const isCurrent = user?.planId === plan.id;
   const totalGb = getTotalDataGb(plan, true);
@@ -27,25 +31,28 @@ export default function PlanDetailScreen() {
     router.back();
   };
 
+  const pageTitle = locale === 'fr' ? plan.nameFr : plan.nameEn;
+
   return (
-    <>
-      <Stack.Screen options={{ title: locale === 'fr' ? plan.nameFr : plan.nameEn, headerShown: true }} />
-      <ScrollView style={{ flex: 1, backgroundColor: colors.gray }} contentContainerStyle={{ padding: spacing.md }}>
+    <View style={{ flex: 1, backgroundColor: colors.gray }}>
+      <Header />
+      <PageTitle>{pageTitle}</PageTitle>
+      <ScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: isAuthenticated ? spacing.md : 100 }}>
         {plan.featured ? <Badge label="35 GB for $29" color={colors.accent} /> : null}
-        <Text style={{ fontSize: 36, fontWeight: '800', marginTop: spacing.md }}>
+        <Text style={{ fontSize: 36, fontFamily: fonts.extraBold, marginTop: spacing.md }}>
           {plan.baseDataGb > 0 ? `${totalGb} GB` : locale === 'fr' ? plan.nameFr : plan.nameEn}
         </Text>
-        <Text style={{ fontSize: 28, fontWeight: '700', color: colors.green, marginTop: 8 }}>
+        <Text style={{ fontSize: 28, fontFamily: fonts.bold, color: colors.green, marginTop: 8 }}>
           {formatCurrency(plan.price, locale)}
           {t('common.perMonth')}
         </Text>
 
         <Card style={{ marginTop: spacing.lg }}>
-          <Text style={{ fontWeight: '700' }}>{t('plans.basePlan')}</Text>
+          <Text style={{ fontFamily: fonts.bold }}>{t('plans.basePlan')}</Text>
           <Text>{plan.baseDataGb} GB</Text>
-          <Text style={{ fontWeight: '700', marginTop: spacing.sm }}>{t('plans.autoPayBonus')}</Text>
+          <Text style={{ fontFamily: fonts.bold, marginTop: spacing.sm }}>{t('plans.autoPayBonus')}</Text>
           <Text>+{plan.autoPayBonusGb} GB</Text>
-          <Text style={{ fontWeight: '700', marginTop: spacing.sm }}>{t('plans.totalData')}</Text>
+          <Text style={{ fontFamily: fonts.bold, marginTop: spacing.sm }}>{t('plans.totalData')}</Text>
           <Text>{totalGb} GB</Text>
         </Card>
 
@@ -66,10 +73,11 @@ export default function PlanDetailScreen() {
         ) : (
           <View style={{ marginTop: spacing.lg, gap: spacing.sm }}>
             <Button title={t('common.activateNow')} onPress={() => router.push('/activate')} />
-            <Button title={t('common.buyNow')} onPress={() => router.push('/activate')} variant="secondary" />
+            <Button title={t('common.buyNow')} onPress={() => router.push('/buy-sim' as Href)} variant="secondary" />
           </View>
         )}
+        {!isAuthenticated ? <PublicHomeFooter /> : null}
       </ScrollView>
-    </>
+    </View>
   );
 }

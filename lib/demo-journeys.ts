@@ -1,5 +1,40 @@
 import type { DemoScenarioId } from './mock/types';
 
+export type JourneyAudience = 'new' | 'existing';
+
+export type JourneyTheme =
+  | 'activation'
+  | 'account'
+  | 'plans'
+  | 'usage'
+  | 'billing'
+  | 'auto-pay'
+  | 'add-ons'
+  | 'support';
+
+export const JOURNEY_THEME_LABELS: Record<JourneyTheme, string> = {
+  activation: 'Activation',
+  account: 'Account',
+  plans: 'Plans',
+  usage: 'Usage',
+  billing: 'Billing',
+  'auto-pay': 'Auto-Pay',
+  'add-ons': 'Add-ons',
+  support: 'Support',
+};
+
+/** Themes shown as quick filters — order controls chip row */
+export const JOURNEY_FILTER_THEMES: JourneyTheme[] = [
+  'activation',
+  'account',
+  'plans',
+  'usage',
+  'billing',
+  'auto-pay',
+  'add-ons',
+  'support',
+];
+
 export type DemoJourney = {
   id: string;
   title: string;
@@ -9,6 +44,8 @@ export type DemoJourney = {
   password?: string;
   scenarioId?: DemoScenarioId;
   signOutFirst?: boolean;
+  audiences: JourneyAudience[];
+  themes: JourneyTheme[];
 };
 
 /** Plain-English sales demo journeys with test credentials */
@@ -21,23 +58,38 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
     email: 'demo@chatr.ca',
     password: 'any',
     scenarioId: 'happy-path',
+    audiences: ['existing'],
+    themes: ['account', 'auto-pay'],
   },
   {
     id: 'sign-in',
     title: 'Sign in',
     description: 'Log in to My chatr with a demo account.',
-    route: '/(auth)/sign-in',
+    route: '/sign-in',
     email: 'demo@chatr.ca',
     password: 'any',
     signOutFirst: true,
+    audiences: ['new', 'existing'],
+    themes: ['account'],
   },
   {
     id: 'register',
     title: 'Create account',
     description: 'Register a new My chatr profile (mock — any details work).',
-    route: '/(auth)/register',
+    route: '/register',
     password: 'any',
     signOutFirst: true,
+    audiences: ['new'],
+    themes: ['activation', 'account'],
+  },
+  {
+    id: 'buy-sim',
+    title: 'Buy a SIM card',
+    description: 'Order a chatr Multi SIM online — $10 with free shipping.',
+    route: '/buy-sim',
+    signOutFirst: true,
+    audiences: ['new'],
+    themes: ['activation'],
   },
   {
     id: 'activate',
@@ -47,15 +99,17 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
     email: 'new@chatr.ca',
     password: 'any',
     signOutFirst: true,
+    audiences: ['new'],
+    themes: ['activation'],
   },
   {
     id: 'browse-plans',
     title: 'Browse and compare plans',
     description: 'Filter plans, view 35 GB promo, FAQ, and plan details.',
-    route: '/(tabs)/plans',
-    email: 'demo@chatr.ca',
-    password: 'any',
-    scenarioId: 'happy-path',
+    route: '/plans',
+    signOutFirst: true,
+    audiences: ['new', 'existing'],
+    themes: ['plans'],
   },
   {
     id: 'change-plan',
@@ -65,6 +119,8 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
     email: 'demo@chatr.ca',
     password: 'any',
     scenarioId: 'plan-upgrade',
+    audiences: ['existing'],
+    themes: ['plans'],
   },
   {
     id: 'usage',
@@ -74,6 +130,8 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
     email: 'demo@chatr.ca',
     password: 'any',
     scenarioId: 'happy-path',
+    audiences: ['existing'],
+    themes: ['usage'],
   },
   {
     id: 'usage-upsell',
@@ -83,6 +141,8 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
     email: 'heavy@chatr.ca',
     password: 'any',
     scenarioId: 'upsell-moment',
+    audiences: ['existing'],
+    themes: ['usage', 'add-ons'],
   },
   {
     id: 'top-up',
@@ -92,6 +152,8 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
     email: 'demo@chatr.ca',
     password: 'any',
     scenarioId: 'happy-path',
+    audiences: ['existing'],
+    themes: ['billing'],
   },
   {
     id: 'auto-pay',
@@ -101,6 +163,8 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
     email: 'demo@chatr.ca',
     password: 'any',
     scenarioId: 'happy-path',
+    audiences: ['existing'],
+    themes: ['auto-pay', 'billing'],
   },
   {
     id: 'addons',
@@ -110,6 +174,8 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
     email: 'roam@chatr.ca',
     password: 'any',
     scenarioId: 'roaming-trip',
+    audiences: ['existing'],
+    themes: ['add-ons'],
   },
   {
     id: 'addon-purchase',
@@ -119,6 +185,8 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
     email: 'heavy@chatr.ca',
     password: 'any',
     scenarioId: 'upsell-moment',
+    audiences: ['existing'],
+    themes: ['add-ons', 'billing'],
   },
   {
     id: 'profile',
@@ -128,6 +196,8 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
     email: 'demo@chatr.ca',
     password: 'any',
     scenarioId: 'happy-path',
+    audiences: ['existing'],
+    themes: ['account'],
   },
   {
     id: 'coverage',
@@ -137,6 +207,8 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
     email: 'demo@chatr.ca',
     password: 'any',
     scenarioId: 'happy-path',
+    audiences: ['new', 'existing'],
+    themes: ['support'],
   },
   {
     id: 'stores',
@@ -146,15 +218,19 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
     email: 'demo@chatr.ca',
     password: 'any',
     scenarioId: 'happy-path',
+    audiences: ['new', 'existing'],
+    themes: ['support'],
   },
   {
     id: 'support',
     title: 'Support and FAQ',
-    description: 'Searchable FAQ, mock chat, phone and store contact options.',
+    description: 'Searchable FAQ, phone and store contact options.',
     route: '/support',
     email: 'demo@chatr.ca',
     password: 'any',
     scenarioId: 'happy-path',
+    audiences: ['new', 'existing'],
+    themes: ['support'],
   },
   {
     id: 'first-top-up',
@@ -164,5 +240,45 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
     email: 'new@chatr.ca',
     password: 'any',
     scenarioId: 'new-activation',
+    audiences: ['new'],
+    themes: ['activation', 'billing'],
   },
 ];
+
+export function filterDemoJourneys(
+  audience: JourneyAudience,
+  activeThemes: JourneyTheme[],
+  searchQuery = '',
+): DemoJourney[] {
+  const query = searchQuery.trim().toLowerCase();
+
+  return DEMO_JOURNEYS.filter((journey) => {
+    const matchesAudience = journey.audiences.includes(audience);
+    const matchesTheme =
+      activeThemes.length === 0 || journey.themes.some((theme) => activeThemes.includes(theme));
+    if (!matchesAudience || !matchesTheme) return false;
+    if (!query) return true;
+
+    const haystack = [
+      journey.title,
+      journey.description,
+      journey.id,
+      journey.email ?? '',
+      ...journey.themes.map((theme) => JOURNEY_THEME_LABELS[theme]),
+    ]
+      .join(' ')
+      .toLowerCase();
+
+    return haystack.includes(query);
+  });
+}
+
+export function getThemesForAudience(audience: JourneyAudience): JourneyTheme[] {
+  const themes = new Set<JourneyTheme>();
+  for (const journey of DEMO_JOURNEYS) {
+    if (journey.audiences.includes(audience)) {
+      journey.themes.forEach((theme) => themes.add(theme));
+    }
+  }
+  return JOURNEY_FILTER_THEMES.filter((theme) => themes.has(theme));
+}

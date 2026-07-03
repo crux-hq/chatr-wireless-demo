@@ -40,6 +40,7 @@ export const DEMO_USERS: Record<string, UserProfile> = {
     balance: 29.0,
     anniversaryDate: ANNIVERSARY,
     autoPayEnabled: true,
+    autoPayBonusClaimed: false,
     activeAddOns: [],
     paymentMethods: [
       {
@@ -86,6 +87,7 @@ export const DEMO_USERS: Record<string, UserProfile> = {
     balance: 25.0,
     anniversaryDate: ANNIVERSARY,
     autoPayEnabled: true,
+    autoPayBonusClaimed: false,
     activeAddOns: [],
     paymentMethods: [
       {
@@ -115,6 +117,7 @@ export const DEMO_USERS: Record<string, UserProfile> = {
     balance: 44.0,
     anniversaryDate: ANNIVERSARY,
     autoPayEnabled: true,
+    autoPayBonusClaimed: false,
     activeAddOns: [
       {
         addOnId: 'roaming-eu-3gb',
@@ -159,6 +162,7 @@ export const DEMO_USERS: Record<string, UserProfile> = {
     balance: 0,
     anniversaryDate: ANNIVERSARY,
     autoPayEnabled: false,
+    autoPayBonusClaimed: false,
     activeAddOns: [],
     paymentMethods: [],
     transactions: [],

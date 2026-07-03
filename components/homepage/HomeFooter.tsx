@@ -1,5 +1,6 @@
 import { View, Text, Pressable } from 'react-native';
-import { FOOTER_LINKS } from '@/lib/homepage-data';
+import { useTranslation } from 'react-i18next';
+import { FOOTER_LINKS, FOOTER_SECTIONS } from '@/lib/homepage-data';
 import { colors, spacing } from '@/lib/theme/colors';
 import { fonts } from '@/lib/theme/typography';
 
@@ -13,17 +14,19 @@ function FooterColumn({
   onLaunch,
 }: {
   title: string;
-  links: readonly { label: string; journeyId: string }[];
+  links: readonly { labelKey: string; journeyId: string }[];
   onLaunch: (id: string) => void;
 }) {
+  const { t } = useTranslation();
+
   return (
     <View style={{ flex: 1, minWidth: 140, marginBottom: spacing.lg }}>
       <Text style={{ fontFamily: fonts.bold, fontSize: 14, color: colors.white, marginBottom: spacing.sm }}>
         {title}
       </Text>
       {links.map((link) => (
-        <Pressable key={link.label} onPress={() => onLaunch(link.journeyId)} style={{ paddingVertical: 4 }}>
-          <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.lavenderMid }}>{link.label}</Text>
+        <Pressable key={link.labelKey} onPress={() => onLaunch(link.journeyId)} style={{ paddingVertical: 4 }}>
+          <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.lavenderMid }}>{t(link.labelKey)}</Text>
         </Pressable>
       ))}
     </View>
@@ -31,17 +34,23 @@ function FooterColumn({
 }
 
 export function HomeFooter({ onLaunchJourney }: HomeFooterProps) {
+  const { t } = useTranslation();
+
   return (
     <View style={{ backgroundColor: colors.primaryDark, padding: spacing.lg, paddingBottom: spacing.xxl }}>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md }}>
-        <FooterColumn title="Shop & Plans" links={FOOTER_LINKS.shop} onLaunch={onLaunchJourney} />
-        <FooterColumn title="Support" links={FOOTER_LINKS.support} onLaunch={onLaunchJourney} />
-        <FooterColumn title="My Chatr" links={FOOTER_LINKS.myChatr} onLaunch={onLaunchJourney} />
-        <FooterColumn title="About" links={FOOTER_LINKS.about} onLaunch={onLaunchJourney} />
+        {FOOTER_SECTIONS.map((section) => (
+          <FooterColumn
+            key={section.linksKey}
+            title={t(section.titleKey)}
+            links={FOOTER_LINKS[section.linksKey]}
+            onLaunch={onLaunchJourney}
+          />
+        ))}
       </View>
       <View style={{ marginTop: spacing.lg, paddingTop: spacing.lg, borderTopWidth: 1, borderTopColor: colors.primaryLight }}>
         <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.lavenderMid }}>
-          © {new Date().getFullYear()} chatr mobile. Demo app — mock data only.
+          {t('homepage.footer.copyright', { year: new Date().getFullYear() })}
         </Text>
       </View>
     </View>

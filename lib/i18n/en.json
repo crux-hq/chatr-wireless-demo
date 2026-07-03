@@ -12,6 +12,7 @@
     "continue": "Continue",
     "confirm": "Confirm",
     "cancel": "Cancel",
+    "close": "Close",
     "save": "Save",
     "back": "Back",
     "done": "Done",
@@ -38,7 +39,7 @@
     "noAccount": "Don't have an account?",
     "createAccount": "Create account",
     "demoAccounts": "Demo accounts",
-    "registerTitle": "Create My chatr account",
+    "registerTitle": "Create account",
     "firstName": "First name",
     "lastName": "Last name",
     "phone": "Phone number",
@@ -63,7 +64,10 @@
     "promos": "Offers for you",
     "usageAlert75": "You've used 75% of your data",
     "usageAlert90": "You've used 90% of your data — add more data now",
-    "activeAddons": "Active add-ons"
+    "activeAddons": "Active add-ons",
+    "bonusClaimedTitle": "Bonus added!",
+    "bonusClaimedMessage": "{{gb}} GB has been added to your account.",
+    "bonusClaimedCta": "Great!"
   },
   "usage": {
     "title": "Usage",
@@ -86,7 +90,7 @@
     "filterData": "Talk, Text & Data",
     "filterTalk": "Talk & Text",
     "basePlan": "Base plan",
-    "autoPayBonus": "Auto-Pay bonus",
+    "autoPayBonus": "Claim 5 GB bonus",
     "totalData": "Total with Auto-Pay",
     "viewDetails": "View plan details",
     "compare": "Compare plans",
@@ -103,6 +107,24 @@
     "subtitle": "Enhance your plan with convenient add-ons",
     "purchase": "Purchase add-on",
     "purchased": "Add-on purchased!",
+    "purchasedDetail": "{{name}} is now active on your account until {{date}}.",
+    "viewAccount": "View my account",
+    "setupTitle": "Let's get your add-on set up.",
+    "setupNewTitle": "New to chatr?",
+    "setupNewDesc": "First, you'll need to activate your plan and select your add-on.",
+    "setupExistingTitle": "Existing customer?",
+    "setupExistingDesc": "Sign in to My chatr to check if your plan is compatible for this add-on.",
+    "setupActivate": "ACTIVATE NOW",
+    "setupSignIn": "SIGN IN",
+    "confirmTitle": "Confirm add-on purchase",
+    "confirmPrice": "One-time charge: {{price}} (deducted from your account balance)",
+    "confirmActive": "Active {{start}} – {{end}}",
+    "confirmTermsDefault": "This add-on is valid for 30 days from purchase. Charges are non-refundable once activated.",
+    "confirmTermsRoaming": "Roaming data is valid for 30 days from purchase in eligible destinations. Data does not roll over.",
+    "confirmTermsLd": "International long-distance minutes are valid for 30 days from purchase for listed destinations.",
+    "confirmTermsData": "Adds {{gb}} GB to your plan for 30 days. Data is used before your base plan allowance where applicable.",
+    "confirmTermsTalk": "Talk Saver minutes are valid for 30 days from purchase.",
+    "confirmTermsText": "US roaming text messages are valid for 30 days from purchase.",
     "activeUntil": "Active until {{date}}",
     "categories": {
       "roaming": "Roaming",
@@ -133,7 +155,51 @@
     "billingAddress": "Billing address",
     "useForAutoPay": "Use this card for Auto-Pay",
     "deleteCard": "Delete card",
-    "editCard": "Edit card"
+    "editCard": "Edit card",
+    "landing": {
+      "pageTitle": "Top up your account",
+      "intro": "Add money to your chatr account to keep your service active. Choose the option that works best for you.",
+      "guestTitle": "Guest top up",
+      "guestBody": "Top up without signing in. Enter your phone number and pay with a credit or debit card.",
+      "guestCta": "Top up",
+      "signInTitle": "Sign in and top up",
+      "signInBody": "Sign in to My chatr to view your balance, manage payment cards, and top up your account.",
+      "signInCta": "Sign in and top up",
+      "signedInTitle": "Top up with My chatr",
+      "signedInBody": "You're signed in. Top up your account, manage saved cards, or enroll in Auto-Pay.",
+      "signedInCta": "Top up now",
+      "exploreTitle": "Explore ways to top up your account",
+      "autoPayBannerTitle": "Auto-pay: the easiest way to top up",
+      "autoPayBannerBody": "Never miss a payment. Auto-pay tops up your account on your renewal date and you get bonus data.",
+      "learnMore": "Learn more",
+      "cardStoreTitle": "Call or text to top up with a top up card",
+      "cardStoreBody1": "From your chatr phone, text your 12-digit top-up card PIN to 611.",
+      "cardStoreBody2": "If you already have a top-up card or payment card on your account, top-up by dialing *611 from your chatr phone.",
+      "cardStoreBody3": "Top-up cards are available at select retailers.",
+      "findStore": "Find a store",
+      "remindersTitle": "Top up with text reminders",
+      "remindersBody": "If you have a payment card saved on your My chatr account, we'll send you monthly top-up reminders. Just reply Yes to the text, and we'll automatically charge your saved card.",
+      "remindersCta": "Sign in to My chatr",
+      "learnMoreTitle": "Learn more about:",
+      "linkHelp": "Help topping up your account",
+      "linkCards": "Manage your saved payment cards in My chatr",
+      "linkAutoPayCard": "Change the payment card you've assigned for auto-pay in My chatr"
+    },
+    "guest": {
+      "title": "Top-up as a guest",
+      "intro": "Topping up is fast and easy! You don't even need to sign in. Simply enter the chatr phone number you want to top-up and continue.",
+      "stepPhone": "chatr phone number",
+      "stepPayment": "Payment method",
+      "stepReview": "Review",
+      "stepConfirmation": "Confirmation",
+      "phoneLabel": "Phone number",
+      "phoneHint": "Make sure the phone number you enter matches the chatr account you're topping up.",
+      "confirmPayment": "Confirm payment",
+      "confirmationBody": "{{amount}} has been added to {{phone}}. Your updated balance will appear within a few minutes.",
+      "confirmationId": "Confirmation #: {{id}}",
+      "merchantTitle": "Merchant address:",
+      "merchantAddress": "chatr mobile, 333 Bloor Street East, Toronto, Ontario M4W 1G9, Canada"
+    }
   },
   "activate": {
     "title": "Activate your phone",
@@ -150,7 +216,22 @@
     "successSubtitle": "Your chatr service is now active",
     "nextSteps": "What's next",
     "topUpNow": "Top up your account",
-    "exploreApp": "Explore the app"
+    "exploreApp": "Explore the app",
+    "needSim": "Don't have a SIM card yet?",
+    "buySimCta": "Buy a SIM card — $10 with free shipping"
+  },
+  "buySim": {
+    "title": "Place order",
+    "subtitlePrefix": "Already have a phone? Buy a",
+    "subtitleSuffix": "and get one of our affordable nation-wide Talk, Text and Data plans. Plus, shipping is free.",
+    "productName": "chatr SIM card",
+    "addToCart": "Add to cart",
+    "freeShipping": "Free shipping",
+    "orderSuccess": "Added to cart!",
+    "orderSuccessDesc": "Your chatr SIM card will ship for free. Activate it when it arrives.",
+    "activateWhenReady": "Activate when ready",
+    "browsePlans": "Browse plans",
+    "findStore": "Or find a store near you"
   },
   "profile": {
     "title": "Profile",
@@ -180,11 +261,34 @@
     "language": "Language",
     "demoMode": "Demo mode",
     "activate": "Activate SIM",
+    "buySim": "Buy a SIM card",
     "signOut": "Sign out"
   },
   "coverage": {
     "title": "Coverage",
     "subtitle": "Nation-wide coverage from coast to coast",
+    "mapTitle": "Coverage map",
+    "mapSubtitle": "Check out our coverage map to make sure you're connected. Search for a location or postal code to get information about our network coverage.",
+    "searchPlaceholder": "Enter a location or postal code",
+    "useLocation": "Use my location",
+    "filterAll": "All coverage layers",
+    "filterNationWide": "Network and nation-wide plans",
+    "filterExtended": "Extended coverage",
+    "filterInZone": "In-zone plans",
+    "legendNationWide": "Network and nation-wide plans",
+    "legendExtended": "Extended coverage",
+    "legendInZone": "In-zone plans",
+    "lastUpdated": "Coverage last updated on 12/06/2026 (demo data)",
+    "notAvailable": "Not available",
+    "noCoverageMessage": "Limited or no chatr coverage in this area. Check back as our network expands.",
+    "featureNationTitle": "Nation-wide coverage",
+    "featureNationBody": "Stay connected with a network that's got you covered from coast-to-coast.",
+    "featureExtendedTitle": "Extended coverage",
+    "featureExtendedBody": "Go even further in Canada with chatr's Extended Network Coverage.",
+    "featurePlansTitle": "Our plans",
+    "featurePlansBody": "Affordable nation-wide plans that fit your budget. Starting from $15/mo.",
+    "fullDetails": "See full details",
+    "fullDetailsBody": "Coverage maps are approximate and represent chatr's Rogers-powered network reach for demo purposes. Actual coverage varies by device, terrain, and network conditions. In-zone plans are available in select data zones — dial *#555# from your chatr phone to check your zone.",
     "excellent": "Excellent coverage",
     "good": "Good coverage",
     "available": "Coverage available"
@@ -192,12 +296,43 @@
   "stores": {
     "title": "Store locator",
     "subtitle": "3,000+ chatr stores coast-to-coast",
+    "findTitle": "Find a store",
+    "searchPlaceholder": "Enter a postal code or city",
+    "useLocation": "Use my location",
+    "locationDenied": "Location permission was denied. Search by city or postal code instead.",
+    "locationError": "Unable to get your location. Try searching by city or postal code.",
+    "filterAll": "All store types",
+    "filterChatr": "chatr stores",
+    "filterRetail": "Retail partners",
+    "legendChatr": "chatr stores",
+    "legendRetail": "Retail partners",
+    "chatrStore": "chatr store",
+    "retailPartner": "Retail partner",
+    "sellsSim": "SIM cards",
+    "sellsTopUp": "Top-up cards",
+    "results": "{{count}} locations",
+    "topUpRetailTitle": "Top-up cards are available at select retailers",
+    "topUpRetailBody": "Check out these other locations you can buy top-up cards from. Please check individual retailers for their store hours.",
     "directions": "Get directions",
     "call": "Call store",
     "hours": "Hours"
   },
   "support": {
     "title": "We can help",
+    "pageTitle": "chatr Support",
+    "browseByCategory": "Browse by category",
+    "featuredBanner": "Bought your chatr phone from TSC? Learn how to track your order and get delivery updates.",
+    "findAnswers": "Find answers",
+    "autoPayTitle": "Enroll in auto-pay",
+    "autoPayBody": "Set up Auto-Pay with a credit card and receive bonus data on eligible plans every month — no manual top-ups required.",
+    "autoPayCta": "Enroll in auto-pay",
+    "stillNeedHelp": "Still need help?",
+    "stillNeedHelpBody": "We're here for you. Our team can help with any questions about your account or services.",
+    "submitTicket": "Submit ticket",
+    "ticketTitle": "Support ticket",
+    "ticketBody": "In this demo, support tickets are not sent to a live team. Browse the categories above or call 611 from your chatr phone for real assistance.",
+    "backToSupport": "Back to Support",
+    "categoryNotFound": "This support category could not be found.",
     "faq": "Frequently asked questions",
     "contact": "Contact us",
     "chat": "Chat support",
@@ -210,7 +345,210 @@
     "title": "Demo mode",
     "subtitle": "Switch scenarios for your sales presentation",
     "apply": "Apply scenario",
-    "current": "Current scenario"
+    "current": "Current scenario",
+    "resetState": "Reset state",
+    "audienceNew": "New users",
+    "audienceExisting": "Existing users",
+    "noJourneysAudience": "No journeys for this audience.",
+    "searchPlaceholder": "Demo journeys",
+    "noSearchResults": "No journeys match your search. Try different keywords or clear the search.",
+    "viewAppState": "App State",
+    "appStateTitle": "App state",
+    "backToJourneys": "Demo journeys",
+    "stateSession": "Session",
+    "stateAuthenticated": "Signed in",
+    "stateLocale": "Locale",
+    "stateScenario": "Scenario",
+    "statePending": "Pending actions",
+    "stateSelectedPlan": "Selected plan",
+    "statePendingPlan": "Pending plan change",
+    "statePendingAddOn": "Pending add-on",
+    "stateActivation": "Activation draft",
+    "stateSimNumber": "SIM number",
+    "statePhone": "Phone",
+    "stateDraftPlan": "Draft plan",
+    "stateDraftAutoPay": "Draft Auto-Pay",
+    "stateUser": "User profile",
+    "statePlan": "Plan",
+    "stateBalance": "Balance",
+    "stateAutoPay": "Auto-Pay",
+    "stateBonusClaimed": "Bonus claimed",
+    "stateAddOns": "Active add-ons",
+    "stateCards": "Saved cards",
+    "stateUsage": "Usage",
+    "stateData": "Data used",
+    "stateCycle": "Billing cycle",
+    "stateTransactions": "Transactions",
+    "stateNoUser": "No user signed in. Launch a journey or sign in to populate profile state."
+  },
+  "header": {
+    "openAccountMenu": "Open account menu",
+    "dashboard": "Dashboard"
+  },
+  "nav": {
+    "plans": "Plans",
+    "buySim": "Buy SIM",
+    "activateSim": "Activate SIM",
+    "topUp": "Top up",
+    "coverage": "Coverage",
+    "stores": "Store locator",
+    "support": "Support & FAQ",
+    "signIn": "Sign in",
+    "createAccount": "Create account",
+    "or": "or"
+  },
+  "homepage": {
+    "hero": {
+      "badge": "Canada's #1 Prepaid Mobile Phone Provider",
+      "shopNow": "Shop now",
+      "viewDetails": "View details",
+      "slides": {
+        "50gb": {
+          "title": "Get 50GB of Data and Unlimited US Calling for $34!!*",
+          "subtitle": "Plus, enjoy unlimited data for the rest of your billing cycle."
+        },
+        "2gb": {
+          "title": "2GB of data — for $10!",
+          "subtitle": "A simple add-on to keep you connected when you need it."
+        }
+      }
+    },
+    "promo": {
+      "sim": {
+        "title": "Get a new Sim today",
+        "body": "Order a SIM card online or at a store near you.",
+        "cta": "Shop SIM"
+      },
+      "topup": {
+        "title": "Top-up your account",
+        "body": "Add funds to your account quickly and easily.",
+        "cta": "Top up now"
+      }
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "step1": {
+        "title": "Order your SIM card",
+        "body": "Order a SIM card online or at a store near you.",
+        "cta": "Get started"
+      },
+      "step2": {
+        "title": "Pick your plan",
+        "body": "Browse affordable plans with no credit checks or contracts.",
+        "cta": "View plans"
+      },
+      "step3": {
+        "title": "Activate and top up",
+        "body": "Activate your SIM, add funds, and start using chatr right away.",
+        "cta": "Activate now"
+      }
+    },
+    "whyChatr": {
+      "title": "Why Chatr?",
+      "getStarted": "Get started",
+      "credit": {
+        "title": "No credit checks",
+        "body": "Get connected without a credit check — everyone is welcome at chatr."
+      },
+      "contracts": {
+        "title": "No term contracts",
+        "body": "Stay flexible with prepaid plans you can change anytime."
+      },
+      "hidden": {
+        "title": "No hidden charges",
+        "body": "What you see is what you pay. No surprise fees on your bill."
+      },
+      "affordable": {
+        "title": "Affordable",
+        "body": "Plans starting from just $10/month with bonus data on Auto-Pay."
+      }
+    },
+    "testimonials": {
+      "label": "Testimonials",
+      "title": "What our customers say about us",
+      "allReviews": "All reviews",
+      "items": {
+        "1": {
+          "quote": "I am very happy with the Chatr product. It's easy to use and the customer service is very helpful.",
+          "name": "John Doe",
+          "role": "Student"
+        },
+        "2": {
+          "quote": "Switching to chatr was simple. Great coverage and the app makes topping up effortless.",
+          "name": "Marie L.",
+          "role": "Customer"
+        }
+      }
+    },
+    "coverage": {
+      "label": "Our Coverage",
+      "title": "Our outstanding network coverage",
+      "subtitle": "Enjoy reliable coverage across the country.",
+      "cta": "Network coverage",
+      "nationwide": {
+        "title": "Nationwide coverage",
+        "body": "Reliable service across Canada."
+      },
+      "reliable": {
+        "title": "Reliable connection",
+        "body": "Stay connected where it matters most."
+      }
+    },
+    "faq": {
+      "titlePurple": "Got some questions for us?",
+      "titleBlack": "We've got you covered",
+      "items": {
+        "purchase-sim": {
+          "question": "How can I purchase a SIM card?",
+          "answer": "Order a chatr SIM online for $10 with free shipping, or visit any chatr store coast-to-coast."
+        },
+        "activate-sim": {
+          "question": "How do I activate a SIM card?",
+          "answer": "Insert your chatr SIM, then follow the activation wizard in the app or online. You'll pick a plan and create your My chatr account."
+        },
+        "roaming": {
+          "question": "Can I use Chatr while traveling abroad?",
+          "answer": "Yes — add a roaming travel pack from the add-ons marketplace before you travel. Manage everything from My chatr."
+        },
+        "payment": {
+          "question": "What are the available payment methods?",
+          "answer": "Top up with Visa, Mastercard, or American Express. Enroll in Auto-Pay for bonus data and hassle-free renewals."
+        },
+        "change-plan": {
+          "question": "How do I change my Chatr plan?",
+          "answer": "Sign in to My chatr, browse plans, and confirm your new plan. Changes take effect on your next billing cycle."
+        }
+      }
+    },
+    "footer": {
+      "shop": "Shop & Plans",
+      "support": "Support",
+      "myChatr": "My Chatr",
+      "about": "About",
+      "copyright": "© {{year}} Demo app by Tech Mahindra",
+      "links": {
+        "plans": "Plans",
+        "phones": "Phones",
+        "simCards": "SIM cards",
+        "helpCenter": "Help center",
+        "contactUs": "Contact us",
+        "storeLocator": "Store locator",
+        "login": "Login",
+        "register": "Register",
+        "topUp": "Top-up",
+        "aboutUs": "About us",
+        "careers": "Careers",
+        "legal": "Legal"
+      }
+    }
+  },
+  "errors": {
+    "planNotFound": "Plan not found",
+    "addonNotFound": "Add-on not found",
+    "noUsageData": "No usage data yet",
+    "notFoundTitle": "Oops!",
+    "notFoundBody": "This screen doesn't exist.",
+    "goHome": "Go to home screen!"
   },
   "language": {
     "en": "English",

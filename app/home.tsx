@@ -10,6 +10,7 @@ import {
   NativeScrollEvent,
 } from 'react-native';
 import { Stack } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ChevronRight, ChevronLeft, Star, MapPin, Plus } from 'lucide-react-native';
 import { MarketingHeader } from '@/components/homepage/MarketingHeader';
@@ -17,7 +18,7 @@ import { HomeFooter } from '@/components/homepage/HomeFooter';
 import { HomeAccordion } from '@/components/homepage/HomeAccordion';
 import { CtaButton } from '@/components/ui/Button';
 import {
-  HERO_BADGE,
+  HERO_BADGE_KEY,
   HERO_SLIDES,
   PROMO_CARDS,
   HOW_IT_WORKS_STEPS,
@@ -26,35 +27,12 @@ import {
   COVERAGE_FEATURES,
   HOMEPAGE_FAQ,
 } from '@/lib/homepage-data';
-import { launchJourneyById } from '@/lib/launch-journey';
-import { useAppStore } from '@/lib/store';
+import { launchPublicJourney, navigateToPublicPlans } from '@/lib/nav-public';
 import { colors, spacing, radius } from '@/lib/theme/colors';
 import { fonts } from '@/lib/theme/typography';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CONTENT_WIDTH = Math.min(SCREEN_WIDTH, 480);
-
-function HeroTitle({ slide }: { slide: (typeof HERO_SLIDES)[number] }) {
-  const baseStyle = {
-    fontSize: 32,
-    lineHeight: 40,
-    color: colors.white,
-    textAlign: 'left' as const,
-    marginBottom: spacing.md,
-  };
-
-  if (slide.id === '50gb') {
-    return (
-      <Text style={{ ...baseStyle, fontFamily: fonts.regular }}>
-        <Text style={{ fontFamily: fonts.bold }}>Get 50GB</Text>{' '}
-        of Data and Unlimited US Calling{' '}
-        <Text style={{ fontFamily: fonts.bold }}>for $34!!*</Text>
-      </Text>
-    );
-  }
-
-  return <Text style={{ ...baseStyle, fontFamily: fonts.bold }}>{slide.title}</Text>;
-}
 
 const PROMO_ICON_SIZE = 90;
 const PROMO_ICON_SHADOW_OFFSET = 10;
@@ -146,10 +124,7 @@ function CarouselControls({
 }
 
 export default function HomeScreen() {
-  const signIn = useAppStore((s) => s.signIn);
-  const signOut = useAppStore((s) => s.signOut);
-  const applyScenario = useAppStore((s) => s.applyScenario);
-
+  const { t } = useTranslation();
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [heroIndex, setHeroIndex] = useState(0);
   const [stepsIndex, setStepsIndex] = useState(0);
@@ -160,13 +135,10 @@ export default function HomeScreen() {
   const heroRef = useRef<ScrollView>(null);
   const stepsRef = useRef<ScrollView>(null);
 
-  const launch = async (journeyId: string) => {
+  const launch = (journeyId: string) => {
     setLoadingId(journeyId);
-    try {
-      await launchJourneyById(journeyId, { signIn, signOut, applyScenario });
-    } finally {
-      setLoadingId(null);
-    }
+    launchPublicJourney(journeyId);
+    setLoadingId(null);
   };
 
   const onHeroScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -218,7 +190,7 @@ export default function HomeScreen() {
                     color: colors.white,
                     textAlign: 'left',
                   }}>
-                  {HERO_BADGE}
+                  {t(HERO_BADGE_KEY)}
                 </Text>
               </View>
             </View>
@@ -231,7 +203,17 @@ export default function HomeScreen() {
               style={{ width: SCREEN_WIDTH }}>
               {HERO_SLIDES.map((slide) => (
                 <View key={slide.id} style={{ width: SCREEN_WIDTH, paddingHorizontal: spacing.lg, paddingTop: spacing.sm }}>
-                  <HeroTitle slide={slide} />
+                  <Text
+                    style={{
+                      fontSize: 32,
+                      lineHeight: 40,
+                      color: colors.white,
+                      textAlign: 'left',
+                      marginBottom: spacing.md,
+                      fontFamily: fonts.bold,
+                    }}>
+                    {t(slide.titleKey)}
+                  </Text>
                   <Text
                     style={{
                       fontFamily: fonts.regular,
@@ -240,7 +222,7 @@ export default function HomeScreen() {
                       color: colors.lavenderMid,
                       textAlign: 'left',
                     }}>
-                    {slide.subtitle}
+                    {t(slide.subtitleKey)}
                   </Text>
                   <Image
                     source={slide.image}
@@ -260,14 +242,13 @@ export default function HomeScreen() {
 
             <View style={{ paddingHorizontal: spacing.lg, gap: spacing.sm }}>
               <CtaButton
-                title="Shop now"
+                title={t('homepage.hero.shopNow')}
                 size="compact"
-                onPress={() => void launch(currentHero.shopJourneyId)}
-                loading={loadingId === currentHero.shopJourneyId}
+                onPress={navigateToPublicPlans}
                 style={{ marginBottom: spacing.xs }}
               />
               <CtaButton
-                title="View details"
+                title={t('homepage.hero.viewDetails')}
                 variant="outline"
                 size="compact"
                 onPress={() => void launch(currentHero.detailsJourneyId)}
@@ -326,7 +307,7 @@ export default function HomeScreen() {
                     color: colors.primary,
                     marginBottom: spacing.md,
                   }}>
-                  {card.title}
+                  {t(card.titleKey)}
                 </Text>
                 <Text
                   style={{
@@ -335,11 +316,11 @@ export default function HomeScreen() {
                     color: '#000',
                     lineHeight: 24,
                   }}>
-                  {card.body}
+                  {t(card.bodyKey)}
                 </Text>
                 <View style={{ marginTop: spacing.lg, marginBottom: spacing.sm }}>
                   <CtaButton
-                    title={card.cta}
+                    title={t(card.ctaKey)}
                     onPress={() => void launch(card.journeyId)}
                     loading={loadingId === card.journeyId}
                   />
@@ -360,7 +341,7 @@ export default function HomeScreen() {
                 textAlign: 'center',
                 alignSelf: 'stretch',
               }}>
-              How it works
+              {t('homepage.howItWorks.title')}
             </Text>
             <ScrollView
               ref={stepsRef}
@@ -406,7 +387,7 @@ export default function HomeScreen() {
                       marginBottom: spacing.sm,
                       textAlign: 'center',
                     }}>
-                    {step.title}
+                    {t(step.titleKey)}
                   </Text>
                   <Text
                     style={{
@@ -417,11 +398,11 @@ export default function HomeScreen() {
                       lineHeight: 24,
                       textAlign: 'center',
                     }}>
-                    {step.body}
+                    {t(step.bodyKey)}
                   </Text>
                   <View style={{ marginTop: spacing.md, alignSelf: 'stretch' }}>
                     <CtaButton
-                      title={step.cta}
+                      title={t(step.ctaKey)}
                       variant="outline"
                       size="compact"
                       onPress={() => void launch(step.journeyId)}
@@ -453,10 +434,14 @@ export default function HomeScreen() {
                 marginBottom: spacing.xxl,
                 textAlign: 'center',
               }}>
-              Why Chatr?
+              {t('homepage.whyChatr.title')}
             </Text>
             <HomeAccordion
-              items={WHY_CHATR_ITEMS}
+              items={WHY_CHATR_ITEMS.map((item) => ({
+                id: item.id,
+                title: t(item.titleKey),
+                body: t(item.bodyKey),
+              }))}
               expandedId={whyExpanded}
               onToggle={(id) => setWhyExpanded(whyExpanded === id ? null : id)}
               showThumbsUp
@@ -482,7 +467,7 @@ export default function HomeScreen() {
               />
             </LinearGradient>
             <CtaButton
-              title="Get started"
+              title={t('homepage.whyChatr.getStarted')}
               onPress={() => void launch('activate')}
               loading={loadingId === 'activate'}
               style={{ marginTop: 20 }}
@@ -508,7 +493,7 @@ export default function HomeScreen() {
                   marginBottom: spacing.sm,
                   textAlign: 'left',
                 }}>
-                Testimonials
+                {t('homepage.testimonials.label')}
               </Text>
               <Text
                 style={{
@@ -519,7 +504,7 @@ export default function HomeScreen() {
                   marginBottom: spacing.xl,
                   textAlign: 'left',
                 }}>
-                What our customers say about us
+                {t('homepage.testimonials.title')}
               </Text>
               <View
                 style={{
@@ -543,7 +528,7 @@ export default function HomeScreen() {
                     style={{ width: 31.29, height: 22.73, marginBottom: spacing.md }}
                   />
                   <Text style={{ fontFamily: fonts.regular, fontSize: 24, lineHeight: 30, color: colors.text }}>
-                    {currentTestimonial.quote}
+                    {t(currentTestimonial.quoteKey)}
                   </Text>
                 </View>
                 <View
@@ -558,10 +543,10 @@ export default function HomeScreen() {
                     <Image source={currentTestimonial.avatar} style={{ width: 56, height: 56, borderRadius: 28 }} />
                     <View style={{ flex: 1 }}>
                       <Text style={{ fontFamily: fonts.semiBold, fontSize: 15, color: colors.text, marginBottom: spacing.xs }}>
-                        {currentTestimonial.name}
+                        {t(currentTestimonial.nameKey)}
                       </Text>
                       <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.textMuted }}>
-                        {currentTestimonial.role}
+                        {t(currentTestimonial.roleKey)}
                       </Text>
                     </View>
                   </View>
@@ -583,7 +568,7 @@ export default function HomeScreen() {
               />
 
               <View style={{ marginTop: spacing.lg }}>
-                <CtaButton title="All reviews" onPress={() => void launch('support')} loading={loadingId === 'support'} />
+                <CtaButton title={t('homepage.testimonials.allReviews')} onPress={() => void launch('support')} loading={loadingId === 'support'} />
               </View>
             </View>
           </View>
@@ -612,10 +597,10 @@ export default function HomeScreen() {
                 textAlign: 'left',
                 marginBottom: spacing.sm,
               }}>
-              Our Coverage
+              {t('homepage.coverage.label')}
             </Text>
             <Text style={{ fontFamily: fonts.semiBold, fontSize: 40, color: colors.white, textAlign: 'left', marginBottom: spacing.lg }}>
-              Our outstanding network coverage
+              {t('homepage.coverage.title')}
             </Text>
             <Text
               style={{
@@ -625,7 +610,7 @@ export default function HomeScreen() {
                 textAlign: 'left',
                 marginBottom: spacing.lg,
               }}>
-              Enjoy reliable coverage across the country.
+              {t('homepage.coverage.subtitle')}
             </Text>
             <View>
               {COVERAGE_FEATURES.map((feature) => {
@@ -657,11 +642,11 @@ export default function HomeScreen() {
                         <Icon size={18} color={colors.white} />
                       </View>
                       <Text style={{ fontFamily: fonts.semiBold, fontSize: 18, color: colors.white, flex: 1 }}>
-                        {feature.title}
+                        {t(feature.titleKey)}
                       </Text>
                     </View>
                     <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.lavenderMid }}>
-                      {feature.body}
+                      {t(feature.bodyKey)}
                     </Text>
                   </View>
                 </View>
@@ -669,15 +654,15 @@ export default function HomeScreen() {
               })}
             </View>
             <View style={{ marginTop: 'auto' }}>
-              <CtaButton title="Network coverage" onPress={() => void launch('coverage')} loading={loadingId === 'coverage'} />
+              <CtaButton title={t('homepage.coverage.cta')} onPress={() => void launch('coverage')} loading={loadingId === 'coverage'} />
             </View>
             </View>
           </View>
 
           {/* FAQ */}
-          <View style={{ paddingHorizontal: spacing.lg, paddingVertical: spacing.xl }}>
+          <View style={{ paddingHorizontal: spacing.lg, paddingVertical: spacing.xxl }}>
             <Text style={{ fontFamily: fonts.semiBold, fontSize: 32, lineHeight: 40, color: '#593494', textAlign: 'center' }}>
-              Got some questions for us?
+              {t('homepage.faq.titlePurple')}
             </Text>
             <Text
               style={{
@@ -688,13 +673,13 @@ export default function HomeScreen() {
                 marginBottom: spacing.xl,
                 textAlign: 'center',
               }}>
-              We've got you covered
+              {t('homepage.faq.titleBlack')}
             </Text>
             <HomeAccordion
               items={HOMEPAGE_FAQ.map((item) => ({
                 id: item.id,
-                title: item.question,
-                body: item.answer,
+                title: t(item.questionKey),
+                body: t(item.answerKey),
                 journeyId: item.journeyId,
               }))}
               expandedId={faqExpanded}

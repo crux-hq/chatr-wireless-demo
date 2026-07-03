@@ -16,14 +16,27 @@ export const fonts = {
 
 export const typography = {
   hero: {
-    fontFamily: fonts.bold,
+    fontFamily: fonts.semiBold,
     fontSize: 32,
     lineHeight: 40,
     color: '#2D263B',
     marginBottom: 16,
   },
+  pageTitle: {
+    fontFamily: fonts.semiBold,
+    fontSize: 32,
+    lineHeight: 40,
+    color: '#2D263B',
+  },
+  pageSubtitle: {
+    fontFamily: fonts.regular,
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#000000',
+    marginBottom: 16,
+  },
   h1: {
-    fontFamily: fonts.bold,
+    fontFamily: fonts.semiBold,
     fontSize: 24,
     lineHeight: 30,
     color: '#2D263B',

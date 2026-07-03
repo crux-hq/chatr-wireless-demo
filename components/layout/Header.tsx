@@ -1,79 +1,66 @@
 import { View, Text, Pressable } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useAppStore } from '@/lib/store';
-import i18n from '@/lib/i18n';
-import { ChatrLogoLink } from '@/components/ui/ChatrLogo';
+import { AuthenticatedHeader } from '@/components/layout/AuthenticatedHeader';
+import { PublicHeader } from '@/components/layout/PublicHeader';
 import { colors, spacing, radius } from '@/lib/theme/colors';
-import { fonts } from '@/lib/theme/typography';
+import { fonts, typography } from '@/lib/theme/typography';
 
-export function LanguageToggle({ onDark = true }: { onDark?: boolean }) {
-  const locale = useAppStore((s) => s.locale);
-  const setLocale = useAppStore((s) => s.setLocale);
-  const { t } = useTranslation();
+export { LanguageToggle } from '@/components/layout/LanguageToggle';
 
-  const toggle = () => {
-    const next = locale === 'en' ? 'fr' : 'en';
-    setLocale(next);
-    void i18n.changeLanguage(next);
-  };
+export function Header() {
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
 
+  if (isAuthenticated) {
+    return <AuthenticatedHeader />;
+  }
+
+  return <PublicHeader />;
+}
+
+export function PageTitle({ children }: { children: React.ReactNode }) {
   return (
-    <Pressable
-      onPress={toggle}
+    <Text
       style={{
-        paddingHorizontal: spacing.sm + 2,
-        paddingVertical: 6,
-        borderRadius: radius.pill,
-        borderWidth: 1.5,
-        borderColor: onDark ? 'rgba(255,255,255,0.7)' : colors.primary,
+        ...typography.pageTitle,
+        paddingHorizontal: spacing.lg,
+        marginTop: spacing.xl,
+        marginBottom: spacing.lg,
       }}>
-      <Text
-        style={{
-          color: onDark ? colors.white : colors.primary,
-          fontFamily: fonts.semiBold,
-          fontSize: 13,
-        }}>
-        {locale === 'en' ? t('language.fr') : t('language.en')}
-      </Text>
-    </Pressable>
+      {children}
+    </Text>
   );
 }
 
-export function Header({ title, right }: { title?: string; right?: React.ReactNode }) {
-  return (
+export function PromoBanner({
+  title,
+  subtitle,
+  onClaimBonus,
+  bonusClaimed = false,
+}: {
+  title: string;
+  subtitle: string;
+  onClaimBonus?: () => void;
+  bonusClaimed?: boolean;
+}) {
+  const { t } = useTranslation();
+  const showClaimButton = onClaimBonus && !bonusClaimed;
+
+  const pill = (
     <View
       style={{
-        backgroundColor: colors.white,
-        paddingHorizontal: spacing.lg,
-        paddingVertical: spacing.md + 4,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        alignSelf: 'flex-start',
+        backgroundColor: colors.accent,
+        paddingHorizontal: spacing.md,
+        paddingVertical: spacing.xs + 2,
+        borderRadius: radius.pill,
       }}>
-      <View>
-        <ChatrLogoLink />
-        {title ? (
-          <Text
-            style={{
-              color: colors.text,
-              opacity: 0.92,
-              fontSize: 16,
-              marginTop: 6,
-              fontFamily: fonts.medium,
-            }}>
-            {title}
-          </Text>
-        ) : null}
-      </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
-        {right}
-        <LanguageToggle onDark={false} />
-      </View>
+      <Text style={{ fontFamily: fonts.bold, fontSize: 13, color: colors.textOnAccent }}>
+        {t('plans.autoPayBonus')}
+      </Text>
     </View>
   );
-}
 
-export function PromoBanner({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <View
       style={{
@@ -102,17 +89,13 @@ export function PromoBanner({ title, subtitle }: { title: string; subtitle: stri
         }}>
         {subtitle}
       </Text>
-      <View
-        style={{
-          marginTop: spacing.md,
-          alignSelf: 'flex-start',
-          backgroundColor: colors.accent,
-          paddingHorizontal: spacing.md,
-          paddingVertical: spacing.xs + 2,
-          borderRadius: radius.pill,
-        }}>
-        <Text style={{ fontFamily: fonts.bold, fontSize: 13, color: colors.textOnAccent }}>Auto-Pay bonus</Text>
-      </View>
+      {showClaimButton ? (
+        <Pressable
+          onPress={onClaimBonus}
+          style={({ pressed }) => ({ marginTop: spacing.md, opacity: pressed ? 0.85 : 1 })}>
+          {pill}
+        </Pressable>
+      ) : null}
     </View>
   );
 }

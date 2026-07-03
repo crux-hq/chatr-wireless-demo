@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { View, Text, ScrollView, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
-import { Link, router } from 'expo-router';
+import { View, Text, Pressable } from 'react-native';
+import { Link, router, type Href } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Header } from '@/components/layout/Header';
+import { AuthScreenShell } from '@/components/layout/AuthScreenShell';
+import { PageSubtitle } from '@/components/layout/PageSubtitle';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useAppStore } from '@/lib/store';
@@ -24,36 +25,34 @@ export default function SignInScreen() {
   };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1, backgroundColor: colors.surface }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <Header />
-      <ScrollView contentContainerStyle={{ padding: spacing.lg }}>
-        <Text style={{ fontFamily: fonts.bold, fontSize: 32, lineHeight: 40, color: colors.text, marginBottom: spacing.md }}>{t('auth.welcome')}</Text>
-        <Text style={{ color: colors.textMuted, marginTop: 8, marginBottom: spacing.lg, fontFamily: fonts.regular, fontSize: 16, lineHeight: 24 }}>
-          {t('auth.signInSubtitle')}
+    <AuthScreenShell title={t('auth.welcome')} keyboard>
+      <PageSubtitle>{t('auth.signInSubtitle')}</PageSubtitle>
+
+      <Input label={t('auth.email')} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" />
+      <Input label={t('auth.password')} value={password} onChangeText={setPassword} secureTextEntry />
+
+      <Pressable onPress={() => router.push('/(auth)/forgot-password')}>
+        <Text style={{ color: colors.primary, fontFamily: fonts.semiBold, marginBottom: spacing.lg }}>{t('auth.forgotPassword')}</Text>
+      </Pressable>
+
+      <Button title={t('common.signIn')} onPress={handleSignIn} loading={loading} />
+
+      <View style={{ marginTop: spacing.lg, alignItems: 'center' }}>
+        <Text style={{ color: '#000000', fontFamily: fonts.regular, fontSize: 16 }}>
+          {t('auth.noAccount')}{' '}
+          <Link href="/(auth)/register" style={{ color: colors.primary, fontFamily: fonts.bold }}>
+            {t('auth.createAccount')}
+          </Link>
         </Text>
+      </View>
 
-        <Input label={t('auth.email')} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" />
-        <Input label={t('auth.password')} value={password} onChangeText={setPassword} secureTextEntry />
+      <Pressable onPress={() => router.push('/buy-sim' as Href)} style={{ marginTop: spacing.md, alignItems: 'center' }}>
+        <Text style={{ color: colors.primary, fontFamily: fonts.bold }}>{t('more.buySim')}</Text>
+      </Pressable>
 
-        <Pressable onPress={() => router.push('/(auth)/forgot-password')}>
-          <Text style={{ color: colors.primary, fontFamily: fonts.semiBold, marginBottom: spacing.lg }}>{t('auth.forgotPassword')}</Text>
-        </Pressable>
-
-        <Button title={t('common.signIn')} onPress={handleSignIn} loading={loading} />
-
-        <View style={{ marginTop: spacing.lg, alignItems: 'center' }}>
-          <Text style={{ color: colors.grayDark }}>
-            {t('auth.noAccount')}{' '}
-            <Link href="/(auth)/register" style={{ color: colors.primary, fontFamily: fonts.bold }}>
-              {t('auth.createAccount')}
-            </Link>
-          </Text>
-        </View>
-
-        <Pressable onPress={() => router.push('/activate')} style={{ marginTop: spacing.md, alignItems: 'center' }}>
-          <Text style={{ color: colors.primary, fontFamily: fonts.bold }}>{t('more.activate')}</Text>
-        </Pressable>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      <Pressable onPress={() => router.push('/activate')} style={{ marginTop: spacing.sm, alignItems: 'center' }}>
+        <Text style={{ color: colors.textMuted, fontFamily: fonts.semiBold }}>{t('more.activate')}</Text>
+      </Pressable>
+    </AuthScreenShell>
   );
 }
