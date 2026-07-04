@@ -27,8 +27,11 @@ export function ScrollReveal({ children, scrollY, delayMs = 0, direction = 'up',
   const tryReveal = () => {
     if (hasRevealed.current) return;
 
-    ref.current?.measureInWindow((_x, y) => {
-      if (y <= viewportHeight + 48) {
+    ref.current?.measureInWindow((_x, y, _w, height) => {
+      const visibleFromBottom = viewportHeight - y;
+      const revealThreshold = Math.min(Math.max(height * 0.14, 40), 72);
+
+      if (visibleFromBottom >= revealThreshold) {
         hasRevealed.current = true;
         progress.value = withDelay(
           delayMs,

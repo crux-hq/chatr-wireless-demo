@@ -87,7 +87,7 @@ export const TESTIMONIALS = [
     quoteKey: 'homepage.testimonials.items.2.quote',
     nameKey: 'homepage.testimonials.items.2.name',
     roleKey: 'homepage.testimonials.items.2.role',
-    avatar: require('@/assets/images/homepage/testimonial-avatar.png'),
+    avatar: require('@/assets/images/assetsforchattr/marie.png'),
     rating: 5,
   },
 ] as const;

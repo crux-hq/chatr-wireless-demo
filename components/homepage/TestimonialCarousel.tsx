@@ -9,7 +9,9 @@ import { colors, spacing, radius } from '@/lib/theme/colors';
 import { fonts } from '@/lib/theme/typography';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const CARD_GAP = spacing.md;
 const CARD_WIDTH = SCREEN_WIDTH - spacing.lg * 2 - spacing.md * 2;
+const SLIDE_WIDTH = CARD_WIDTH + CARD_GAP;
 
 type Testimonial = (typeof TESTIMONIALS)[number];
 
@@ -80,13 +82,13 @@ export function TestimonialCarousel({ onAllReviews, loading }: TestimonialCarous
   const [index, setIndex] = useState(0);
 
   const syncIndex = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const next = Math.round(event.nativeEvent.contentOffset.x / CARD_WIDTH);
+    const next = Math.round(event.nativeEvent.contentOffset.x / SLIDE_WIDTH);
     setIndex(Math.max(0, Math.min(TESTIMONIALS.length - 1, next)));
   };
 
   const goTo = (next: number) => {
     const clamped = Math.max(0, Math.min(TESTIMONIALS.length - 1, next));
-    scrollRef.current?.scrollTo({ x: clamped * CARD_WIDTH, animated: true });
+    scrollRef.current?.scrollTo({ x: clamped * SLIDE_WIDTH, animated: true });
     setIndex(clamped);
   };
 
@@ -95,7 +97,6 @@ export function TestimonialCarousel({ onAllReviews, loading }: TestimonialCarous
       <ScrollView
         ref={scrollRef}
         horizontal
-        pagingEnabled
         decelerationRate="fast"
         showsHorizontalScrollIndicator={false}
         scrollEventThrottle={16}
@@ -103,11 +104,16 @@ export function TestimonialCarousel({ onAllReviews, loading }: TestimonialCarous
         onScrollEndDrag={syncIndex}
         onMomentumScrollEnd={syncIndex}
         style={{ width: CARD_WIDTH }}
-        snapToInterval={CARD_WIDTH}
+        snapToInterval={SLIDE_WIDTH}
         snapToAlignment="start"
         disableIntervalMomentum>
-        {TESTIMONIALS.map((testimonial) => (
-          <View key={testimonial.id} style={{ width: CARD_WIDTH }}>
+        {TESTIMONIALS.map((testimonial, itemIndex) => (
+          <View
+            key={testimonial.id}
+            style={{
+              width: CARD_WIDTH,
+              marginRight: itemIndex < TESTIMONIALS.length - 1 ? CARD_GAP : 0,
+            }}>
             <TestimonialCard testimonial={testimonial} />
           </View>
         ))}
