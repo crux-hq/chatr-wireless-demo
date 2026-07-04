@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Header, PageTitle } from '@/components/layout/Header';
+import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
+import { BackToAddOns } from '@/components/addons/BackToAddOns';
 import { Button, Card, Badge } from '@/components/ui/Button';
 import { AddOnSetupDialog } from '@/components/addons/AddOnSetupDialog';
 import { AddOnPurchaseConfirmDialog } from '@/components/addons/AddOnPurchaseConfirmDialog';
@@ -42,7 +43,17 @@ export default function AddOnDetailScreen() {
     }
   }, [addOn, isAuthenticated, openConfirm, pendingAddOnId, setPendingAddOn]);
 
-  if (!addOn) return <Text>{t('errors.addonNotFound')}</Text>;
+  if (!addOn) {
+    return (
+      <View style={{ flex: 1, backgroundColor: colors.gray }}>
+        <Header />
+        <PageTitle leading={<BackToAddOns />} />
+        <PageScrollView contentContainerStyle={{ padding: spacing.md }}>
+          <Text>{t('errors.addonNotFound')}</Text>
+        </PageScrollView>
+      </View>
+    );
+  }
 
   const pageTitle = locale === 'fr' ? addOn.nameFr : addOn.nameEn;
 
@@ -107,8 +118,8 @@ export default function AddOnDetailScreen() {
       />
 
       <Header />
-      <PageTitle>{pageTitle}</PageTitle>
-      <ScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: isAuthenticated ? spacing.md : 100 }}>
+      <PageTitle leading={<BackToAddOns />} />
+      <PageScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: isAuthenticated ? spacing.md : 100 }}>
         <Card>
           <Badge label={t(`addons.categories.${addOn.category}`)} />
           <Text style={{ fontSize: 24, fontFamily: fonts.extraBold, marginTop: spacing.md }}>
@@ -130,7 +141,7 @@ export default function AddOnDetailScreen() {
           <Button title={t('addons.purchase')} onPress={handlePurchasePress} loading={loading && !confirmVisible} />
         </View>
         {!isAuthenticated ? <PublicHomeFooter /> : null}
-      </ScrollView>
+      </PageScrollView>
     </View>
   );
 }

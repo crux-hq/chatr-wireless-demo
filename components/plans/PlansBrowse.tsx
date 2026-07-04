@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { ScrollView, View, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Header, PageTitle, PromoBanner } from '@/components/layout/Header';
+import { Header } from '@/components/layout/Header';
 import { PlanCard, PlanFilter } from '@/components/plans/PlanCard';
+import { PlansIntro } from '@/components/plans/PlansIntro';
+import { ProvincePlansBar } from '@/components/plans/ProvincePlansBar';
 import { Card, SectionTitle } from '@/components/ui/Button';
 import { PLANS } from '@/lib/mock/plans';
 import { FAQ_ITEMS } from '@/lib/mock/stores';
 import { useAppStore } from '@/lib/store';
 import { PublicHomeFooter } from '@/components/layout/PublicHomeFooter';
 import { colors, spacing } from '@/lib/theme/colors';
-import { fonts } from '@/lib/theme/typography';
+import { fonts, typography } from '@/lib/theme/typography';
 
 type PlansBrowseProps = {
   variant: 'authenticated' | 'public';
@@ -37,19 +39,30 @@ export function PlansBrowse({ variant }: PlansBrowseProps) {
   return (
     <View style={{ flex: 1, backgroundColor: colors.gray }}>
       <Header />
-      <PageTitle>{t('plans.title')}</PageTitle>
       <ScrollView
+        style={{ flex: 1 }}
         contentContainerStyle={{
-          padding: spacing.md,
           paddingBottom: variant === 'public' ? 100 : spacing.md,
         }}>
-        <PromoBanner title={t('plans.nationWide')} subtitle={t('plans.subtitle')} />
+        <Text
+          style={{
+            ...typography.pageTitle,
+            marginTop: spacing.xl,
+            marginBottom: spacing.lg,
+            paddingHorizontal: spacing.lg,
+          }}>
+          {t('plans.title')}
+        </Text>
+        <PlansIntro />
+        <View style={{ paddingHorizontal: spacing.md }}>
+        <ProvincePlansBar />
         <PlanFilter value={filter} onChange={setFilter} options={filterOptions} />
         {filtered.map((plan) => (
           <PlanCard
             key={plan.id}
             plan={plan}
             isCurrent={variant === 'authenticated' && user?.planId === plan.id}
+            showBuyActions={variant === 'public'}
           />
         ))}
 
@@ -70,6 +83,7 @@ export function PlansBrowse({ variant }: PlansBrowseProps) {
         ))}
 
         {variant === 'public' ? <PublicHomeFooter /> : null}
+        </View>
       </ScrollView>
     </View>
   );

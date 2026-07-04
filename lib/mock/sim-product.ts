@@ -7,3 +7,13 @@ export const SIM_PRODUCT = {
   tagFr: 'Multi SIM',
   image: require('@/assets/images/homepage/icon-sim.png'),
 } as const;
+
+export const ESIM_PRODUCT = {
+  id: 'chatr-esim',
+  price: 0,
+  nameEn: 'chatr eSIM',
+  nameFr: 'eSIM chatr',
+  tagEn: 'eSIM',
+  tagFr: 'eSIM',
+  image: require('@/assets/images/homepage/esim-promo.png'),
+} as const;

@@ -26,6 +26,7 @@
     "signOut": "Déconnexion",
     "register": "S'inscrire",
     "perMonth": "/mois",
+    "perYear": "/an",
     "withAutoPay": "avec paiement auto",
     "noContract": "Sans vérification de crédit. Sans contrat.",
     "nationWide": "Couverture nationale"
@@ -67,7 +68,10 @@
     "activeAddons": "Add-ons actifs",
     "bonusClaimedTitle": "Bonus ajouté !",
     "bonusClaimedMessage": "{{gb}} Go ont été ajoutés à votre compte.",
-    "bonusClaimedCta": "Super !"
+    "bonusClaimedCta": "Super !",
+    "autoPayPromoTitle": "Le paiement auto vous garde connecté",
+    "autoPayPromoSubtitle": "Votre forfait se renouvelle automatiquement à votre date anniversaire — et vous obtenez +{{gb}} Go de données bonus immédiatement.",
+    "autoPayPromoCta": "S'inscrire au paiement auto"
   },
   "usage": {
     "title": "Utilisation",
@@ -80,10 +84,11 @@
     "dailyUsage": "Utilisation quotidienne des données",
     "addDataCta": "Ajouter 5 Go pour {{price}}",
     "minutesUsed": "{{used}} sur {{total}} min",
+    "talkMinutesUsed": "{{used}} min utilisées ce cycle",
     "textsUsed": "{{used}} textos envoyés"
   },
   "plans": {
-    "title": "Forfaits",
+    "title": "Forfaits téléphoniques prépayés",
     "nationWide": "Forfaits nationaux",
     "subtitle": "Sans vérification de crédit. Sans contrat. À votre rythme.",
     "filterAll": "Tous",
@@ -97,13 +102,50 @@
     "currentPlan": "Forfait actuel",
     "changePlan": "Changer de forfait",
     "changeConfirm": "Confirmer le changement",
+    "confirmChangeFrom": "De : {{plan}}",
+    "confirmChangeData": "{{gb}} Go de données au total",
+    "confirmChangePrice": "Nouveau prix : {{price}}",
     "changeSuccess": "Changement de forfait planifié!",
     "changeEffective": "Entre en vigueur le {{date}}",
     "featuredDeal": "Obtenez 35 Go pour seulement 29 $/mois avec paiement auto",
-    "faq": "FAQ"
+    "bestDeal": "Notre meilleure offre",
+    "yearlyPlan": "Forfait annuel",
+    "includesAutoPayBonus": "Comprend {{gb}} Go bonus avec paiement auto",
+    "getPlan": "Obtenir le forfait",
+    "backToPlans": "Retour aux forfaits",
+    "faq": "FAQ",
+    "whatsIncluded": "Ce qui est inclus",
+    "allPlansInclude": "Tous les forfaits chatr comprennent",
+    "allPlansIncludeBody": "Affichage des appels, renvoi d'appel et conférence téléphonique.",
+    "autoPayBonusTitle": "Données bonus avec paiement auto",
+    "autoPayBonusBody": "Inscrivez-vous au paiement automatique pour recevoir {{gb}} Go de données bonus chaque mois tant que vous restez inscrit.",
+    "autoPayBonusData": "Bonus paiement auto",
+    "detailDisclaimer": "Détails du forfait tirés de chatrwireless.com. Vitesses jusqu'à 150 Mbps en 4G. L'utilisation des données est assujettie à la Politique de gestion des données.",
+    "intro": {
+      "lead": "Des forfaits prépayés abordables du fournisseur mobile prépayé #1 au Canada*. Propulsé par le réseau Rogers.",
+      "deal": "Profitez de cette offre! Obtenez 35 Go pour seulement 29 $/mois avec le paiement automatique.",
+      "disclaimer": "Prix pour les nouvelles activations seulement.",
+      "tapToExpand": "Appuyez pour en savoir plus",
+      "tapToCollapse": "Afficher moins"
+    },
+    "valueProps": {
+      "nationwide": "Appels partout au pays",
+      "fastData": "Données 4G rapides",
+      "activate": "Activation en minutes",
+      "noCredit": "Sans vérification de crédit",
+      "noSurprises": "Sans frais surprises",
+      "noCommitment": "Sans engagement"
+    },
+    "province": {
+      "shownFor": "Forfaits affichés pour :",
+      "change": "Changer de province",
+      "dialogTitle": "Sélectionnez votre emplacement",
+      "yourProvince": "Votre province :"
+    }
   },
   "addons": {
     "title": "Add-ons",
+    "backToAddOns": "Tous les add-ons",
     "subtitle": "Améliorez votre forfait avec des add-ons pratiques",
     "purchase": "Acheter l'add-on",
     "purchased": "Add-on acheté!",
@@ -221,7 +263,7 @@
     "buySimCta": "Acheter une carte SIM — 10 $, livraison gratuite"
   },
   "buySim": {
-    "title": "Passer commande",
+    "title": "Acheter une SIM",
     "subtitlePrefix": "Vous avez déjà un téléphone? Achetez une",
     "subtitleSuffix": "et choisissez l'un de nos forfaits abordables partout au pays. De plus, la livraison est gratuite.",
     "productName": "carte SIM chatr",
@@ -231,10 +273,94 @@
     "orderSuccessDesc": "Votre carte SIM chatr sera expédiée gratuitement. Activez-la à réception.",
     "activateWhenReady": "Activer quand prêt",
     "browsePlans": "Voir les forfaits",
-    "findStore": "Ou trouver un magasin près de chez vous"
+    "findStore": "Ou trouver un magasin près de chez vous",
+    "esimTitle": "eSIM",
+    "esimSubtitle": "Obtenez une eSIM chatr gratuitement en ligne. Choisissez un forfait et activez instantanément — aucune carte physique requise.",
+    "free": "Gratuit",
+    "instantAccess": "Accès instantané",
+    "shopPlans": "Magasiner les forfaits"
+  },
+  "cart": {
+    "title": "Votre panier",
+    "empty": "Votre panier est vide.",
+    "quantity": "Qté : {{count}}",
+    "subtotal": "Sous-total",
+    "shippingNote": "Livraison gratuite pour les commandes de cartes SIM.",
+    "checkout": "Passer à la caisse",
+    "continueShopping": "Continuer vos achats",
+    "removeItem": "Retirer l'article",
+    "viewCart": "Voir le panier",
+    "openCart": "Ouvrir le panier, {{count}} articles"
+  },
+  "checkout": {
+    "simTitle": "Numéro et carte SIM",
+    "selectSim": "Choisir une SIM",
+    "orderSummary": "Résumé de la commande",
+    "autoPayBonus": "Bonus paiement auto {{gb}} Go",
+    "totalDueToday": "Total dû aujourd'hui",
+    "mostPopular": "LE PLUS POPULAIRE",
+    "compatibilityTitle": "Vérifier la compatibilité eSIM",
+    "compatibilityBody": "La eSIM fonctionne sur iPhone 11 et plus récents, Galaxy S20 et plus récents, Pixel 3 et plus récents, et bien d'autres appareils.",
+    "checkPhone": "Vérifier le téléphone",
+    "checkCompatibility": "Vérifier la compatibilité",
+    "phoneCompatible": "Ce téléphone est compatible avec la eSIM.",
+    "steps": {
+      "selectPlan": "Choisir un forfait",
+      "phoneSim": "Numéro et carte SIM",
+      "payment": "Mode de paiement",
+      "review": "Révision de la commande"
+    },
+    "simOptions": {
+      "esim": {
+        "title": "eSIM",
+        "description": "Activez en quelques minutes, gratuitement"
+      },
+      "physical-activate": {
+        "title": "Activer une carte SIM physique",
+        "description": "Activez votre carte SIM physique"
+      },
+      "physical-order": {
+        "title": "Commander une carte SIM physique",
+        "description": "Commandez une carte SIM physique"
+      }
+    }
+  },
+  "phones": {
+    "title": "Téléphones",
+    "backToPhones": "Retour aux téléphones",
+    "viewLargerImage": "Voir l'image agrandie",
+    "subtitle": "Restez en contact avec vos proches grâce à des téléphones abordables qui correspondent à votre budget.",
+    "voLTE": "VoLTE activé",
+    "noTermPrice": "Prix sans engagement",
+    "buyAtTsc": "Acheter chez TSC.ca",
+    "viewDetails": "Voir les détails",
+    "phoneDetails": "DÉTAILS DU TÉLÉPHONE",
+    "inTheBox": "Dans la boîte",
+    "findStore": "Trouver un magasin",
+    "tscNote": "Sélectionnez Acheter chez TSC.ca pour acheter votre téléphone sur le site TSC. Ils vous aideront pour tout ce dont vous avez besoin après votre commande.",
+    "specs": "Spécifications",
+    "faqTitle": "FAQ",
+    "faqNote": "Pour les commandes passées chez TSC, visitez TSC.ca ou appelez le 1-888-2020-888",
+    "physicalSim": {
+      "title": "Carte SIM Multi chatr",
+      "body": "Commandez en ligne et recevez une livraison gratuite sous 5 jours. Également disponible en magasin.",
+      "buyNow": "Acheter",
+      "findStore": "Trouver un magasin"
+    },
+    "esim": {
+      "title": "eSIM chatr",
+      "body": "Obtenez-la gratuitement en ligne. Achetez un forfait et activez instantanément.",
+      "shopPlans": "Magasiner les forfaits"
+    },
+    "byop": {
+      "title": "Vous avez déjà un téléphone?",
+      "body": "Apportez votre téléphone chez chatr et profitez de forfaits abordables.",
+      "cta": "Comment apporter votre téléphone"
+    }
   },
   "profile": {
     "title": "Profil",
+    "backToAccountSettings": "Retour aux paramètres du compte",
     "accountInfo": "Informations du compte",
     "updateProfile": "Mettre à jour le profil",
     "username": "Nom d'utilisateur",
@@ -262,6 +388,7 @@
     "demoMode": "Mode démo",
     "activate": "Activer SIM",
     "buySim": "Acheter une carte SIM",
+    "shopPhones": "Magasiner des téléphones",
     "signOut": "Déconnexion"
   },
   "coverage": {
@@ -350,7 +477,7 @@
     "audienceNew": "Nouveaux utilisateurs",
     "audienceExisting": "Utilisateurs existants",
     "noJourneysAudience": "Aucun parcours pour ce public.",
-    "searchPlaceholder": "Parcours démo",
+    "searchPlaceholder": "Rechercher des parcours",
     "noSearchResults": "Aucun parcours ne correspond à votre recherche. Essayez d'autres mots-clés ou effacez la recherche.",
     "viewAppState": "État de l'app",
     "appStateTitle": "État de l'app",
@@ -387,6 +514,7 @@
   },
   "nav": {
     "plans": "Forfaits",
+    "phones": "Téléphones",
     "buySim": "Acheter une SIM",
     "activateSim": "Activer la SIM",
     "topUp": "Recharger",
@@ -548,7 +676,8 @@
     "noUsageData": "Aucune donnée d'utilisation",
     "notFoundTitle": "Oups!",
     "notFoundBody": "Cet écran n'existe pas.",
-    "goHome": "Retour à l'accueil!"
+    "goHome": "Retour à l'accueil!",
+    "phoneNotFound": "Téléphone introuvable"
   },
   "language": {
     "en": "English",

@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { AuthScreenShell } from '@/components/layout/AuthScreenShell';
+import { BackToAccountSettings } from '@/components/profile/BackToAccountSettings';
 import { Button, Card } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { AddOnSetupDialog } from '@/components/addons/AddOnSetupDialog';
@@ -43,6 +45,49 @@ export default function CardsScreen() {
     setLast4('');
   };
 
+  const cardsContent = (
+    <>
+      {user?.paymentMethods.map((card) => (
+        <Card key={card.id} style={{ marginBottom: spacing.sm }}>
+          <Text style={{ fontFamily: fonts.bold }}>
+            {card.brand} •••• {card.last4}
+          </Text>
+          <Text style={{ color: colors.grayDark }}>
+            Exp {card.expiryMonth}/{card.expiryYear}
+          </Text>
+          <Pressable onPress={() => removePaymentMethod(card.id)} style={{ marginTop: spacing.sm }}>
+            <Text style={{ color: colors.red, fontFamily: fonts.semiBold }}>{t('topUp.deleteCard')}</Text>
+          </Pressable>
+        </Card>
+      ))}
+
+      {showAdd ? (
+        <Card style={{ marginTop: spacing.md }}>
+          <Input
+            label={t('topUp.cardNumber')}
+            value={last4}
+            onChangeText={setLast4}
+            keyboardType="numeric"
+            placeholder="4242 4242 4242 4242"
+          />
+          <Pressable onPress={() => setUseAutoPay(!useAutoPay)} style={{ marginBottom: spacing.md }}>
+            <Text style={{ color: colors.green }}>
+              {useAutoPay ? '✓' : '○'} {t('topUp.useForAutoPay')}
+            </Text>
+          </Pressable>
+          <Button title={t('common.save')} onPress={handleAdd} />
+        </Card>
+      ) : (
+        <Button
+          title={t('topUp.addCard')}
+          onPress={() => requireAuth(() => setShowAdd(true))}
+          style={{ marginTop: spacing.md }}
+        />
+      )}
+      {!isAuthenticated ? <PublicHomeFooter /> : null}
+    </>
+  );
+
   return (
     <>
       <AddOnSetupDialog
@@ -57,34 +102,19 @@ export default function CardsScreen() {
           navigateToAuthScreen('/sign-in');
         }}
       />
-      <AuthScreenShell title={t('topUp.manageCards')} contentStyle={{ paddingBottom: isAuthenticated ? spacing.xl : 100 }}>
-        {user?.paymentMethods.map((card) => (
-          <Card key={card.id} style={{ marginBottom: spacing.sm }}>
-            <Text style={{ fontFamily: fonts.bold }}>
-              {card.brand} •••• {card.last4}
-            </Text>
-            <Text style={{ color: colors.grayDark }}>
-              Exp {card.expiryMonth}/{card.expiryYear}
-            </Text>
-            <Pressable onPress={() => removePaymentMethod(card.id)} style={{ marginTop: spacing.sm }}>
-              <Text style={{ color: colors.red, fontFamily: fonts.semiBold }}>{t('topUp.deleteCard')}</Text>
-            </Pressable>
-          </Card>
-        ))}
-
-        {showAdd ? (
-          <Card style={{ marginTop: spacing.md }}>
-            <Input label={t('topUp.cardNumber')} value={last4} onChangeText={setLast4} keyboardType="numeric" placeholder="4242 4242 4242 4242" />
-            <Pressable onPress={() => setUseAutoPay(!useAutoPay)} style={{ marginBottom: spacing.md }}>
-              <Text style={{ color: colors.green }}>{useAutoPay ? '✓' : '○'} {t('topUp.useForAutoPay')}</Text>
-            </Pressable>
-            <Button title={t('common.save')} onPress={handleAdd} />
-          </Card>
-        ) : (
-          <Button title={t('topUp.addCard')} onPress={() => requireAuth(() => setShowAdd(true))} variant="outline" />
-        )}
-        {!isAuthenticated ? <PublicHomeFooter /> : null}
-      </AuthScreenShell>
+      {isAuthenticated ? (
+        <View style={{ flex: 1, backgroundColor: colors.gray }}>
+          <Header />
+          <PageTitle leading={<BackToAccountSettings />}>{t('topUp.manageCards')}</PageTitle>
+          <PageScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: spacing.xl }}>
+            {cardsContent}
+          </PageScrollView>
+        </View>
+      ) : (
+        <AuthScreenShell title={t('topUp.manageCards')} contentStyle={{ paddingBottom: 100 }}>
+          {cardsContent}
+        </AuthScreenShell>
+      )}
     </>
   );
 }

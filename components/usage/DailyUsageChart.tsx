@@ -1,8 +1,7 @@
-import { useEffect } from 'react';
-import { Dimensions, type StyleProp, type ViewStyle } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
+import { View, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
-import { colors } from '@/lib/theme/colors';
 
 type DailyUsageChartProps = {
   data: { value: number; label: string; frontColor: string }[];
@@ -10,7 +9,28 @@ type DailyUsageChartProps = {
   style?: StyleProp<ViewStyle>;
 };
 
+const CHART_HEIGHT = 180;
+const Y_AXIS_WIDTH = 44;
+const END_PADDING = 8;
+
+function fitBarLayout(barCount: number, chartWidth: number) {
+  if (barCount === 0 || chartWidth <= 0) {
+    return { barWidth: 12, spacing: 6, initialSpacing: 6 };
+  }
+
+  const available = chartWidth - END_PADDING * 2;
+  const spacingRatio = 0.5;
+  const barWidth = Math.max(
+    8,
+    Math.floor(available / (barCount + spacingRatio * (barCount - 1))),
+  );
+  const spacing = Math.max(4, Math.round(barWidth * spacingRatio));
+
+  return { barWidth, spacing, initialSpacing: spacing };
+}
+
 export function DailyUsageChart({ data, delay = 180, style }: DailyUsageChartProps) {
+  const [containerWidth, setContainerWidth] = useState(0);
   const opacity = useSharedValue(0);
   const translateY = useSharedValue(14);
 
@@ -26,24 +46,44 @@ export function DailyUsageChart({ data, delay = 180, style }: DailyUsageChartPro
     transform: [{ translateY: translateY.value }],
   }));
 
+  const chartWidth = Math.max(0, containerWidth - Y_AXIS_WIDTH);
+  const { barWidth, spacing, initialSpacing } = useMemo(
+    () => fitBarLayout(data.length, chartWidth),
+    [data.length, chartWidth],
+  );
+
+  const onLayout = (event: LayoutChangeEvent) => {
+    const nextWidth = event.nativeEvent.layout.width;
+    if (nextWidth !== containerWidth) {
+      setContainerWidth(nextWidth);
+    }
+  };
+
   if (data.length === 0) return null;
 
   return (
-    <Animated.View style={[animatedStyle, style]}>
-      <BarChart
-        data={data}
-        width={Dimensions.get('window').width - 80}
-        height={180}
-        barWidth={16}
-        spacing={8}
-        roundedTop
-        yAxisThickness={0}
-        xAxisThickness={0}
-        noOfSections={4}
-        maxValue={800}
-        isAnimated
-        animationDuration={620}
-      />
-    </Animated.View>
+    <View style={{ width: '100%' }} onLayout={onLayout}>
+      {containerWidth > 0 ? (
+        <Animated.View style={[animatedStyle, style]}>
+          <BarChart
+            data={data}
+            parentWidth={containerWidth}
+            width={chartWidth}
+            height={CHART_HEIGHT}
+            barWidth={barWidth}
+            spacing={spacing}
+            initialSpacing={initialSpacing}
+            endSpacing={END_PADDING}
+            roundedTop
+            yAxisThickness={0}
+            xAxisThickness={0}
+            noOfSections={4}
+            maxValue={800}
+            isAnimated
+            animationDuration={620}
+          />
+        </Animated.View>
+      ) : null}
+    </View>
   );
 }

@@ -9,6 +9,7 @@ type SimOrderSuccessDialogProps = {
   onClose: () => void;
   onActivate: () => void;
   onBrowsePlans: () => void;
+  onViewCart: () => void;
 };
 
 export function SimOrderSuccessDialog({
@@ -16,6 +17,7 @@ export function SimOrderSuccessDialog({
   onClose,
   onActivate,
   onBrowsePlans,
+  onViewCart,
 }: SimOrderSuccessDialogProps) {
   const { t } = useTranslation();
 
@@ -61,7 +63,8 @@ export function SimOrderSuccessDialog({
             {t('buySim.orderSuccessDesc')}
           </Text>
           <View style={{ width: '100%', gap: spacing.sm }}>
-            <Button title={t('buySim.activateWhenReady')} onPress={onActivate} />
+            <Button title={t('cart.viewCart')} onPress={onViewCart} />
+            <Button title={t('buySim.activateWhenReady')} onPress={onActivate} variant="secondary" />
             <Button title={t('buySim.browsePlans')} onPress={onBrowsePlans} variant="secondary" />
             <Button title={t('common.close')} onPress={onClose} variant="outline" />
           </View>

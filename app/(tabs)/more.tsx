@@ -1,8 +1,8 @@
 import { ScrollView, View, Text, Pressable } from 'react-native';
 import { router, type Href } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { ChevronRight, MapPin, Globe, HelpCircle, User, Smartphone, ShoppingBag } from 'lucide-react-native';
-import { Header, PageTitle } from '@/components/layout/Header';
+import { ChevronRight, MapPin, Globe, HelpCircle, User, Smartphone, ShoppingBag, Phone } from 'lucide-react-native';
+import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { Card } from '@/components/ui/Button';
 import { useAppStore } from '@/lib/store';
 import { colors, spacing } from '@/lib/theme/colors';
@@ -40,6 +40,7 @@ export default function MoreScreen() {
     { icon: <HelpCircle color={colors.primary} size={22} />, label: t('more.support'), route: '/support' },
     { icon: <Globe color={colors.primary} size={22} />, label: t('more.coverage'), route: '/coverage' },
     { icon: <MapPin color={colors.primary} size={22} />, label: t('more.stores'), route: '/stores' },
+    { icon: <Phone color={colors.primary} size={22} />, label: t('more.shopPhones'), route: '/phones' },
     { icon: <ShoppingBag color={colors.primary} size={22} />, label: t('more.buySim'), route: '/buy-sim' },
     { icon: <Smartphone color={colors.primary} size={22} />, label: t('more.activate'), route: '/activate' },
   ];
@@ -48,7 +49,7 @@ export default function MoreScreen() {
     <View style={{ flex: 1, backgroundColor: colors.gray }}>
       <Header />
       <PageTitle>{t('more.title')}</PageTitle>
-      <ScrollView contentContainerStyle={{ padding: spacing.md }}>
+      <PageScrollView contentContainerStyle={{ padding: spacing.md }}>
         {items.map((item) => (
           <MenuItem
             key={item.route}
@@ -73,7 +74,7 @@ export default function MoreScreen() {
         <Text style={{ textAlign: 'center', color: colors.grayDark, marginTop: spacing.lg, fontSize: 12 }}>
           Demo app by Tech Mahindra • {locale.toUpperCase()}
         </Text>
-      </ScrollView>
+      </PageScrollView>
     </View>
   );
 }

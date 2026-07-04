@@ -53,7 +53,8 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
   {
     id: 'dashboard',
     title: 'Account dashboard',
-    description: 'Home screen with balance, plan summary, usage ring, promos, and quick links.',
+    description:
+      'Greeting, balance with Auto-Pay status, enroll-in-Auto-Pay promo, plan inclusions, data ring, quick links, and offers.',
     route: '/(tabs)',
     email: 'demo@chatr.ca',
     password: 'any',
@@ -85,7 +86,7 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
   {
     id: 'buy-sim',
     title: 'Buy a SIM card',
-    description: 'Order a chatr Multi SIM online — $10 with free shipping.',
+    description: 'Order a chatr Multi SIM online — $10 with free shipping, or shop eSIM plans.',
     route: '/buy-sim',
     signOutFirst: true,
     audiences: ['new'],
@@ -94,7 +95,7 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
   {
     id: 'activate',
     title: 'Activate new SIM',
-    description: 'New customer wizard: enter SIM, pick plan, create account.',
+    description: 'New customer wizard: SIM number, plan with optional Auto-Pay bonus, and account setup.',
     route: '/activate',
     email: 'new@chatr.ca',
     password: 'any',
@@ -105,18 +106,28 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
   {
     id: 'browse-plans',
     title: 'Browse and compare plans',
-    description: 'Filter plans, view 35 GB promo, FAQ, and plan details.',
+    description:
+      'Scrollable plan list with province selector, intro, filters, Get Plan, view details, and FAQ.',
     route: '/plans',
     signOutFirst: true,
     audiences: ['new', 'existing'],
     themes: ['plans'],
   },
   {
+    id: 'plan-checkout',
+    title: 'Get Plan — SIM checkout',
+    description: 'Public checkout: pick eSIM (with compatibility check) or order a physical SIM for a plan.',
+    route: '/checkout/sim?planId=35gb',
+    signOutFirst: true,
+    audiences: ['new'],
+    themes: ['plans', 'activation'],
+  },
+  {
     id: 'change-plan',
     title: 'Change plan',
-    description: 'Open the featured 35 GB plan and confirm a plan change.',
+    description: 'Signed-in customer on 1 GB plan opens 35 GB details and confirms a plan change.',
     route: '/plan/35gb',
-    email: 'demo@chatr.ca',
+    email: 'new@chatr.ca',
     password: 'any',
     scenarioId: 'plan-upgrade',
     audiences: ['existing'],
@@ -125,7 +136,8 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
   {
     id: 'usage',
     title: 'Usage monitoring',
-    description: 'Data, talk, and text usage with charts and cycle dates.',
+    description:
+      'Your plan summary, billing cycle, data ring, unlimited talk and text usage rings, and daily data chart.',
     route: '/(tabs)/usage',
     email: 'demo@chatr.ca',
     password: 'any',
@@ -136,7 +148,7 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
   {
     id: 'usage-upsell',
     title: 'Usage alert — upsell data',
-    description: '90% data used with alert banner and add-on CTA.',
+    description: '90% data used with alert banner and 5 GB add-on CTA.',
     route: '/(tabs)/usage',
     email: 'heavy@chatr.ca',
     password: 'any',
@@ -147,7 +159,7 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
   {
     id: 'top-up',
     title: 'Top up account',
-    description: 'One-time payment amount picker and receipt.',
+    description: 'Top-up landing, amount picker, Auto-Pay info, and one-time payment flow.',
     route: '/top-up',
     email: 'demo@chatr.ca',
     password: 'any',
@@ -158,7 +170,7 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
   {
     id: 'auto-pay',
     title: 'Auto-Pay and saved cards',
-    description: 'Enroll in Auto-Pay, manage cards, view bonus data.',
+    description: 'Enroll in Auto-Pay for +5 GB bonus data, toggle Auto-Pay, and manage saved cards.',
     route: '/top-up/auto-pay',
     email: 'demo@chatr.ca',
     password: 'any',
@@ -169,7 +181,7 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
   {
     id: 'addons',
     title: 'Add-ons marketplace',
-    description: 'Roaming, international LD, extra data, and talk saver packs.',
+    description: 'Browse roaming, international LD, extra data, and talk saver packs by category.',
     route: '/(tabs)/add-ons',
     email: 'roam@chatr.ca',
     password: 'any',
@@ -180,7 +192,7 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
   {
     id: 'addon-purchase',
     title: 'Buy extra data add-on',
-    description: 'Purchase flow for 5 GB extra data pack.',
+    description: 'Add-on detail with All Add-ons breadcrumb, confirm purchase, and success dialog.',
     route: '/addons/extra-data-5gb',
     email: 'heavy@chatr.ca',
     password: 'any',
@@ -189,9 +201,19 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
     themes: ['add-ons', 'billing'],
   },
   {
+    id: 'phones',
+    title: 'Shop phones',
+    description: 'Browse affordable phones, view specs and gallery, and link to TSC financing.',
+    route: '/phones',
+    signOutFirst: true,
+    audiences: ['new', 'existing'],
+    themes: ['support'],
+  },
+  {
     id: 'profile',
     title: 'Profile and settings',
-    description: 'Account info, password, cards, MFA, in-store notices.',
+    description:
+      'Account hub for profile info, password, and payment cards — sub-pages include back to settings links.',
     route: '/profile',
     email: 'demo@chatr.ca',
     password: 'any',
@@ -202,7 +224,7 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
   {
     id: 'coverage',
     title: 'Coverage map',
-    description: 'Nation-wide coverage by region across Canada.',
+    description: 'Search by location or postal code with nationwide coverage layer filters.',
     route: '/coverage',
     email: 'demo@chatr.ca',
     password: 'any',
@@ -224,7 +246,7 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
   {
     id: 'support',
     title: 'Support and FAQ',
-    description: 'Searchable FAQ, phone and store contact options.',
+    description: 'Searchable FAQ by category, contact options, and Auto-Pay enrolment callout.',
     route: '/support',
     email: 'demo@chatr.ca',
     password: 'any',

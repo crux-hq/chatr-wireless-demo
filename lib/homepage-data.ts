@@ -133,7 +133,7 @@ export const HOMEPAGE_FAQ = [
 export const FOOTER_LINKS = {
   shop: [
     { labelKey: 'homepage.footer.links.plans', journeyId: 'browse-plans' },
-    { labelKey: 'homepage.footer.links.phones', journeyId: 'browse-plans' },
+    { labelKey: 'homepage.footer.links.phones', journeyId: 'browse-phones' },
     { labelKey: 'homepage.footer.links.simCards', journeyId: 'buy-sim' },
   ],
   support: [

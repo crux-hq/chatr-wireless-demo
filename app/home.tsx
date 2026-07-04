@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ChevronRight, ChevronLeft, Star, MapPin, Plus } from 'lucide-react-native';
 import { MarketingHeader } from '@/components/homepage/MarketingHeader';
+import { CarouselPopImage } from '@/components/homepage/CarouselPopImage';
 import { HomeFooter } from '@/components/homepage/HomeFooter';
 import { HomeAccordion } from '@/components/homepage/HomeAccordion';
 import { CtaButton } from '@/components/ui/Button';
@@ -201,7 +202,7 @@ export default function HomeScreen() {
               showsHorizontalScrollIndicator={false}
               onMomentumScrollEnd={onHeroScroll}
               style={{ width: SCREEN_WIDTH }}>
-              {HERO_SLIDES.map((slide) => (
+              {HERO_SLIDES.map((slide, index) => (
                 <View key={slide.id} style={{ width: SCREEN_WIDTH, paddingHorizontal: spacing.lg, paddingTop: spacing.sm }}>
                   <Text
                     style={{
@@ -224,8 +225,9 @@ export default function HomeScreen() {
                     }}>
                     {t(slide.subtitleKey)}
                   </Text>
-                  <Image
+                  <CarouselPopImage
                     source={slide.image}
+                    active={heroIndex === index}
                     style={{
                       width: SCREEN_WIDTH - spacing.lg * 2,
                       maxHeight: 244,
@@ -233,7 +235,6 @@ export default function HomeScreen() {
                       alignSelf: 'center',
                       marginTop: spacing.lg,
                       marginBottom: spacing.lg + 5,
-                      resizeMode: 'contain',
                     }}
                   />
                 </View>

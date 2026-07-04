@@ -6,11 +6,13 @@ import { Menu } from 'lucide-react-native';
 import { AppHeaderBar } from '@/components/layout/AppHeaderBar';
 import { NavigationDrawer, type NavigationDrawerItem } from '@/components/layout/NavigationDrawer';
 import { LanguageToggle } from '@/components/layout/LanguageToggle';
+import { CartButton } from '@/components/layout/CartButton';
 import { navigateToAuthScreen } from '@/lib/nav-auth';
 import { colors, spacing } from '@/lib/theme/colors';
 
 const PUBLIC_MENU_ITEMS: { labelKey: string; route: string }[] = [
   { labelKey: 'nav.plans', route: '/plans' },
+  { labelKey: 'nav.phones', route: '/phones' },
   { labelKey: 'nav.buySim', route: '/buy-sim' },
   { labelKey: 'nav.activateSim', route: '/activate' },
   { labelKey: 'nav.coverage', route: '/coverage' },
@@ -52,6 +54,7 @@ export function PublicHeader() {
         trailing={
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
             <LanguageToggle onDark={false} />
+            <CartButton />
             <Pressable
               onPress={() => setMenuOpen(true)}
               accessibilityLabel="Open menu"

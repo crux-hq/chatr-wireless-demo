@@ -14,6 +14,7 @@ export const PLANS: Plan[] = [
     textFr: 'Textos illimités Canada, É.-U. et international',
     category: 'talk-text-data',
     featured: true,
+    highlight: 'best-deal',
   },
   {
     id: '25gb',
@@ -71,7 +72,7 @@ export const PLANS: Plan[] = [
     id: '400min',
     nameEn: '400 Minutes Talk',
     nameFr: '400 minutes d\'appels',
-    price: 15,
+    price: 100,
     baseDataGb: 0,
     autoPayBonusGb: 0,
     talkEn: '400 minutes Canada-wide talk',
@@ -79,6 +80,8 @@ export const PLANS: Plan[] = [
     textEn: 'Pay-per-use text',
     textFr: 'Textos à la carte',
     category: 'talk-text',
+    billingPeriod: 'yearly',
+    highlight: 'yearly',
   },
   {
     id: 'talk-text-basic',

@@ -23,8 +23,8 @@ export const DEMO_SCENARIOS: DemoScenario[] = [
     id: 'happy-path',
     labelEn: 'Happy path',
     labelFr: 'Parcours standard',
-    descriptionEn: 'Moderate usage with Auto-Pay enabled',
-    descriptionFr: 'Utilisation modérée avec paiement automatique',
+    descriptionEn: 'Moderate usage — enroll in Auto-Pay to unlock bonus data',
+    descriptionFr: 'Utilisation modérée — inscrivez-vous au paiement auto pour des données bonus',
     email: 'demo@chatr.ca',
   },
   {

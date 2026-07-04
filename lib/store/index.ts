@@ -1,10 +1,12 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from '@/lib/i18n';
-import type { DemoScenarioId, UserProfile } from '../mock/types';
+import type { CartLineItem, DemoScenarioId, SimType, UserProfile } from '../mock/types';
+import { DEFAULT_PROVINCE_CODE, type ProvinceCode } from '../mock/provinces';
+import { getCartProduct } from '../mock/cart-products';
 import { getUserForScenario, getUserByEmail } from '../demo-scenarios';
 import { mockApiCall } from '../mock/api';
-import { getPlanById } from '../mock/plans';
+import { getPlanById, getTotalDataGb } from '../mock/plans';
 import { getAddOnById } from '../mock/add-ons';
 
 type AppState = {
@@ -16,11 +18,14 @@ type AppState = {
   selectedPlanId: string | null;
   pendingPlanChangeId: string | null;
   pendingAddOnId: string | null;
+  cart: CartLineItem[];
+  plansProvince: ProvinceCode;
   activationDraft: {
     simNumber: string;
     phoneNumber: string;
     planId: string;
     autoPay: boolean;
+    simType: SimType | null;
   };
 
   hydrate: () => Promise<void>;
@@ -32,7 +37,7 @@ type AppState = {
   updateUser: (updates: Partial<UserProfile>) => void;
   setSelectedPlan: (planId: string) => void;
   setPendingPlanChange: (planId: string | null) => void;
-  confirmPlanChange: () => Promise<void>;
+  confirmPlanChange: (planId?: string) => Promise<boolean>;
   topUp: (amount: number) => Promise<void>;
   toggleAutoPay: (enabled: boolean) => void;
   claimAutoPayBonus: () => Promise<void>;
@@ -40,8 +45,13 @@ type AppState = {
   removePaymentMethod: (id: string) => void;
   purchaseAddOn: (addOnId: string) => Promise<{ expiresAt: string } | null>;
   setPendingAddOn: (addOnId: string | null) => void;
+  addToCart: (productId: string) => void;
+  removeFromCart: (productId: string) => void;
+  clearCart: () => void;
+  setPlansProvince: (province: ProvinceCode) => void;
   resetDemoState: () => Promise<void>;
   setActivationDraft: (updates: Partial<AppState['activationDraft']>) => void;
+  startPlanCheckout: (planId: string) => void;
   completeActivation: (profile: Partial<UserProfile>) => Promise<void>;
 };
 
@@ -56,18 +66,21 @@ export const useAppStore = create<AppState>((set, get) => ({
   selectedPlanId: null,
   pendingPlanChangeId: null,
   pendingAddOnId: null,
+  cart: [],
+  plansProvince: DEFAULT_PROVINCE_CODE,
   activationDraft: {
     simNumber: '',
     phoneNumber: '',
     planId: '35gb',
     autoPay: true,
+    simType: null,
   },
 
   persist: async () => {
-    const { locale, currentScenario, isAuthenticated, user } = get();
+    const { locale, currentScenario, isAuthenticated, user, cart, plansProvince } = get();
     await AsyncStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({ locale, currentScenario, isAuthenticated, userEmail: user?.email }),
+      JSON.stringify({ locale, currentScenario, isAuthenticated, userEmail: user?.email, user, cart, plansProvince }),
     );
   },
 
@@ -81,7 +94,11 @@ export const useAppStore = create<AppState>((set, get) => ({
           void i18n.changeLanguage(saved.locale);
         }
         if (saved.currentScenario) set({ currentScenario: saved.currentScenario });
-        if (saved.isAuthenticated && saved.userEmail) {
+        if (Array.isArray(saved.cart)) set({ cart: saved.cart as CartLineItem[] });
+        if (saved.plansProvince) set({ plansProvince: saved.plansProvince as ProvinceCode });
+        if (saved.isAuthenticated && saved.user) {
+          set({ isAuthenticated: true, user: saved.user as UserProfile });
+        } else if (saved.isAuthenticated && saved.userEmail) {
           const user = getUserByEmail(saved.userEmail);
           if (user) set({ isAuthenticated: true, user });
         }
@@ -128,18 +145,19 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   setPendingPlanChange: (planId) => set({ pendingPlanChangeId: planId }),
 
-  confirmPlanChange: async () => {
+  confirmPlanChange: async (planId) => {
     const { user, pendingPlanChangeId } = get();
-    if (!user || !pendingPlanChangeId) return;
-    const plan = getPlanById(pendingPlanChangeId);
-    if (!plan) return;
+    const targetPlanId = planId ?? pendingPlanChangeId;
+    if (!user || !targetPlanId) return false;
+    if (user.planId === targetPlanId) return false;
+    const plan = getPlanById(targetPlanId);
+    if (!plan) return false;
     await mockApiCall(null);
-    const dataLimitMb =
-      (plan.baseDataGb + (user.autoPayEnabled && (user.autoPayBonusClaimed ?? false) ? plan.autoPayBonusGb : 0)) * 1024;
+    const dataLimitMb = getTotalDataGb(plan, user.autoPayEnabled) * 1024;
     set({
       user: {
         ...user,
-        planId: pendingPlanChangeId,
+        planId: targetPlanId,
         balance: plan.price,
         autoPayBonusClaimed: false,
         usage: { ...user.usage, dataLimitMb },
@@ -147,6 +165,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       pendingPlanChangeId: null,
     });
     void get().persist();
+    return true;
   },
 
   topUp: async (amount) => {
@@ -177,13 +196,25 @@ export const useAppStore = create<AppState>((set, get) => ({
     const { user } = get();
     if (!user) return;
     const plan = getPlanById(user.planId);
-    const bonusMb = plan && enabled && (user.autoPayBonusClaimed ?? false) ? plan.autoPayBonusGb * 1024 : 0;
     const baseMb = plan ? plan.baseDataGb * 1024 : user.usage.dataLimitMb;
+    let autoPayBonusClaimed = user.autoPayBonusClaimed ?? false;
+    let dataLimitMb = baseMb;
+
+    if (enabled && plan) {
+      if (plan.autoPayBonusGb > 0 && !autoPayBonusClaimed) {
+        autoPayBonusClaimed = true;
+      }
+      if (autoPayBonusClaimed && plan.autoPayBonusGb > 0) {
+        dataLimitMb = baseMb + plan.autoPayBonusGb * 1024;
+      }
+    }
+
     set({
       user: {
         ...user,
         autoPayEnabled: enabled,
-        usage: { ...user.usage, dataLimitMb: baseMb + bonusMb },
+        autoPayBonusClaimed: enabled ? autoPayBonusClaimed : false,
+        usage: { ...user.usage, dataLimitMb },
       },
     });
     void get().persist();
@@ -280,6 +311,34 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ pendingAddOnId: addOnId });
   },
 
+  addToCart: (productId) => {
+    if (!getCartProduct(productId)) return;
+    const { cart } = get();
+    const existing = cart.find((item) => item.productId === productId);
+    const nextCart = existing
+      ? cart.map((item) =>
+          item.productId === productId ? { ...item, quantity: item.quantity + 1 } : item,
+        )
+      : [...cart, { productId, quantity: 1 }];
+    set({ cart: nextCart });
+    void get().persist();
+  },
+
+  removeFromCart: (productId) => {
+    set({ cart: get().cart.filter((item) => item.productId !== productId) });
+    void get().persist();
+  },
+
+  clearCart: () => {
+    set({ cart: [] });
+    void get().persist();
+  },
+
+  setPlansProvince: (province) => {
+    set({ plansProvince: province });
+    void get().persist();
+  },
+
   resetDemoState: async () => {
     await AsyncStorage.removeItem(STORAGE_KEY);
     set({
@@ -289,17 +348,28 @@ export const useAppStore = create<AppState>((set, get) => ({
       selectedPlanId: null,
       pendingPlanChangeId: null,
       pendingAddOnId: null,
+      cart: [],
+      plansProvince: DEFAULT_PROVINCE_CODE,
       activationDraft: {
         simNumber: '',
         phoneNumber: '',
         planId: '35gb',
         autoPay: true,
+        simType: null,
       },
     });
   },
 
   setActivationDraft: (updates) => {
     set({ activationDraft: { ...get().activationDraft, ...updates } });
+  },
+
+  startPlanCheckout: (planId) => {
+    set({
+      selectedPlanId: planId,
+      activationDraft: { ...get().activationDraft, planId, simType: null },
+    });
+    void get().persist();
   },
 
   completeActivation: async (profile) => {

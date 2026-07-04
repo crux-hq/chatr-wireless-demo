@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ScrollView, View, Text, Pressable } from 'react-native';
 import { router, type Href } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Header, PageTitle } from '@/components/layout/Header';
+import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { Button, Card, CtaButton } from '@/components/ui/Button';
 import { SupportCategoryCard } from '@/components/support/SupportCategoryCard';
 import { SubmitTicketDialog } from '@/components/support/SubmitTicketDialog';
@@ -34,7 +34,7 @@ export default function SupportScreen() {
       <SubmitTicketDialog visible={ticketVisible} onClose={() => setTicketVisible(false)} />
       <Header />
       <PageTitle>{t('support.pageTitle')}</PageTitle>
-      <ScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: 100 }}>
+      <PageScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: 100 }}>
         <Text style={{ fontFamily: fonts.extraBold, fontSize: 20, marginBottom: spacing.md }}>
           {t('support.browseByCategory')}
         </Text>
@@ -127,7 +127,7 @@ export default function SupportScreen() {
         </Card>
 
         <PublicHomeFooter />
-      </ScrollView>
+      </PageScrollView>
     </View>
   );
 }

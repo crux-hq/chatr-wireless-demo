@@ -1,24 +1,29 @@
 import { useState } from 'react';
-import { View, Pressable } from 'react-native';
+import { View, Pressable, Text } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { User } from 'lucide-react-native';
 import { AppHeaderBar } from '@/components/layout/AppHeaderBar';
 import { NavigationDrawer, type NavigationDrawerItem } from '@/components/layout/NavigationDrawer';
 import { LanguageToggle } from '@/components/layout/LanguageToggle';
+import { CartButton } from '@/components/layout/CartButton';
 import { useAppStore } from '@/lib/store';
 import { colors, spacing } from '@/lib/theme/colors';
+import { fonts } from '@/lib/theme/typography';
+
+function getUserInitials(firstName: string, lastName: string) {
+  const first = firstName.trim()[0] ?? '';
+  const last = lastName.trim()[0] ?? '';
+  return (first + last).toUpperCase() || '?';
+}
 
 export function AuthenticatedHeader() {
   const { t } = useTranslation();
   const signOut = useAppStore((s) => s.signOut);
+  const user = useAppStore((s) => s.user);
   const [menuOpen, setMenuOpen] = useState(false);
+  const initials = user ? getUserInitials(user.firstName, user.lastName) : '?';
 
   const menuItems: NavigationDrawerItem[] = [
-    {
-      label: t('header.dashboard'),
-      onPress: () => router.push('/(tabs)'),
-    },
     {
       label: t('more.profile'),
       onPress: () => router.push('/profile'),
@@ -33,12 +38,21 @@ export function AuthenticatedHeader() {
     },
   ];
 
+  const footerActions = [
+    {
+      label: t('header.dashboard'),
+      variant: 'primary' as const,
+      onPress: () => router.push('/(tabs)'),
+    },
+  ];
+
   return (
     <>
       <AppHeaderBar
         trailing={
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
             <LanguageToggle onDark={false} />
+            <CartButton />
             <Pressable
               onPress={() => setMenuOpen(true)}
               accessibilityLabel={t('header.openAccountMenu')}
@@ -50,12 +64,17 @@ export function AuthenticatedHeader() {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <User color={colors.primary} size={22} />
+              <Text style={{ fontFamily: fonts.bold, fontSize: 15, color: colors.primary }}>{initials}</Text>
             </Pressable>
           </View>
         }
       />
-      <NavigationDrawer items={menuItems} visible={menuOpen} onClose={() => setMenuOpen(false)} />
+      <NavigationDrawer
+        items={menuItems}
+        footerActions={footerActions}
+        visible={menuOpen}
+        onClose={() => setMenuOpen(false)}
+      />
     </>
   );
 }

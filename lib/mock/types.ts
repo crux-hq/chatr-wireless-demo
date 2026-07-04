@@ -1,4 +1,6 @@
 export type PlanCategory = 'talk-text-data' | 'talk-text';
+export type PlanHighlight = 'best-deal' | 'yearly';
+export type PlanBillingPeriod = 'monthly' | 'yearly';
 
 export type Plan = {
   id: string;
@@ -13,6 +15,8 @@ export type Plan = {
   textFr: string;
   category: PlanCategory;
   featured?: boolean;
+  highlight?: PlanHighlight;
+  billingPeriod?: PlanBillingPeriod;
 };
 
 export type AddOnCategory =
@@ -93,6 +97,8 @@ export type UserProfile = {
   usage: Usage;
 };
 
+export type SimType = 'esim' | 'physical-activate' | 'physical-order';
+
 export type DemoScenarioId =
   | 'new-activation'
   | 'happy-path'
@@ -138,4 +144,42 @@ export type Promo = {
   ctaEn: string;
   ctaFr: string;
   route: string;
+};
+
+import type { ImageSourcePropType } from 'react-native';
+
+export type CartLineItem = {
+  productId: string;
+  quantity: number;
+};
+
+export type PhoneSpecRow = {
+  labelEn: string;
+  labelFr: string;
+  valueEn: string;
+  valueFr: string;
+};
+
+export type PhoneSpecSection = {
+  id: string;
+  titleEn: string;
+  titleFr: string;
+  rows: PhoneSpecRow[];
+};
+
+export type Phone = {
+  id: string;
+  nameEn: string;
+  nameFr: string;
+  price: number;
+  image: ImageSourcePropType;
+  descriptionEn: string;
+  descriptionFr: string;
+  inBoxEn: string[];
+  inBoxFr: string[];
+  voLTE: boolean;
+  buyAtTsc: boolean;
+  brand: 'tcl' | 'nubia' | 'samsung';
+  formFactor: 'smartphone' | 'flip';
+  specs: PhoneSpecSection[];
 };

@@ -26,6 +26,7 @@
     "signOut": "Sign out",
     "register": "Register",
     "perMonth": "/mo",
+    "perYear": "/year",
     "withAutoPay": "with Auto-Pay",
     "noContract": "No credit checks. No contracts.",
     "nationWide": "Nation-wide coverage"
@@ -67,7 +68,10 @@
     "activeAddons": "Active add-ons",
     "bonusClaimedTitle": "Bonus added!",
     "bonusClaimedMessage": "{{gb}} GB has been added to your account.",
-    "bonusClaimedCta": "Great!"
+    "bonusClaimedCta": "Great!",
+    "autoPayPromoTitle": "Auto-Pay keeps you connected",
+    "autoPayPromoSubtitle": "Your plan renews automatically on your anniversary date — and you get +{{gb}} GB bonus data right away.",
+    "autoPayPromoCta": "Enroll in Auto-Pay"
   },
   "usage": {
     "title": "Usage",
@@ -80,10 +84,11 @@
     "dailyUsage": "Daily data usage",
     "addDataCta": "Add 5 GB for {{price}}",
     "minutesUsed": "{{used}} of {{total}} min",
+    "talkMinutesUsed": "{{used}} min used this cycle",
     "textsUsed": "{{used}} texts sent"
   },
   "plans": {
-    "title": "Plans",
+    "title": "Prepaid phone plans",
     "nationWide": "Nation-wide Plans",
     "subtitle": "No credit checks. No term contracts. All on your terms.",
     "filterAll": "All",
@@ -97,13 +102,50 @@
     "currentPlan": "Current plan",
     "changePlan": "Change plan",
     "changeConfirm": "Confirm plan change",
+    "confirmChangeFrom": "From: {{plan}}",
+    "confirmChangeData": "{{gb}} GB total data",
+    "confirmChangePrice": "New price: {{price}}",
     "changeSuccess": "Plan change scheduled!",
     "changeEffective": "Takes effect on {{date}}",
     "featuredDeal": "Get 35 GB for just $29/month with Auto-Pay",
-    "faq": "FAQ"
+    "bestDeal": "Our best deal",
+    "yearlyPlan": "Yearly plan",
+    "includesAutoPayBonus": "Includes {{gb}} GB bonus with Auto-Pay",
+    "getPlan": "Get Plan",
+    "backToPlans": "Back to Plans",
+    "faq": "FAQ",
+    "whatsIncluded": "What's included",
+    "allPlansInclude": "All chatr plans include",
+    "allPlansIncludeBody": "Call display, call forwarding and group calling.",
+    "autoPayBonusTitle": "Auto-Pay bonus data",
+    "autoPayBonusBody": "Enroll in Auto-Pay to receive {{gb}} GB of bonus data each month for as long as you stay enrolled.",
+    "autoPayBonusData": "Auto-Pay bonus",
+    "detailDisclaimer": "Plan details sourced from chatrwireless.com. Speeds up to 150Mbps on 4G. Data usage is subject to the Data Management Policy.",
+    "intro": {
+      "lead": "Affordable prepaid plans from Canada's #1 prepaid mobile provider*. Powered by the Rogers network.",
+      "deal": "Capture this deal! Get 35 GB for just $29/month with Autopay.",
+      "disclaimer": "Prices for new activations only.",
+      "tapToExpand": "Tap to read more",
+      "tapToCollapse": "Show less"
+    },
+    "valueProps": {
+      "nationwide": "Nationwide calling",
+      "fastData": "Fast 4G data",
+      "activate": "Activate in minutes",
+      "noCredit": "No credit checks",
+      "noSurprises": "No surprise charges",
+      "noCommitment": "No commitment"
+    },
+    "province": {
+      "shownFor": "Plans shown for:",
+      "change": "Change your province",
+      "dialogTitle": "Select your location",
+      "yourProvince": "Your province:"
+    }
   },
   "addons": {
     "title": "Add-ons",
+    "backToAddOns": "All Add-ons",
     "subtitle": "Enhance your plan with convenient add-ons",
     "purchase": "Purchase add-on",
     "purchased": "Add-on purchased!",
@@ -221,7 +263,7 @@
     "buySimCta": "Buy a SIM card — $10 with free shipping"
   },
   "buySim": {
-    "title": "Place order",
+    "title": "Buy SIM",
     "subtitlePrefix": "Already have a phone? Buy a",
     "subtitleSuffix": "and get one of our affordable nation-wide Talk, Text and Data plans. Plus, shipping is free.",
     "productName": "chatr SIM card",
@@ -231,10 +273,94 @@
     "orderSuccessDesc": "Your chatr SIM card will ship for free. Activate it when it arrives.",
     "activateWhenReady": "Activate when ready",
     "browsePlans": "Browse plans",
-    "findStore": "Or find a store near you"
+    "findStore": "Or find a store near you",
+    "esimTitle": "eSIM",
+    "esimSubtitle": "Get a chatr eSIM free online. Choose a plan and activate instantly — no physical card needed.",
+    "free": "Free",
+    "instantAccess": "Instant access",
+    "shopPlans": "Shop plans"
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty.",
+    "quantity": "Qty: {{count}}",
+    "subtotal": "Subtotal",
+    "shippingNote": "Free shipping on SIM orders.",
+    "checkout": "Checkout",
+    "continueShopping": "Continue shopping",
+    "removeItem": "Remove item",
+    "viewCart": "View cart",
+    "openCart": "Open cart, {{count}} items"
+  },
+  "checkout": {
+    "simTitle": "Phone number & SIM",
+    "selectSim": "Select SIM",
+    "orderSummary": "Order summary",
+    "autoPayBonus": "Data Autopay Bonus {{gb}}GB",
+    "totalDueToday": "Total due today",
+    "mostPopular": "MOST POPULAR",
+    "compatibilityTitle": "Check eSIM compatibility",
+    "compatibilityBody": "eSIM works on iPhone 11 and newer, Galaxy S20 and newer, Pixel 3 and newer, and many other devices.",
+    "checkPhone": "Check phone",
+    "checkCompatibility": "Check compatibility",
+    "phoneCompatible": "This phone is compatible with eSIM.",
+    "steps": {
+      "selectPlan": "Select a plan",
+      "phoneSim": "Phone number & SIM",
+      "payment": "Payment method",
+      "review": "Order review"
+    },
+    "simOptions": {
+      "esim": {
+        "title": "eSIM",
+        "description": "Activate in minutes for free"
+      },
+      "physical-activate": {
+        "title": "Activate physical SIM",
+        "description": "Activate your physical SIM card"
+      },
+      "physical-order": {
+        "title": "Order physical SIM",
+        "description": "Order a physical SIM card"
+      }
+    }
+  },
+  "phones": {
+    "title": "Phones",
+    "backToPhones": "Back to Phones",
+    "viewLargerImage": "View larger image",
+    "subtitle": "Stay connected to friends and family with affordable cellphones that fit your budget.",
+    "voLTE": "VoLTE Enabled",
+    "noTermPrice": "No term price",
+    "buyAtTsc": "Buy at TSC.ca",
+    "viewDetails": "View details",
+    "phoneDetails": "PHONE DETAILS",
+    "inTheBox": "In the box",
+    "findStore": "Find a store",
+    "tscNote": "Select Buy at TSC.ca to buy your phone from the TSC website. They'll help you with anything you need after you place your order.",
+    "specs": "Specs",
+    "faqTitle": "FAQ",
+    "faqNote": "For orders placed at TSC, visit TSC.ca or call 1-888-2020-888 for support",
+    "physicalSim": {
+      "title": "chatr Multi SIM card",
+      "body": "Order online and get free delivery within 5 days. Also available in stores.",
+      "buyNow": "Buy now",
+      "findStore": "Find a store"
+    },
+    "esim": {
+      "title": "chatr eSIM",
+      "body": "Get it free online. Buy a plan and activate instantly.",
+      "shopPlans": "Shop plans"
+    },
+    "byop": {
+      "title": "Already have a phone?",
+      "body": "Bring your phone to chatr and enjoy affordable plans.",
+      "cta": "How to bring your phone"
+    }
   },
   "profile": {
     "title": "Profile",
+    "backToAccountSettings": "Back to Account settings",
     "accountInfo": "Account information",
     "updateProfile": "Update profile information",
     "username": "Username",
@@ -262,6 +388,7 @@
     "demoMode": "Demo mode",
     "activate": "Activate SIM",
     "buySim": "Buy a SIM card",
+    "shopPhones": "Shop Phones",
     "signOut": "Sign out"
   },
   "coverage": {
@@ -350,7 +477,7 @@
     "audienceNew": "New users",
     "audienceExisting": "Existing users",
     "noJourneysAudience": "No journeys for this audience.",
-    "searchPlaceholder": "Demo journeys",
+    "searchPlaceholder": "Search journeys",
     "noSearchResults": "No journeys match your search. Try different keywords or clear the search.",
     "viewAppState": "App State",
     "appStateTitle": "App state",
@@ -387,6 +514,7 @@
   },
   "nav": {
     "plans": "Plans",
+    "phones": "Phones",
     "buySim": "Buy SIM",
     "activateSim": "Activate SIM",
     "topUp": "Top up",
@@ -548,7 +676,8 @@
     "noUsageData": "No usage data yet",
     "notFoundTitle": "Oops!",
     "notFoundBody": "This screen doesn't exist.",
-    "goHome": "Go to home screen!"
+    "goHome": "Go to home screen!",
+    "phoneNotFound": "Phone not found"
   },
   "language": {
     "en": "English",

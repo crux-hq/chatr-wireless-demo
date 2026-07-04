@@ -1,7 +1,7 @@
 import { ScrollView, View, Text, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Header, PageTitle } from '@/components/layout/Header';
+import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { PageSubtitle } from '@/components/layout/PageSubtitle';
 import { Card, Badge } from '@/components/ui/Button';
 import { ADD_ONS, ADD_ON_CATEGORY_LABELS } from '@/lib/mock/add-ons';
@@ -25,7 +25,7 @@ export function AddOnsBrowse({ variant = 'authenticated' }: AddOnsBrowseProps) {
     <View style={{ flex: 1, backgroundColor: colors.gray }}>
       <Header />
       <PageTitle>{t('addons.title')}</PageTitle>
-      <ScrollView
+      <PageScrollView
         contentContainerStyle={{
           padding: spacing.md,
           paddingBottom: variant === 'public' ? 100 : spacing.md,
@@ -71,7 +71,7 @@ export function AddOnsBrowse({ variant = 'authenticated' }: AddOnsBrowseProps) {
           );
         })}
         {variant === 'public' ? <PublicHomeFooter /> : null}
-      </ScrollView>
+      </PageScrollView>
     </View>
   );
 }

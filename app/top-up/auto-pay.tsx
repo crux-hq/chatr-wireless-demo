@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ScrollView, View, Text, Switch } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Header, PageTitle } from '@/components/layout/Header';
+import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { Button, Card } from '@/components/ui/Button';
 import { AddOnSetupDialog } from '@/components/addons/AddOnSetupDialog';
 import { navigateToAuthScreen } from '@/lib/nav-auth';
@@ -45,7 +45,7 @@ export default function AutoPayScreen() {
       />
       <Header />
       <PageTitle>{t('topUp.autoPay')}</PageTitle>
-      <ScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: isAuthenticated ? spacing.md : 100 }}>
+      <PageScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: isAuthenticated ? spacing.md : 100 }}>
         <Card>
           <Text style={{ fontFamily: fonts.bold, fontSize: 18 }}>{t('topUp.autoPayDesc')}</Text>
           {plan && plan.autoPayBonusGb > 0 ? (
@@ -86,7 +86,7 @@ export default function AutoPayScreen() {
           />
         </View>
         {!isAuthenticated ? <PublicHomeFooter /> : null}
-      </ScrollView>
+      </PageScrollView>
     </View>
   );
 }

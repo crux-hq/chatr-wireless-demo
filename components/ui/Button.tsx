@@ -162,7 +162,7 @@ export function Badge({
   );
 }
 
-export function SectionTitle({ children }: { children: string }) {
+export function SectionTitle({ children, style }: { children: string; style?: object }) {
   return (
     <Text
       style={{
@@ -170,6 +170,7 @@ export function SectionTitle({ children }: { children: string }) {
         fontSize: 18,
         color: colors.text,
         marginBottom: spacing.md,
+        ...style,
       }}>
       {children}
     </Text>

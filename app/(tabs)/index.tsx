@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { ScrollView, View, Text, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -9,18 +9,17 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import { Header, PageTitle, PromoBanner, QuickLinkGrid } from '@/components/layout/Header';
+import { Header, PromoBanner, QuickLinkGrid } from '@/components/layout/Header';
 import { Card, Badge, Section, SectionTitle } from '@/components/ui/Button';
 import { ProgressRing } from '@/components/ui/ProgressRing';
-import { ConfettiBurst } from '@/components/ui/ConfettiBurst';
-import { BonusClaimDialog } from '@/components/ui/BonusClaimDialog';
 import { useAppStore, useDataUsagePercent } from '@/lib/store';
 import { getPlanById } from '@/lib/mock/plans';
+import { PlanInclusions } from '@/components/plans/PlanInclusions';
 import { getAddOnById } from '@/lib/mock/add-ons';
 import { PROMOS } from '@/lib/mock/stores';
 import { formatCurrency, formatDate, formatGb } from '@/lib/i18n';
 import { colors, spacing, radius } from '@/lib/theme/colors';
-import { fonts } from '@/lib/theme/typography';
+import { fonts, typography } from '@/lib/theme/typography';
 
 function BonusDataLabel({ gb, highlight }: { gb: number; highlight: boolean }) {
   const { t } = useTranslation();
@@ -64,30 +63,11 @@ export default function DashboardScreen() {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const locale = useAppStore((s) => s.locale);
-  const claimAutoPayBonus = useAppStore((s) => s.claimAutoPayBonus);
   const usagePercent = useDataUsagePercent(user);
-  const [confettiActive, setConfettiActive] = useState(false);
-  const [dialogVisible, setDialogVisible] = useState(false);
-  const [highlightBonus, setHighlightBonus] = useState(false);
 
   const plan = user ? getPlanById(user.planId) : null;
   const bonusClaimed = user?.autoPayBonusClaimed ?? false;
-  const canClaimBonus = Boolean(
-    plan && plan.autoPayBonusGb > 0 && user?.autoPayEnabled && !bonusClaimed,
-  );
-
-  const handleClaimBonus = useCallback(async () => {
-    if (!canClaimBonus) return;
-    setConfettiActive(true);
-    setDialogVisible(true);
-    await claimAutoPayBonus();
-    setHighlightBonus(true);
-    setTimeout(() => setConfettiActive(false), 3000);
-  }, [canClaimBonus, claimAutoPayBonus]);
-
-  const handleCloseDialog = useCallback(() => {
-    setDialogVisible(false);
-  }, []);
+  const showAutoPayPromo = !user?.autoPayEnabled;
 
   if (!user) return null;
 
@@ -104,21 +84,19 @@ export default function DashboardScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.gray }}>
-      <ConfettiBurst active={confettiActive} />
-      <BonusClaimDialog
-        visible={dialogVisible}
-        gb={plan?.autoPayBonusGb ?? 5}
-        onClose={handleCloseDialog}
-      />
       <Header />
-      <PageTitle>{t('dashboard.greeting', { name: user.firstName })}</PageTitle>
-      <ScrollView contentContainerStyle={{ padding: spacing.md }}>
-        <PromoBanner
-          title={t('plans.featuredDeal')}
-          subtitle={t('common.noContract')}
-          onClaimBonus={canClaimBonus ? handleClaimBonus : undefined}
-          bonusClaimed={bonusClaimed}
-        />
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: spacing.md, paddingTop: spacing.xl }}>
+        <Text style={{ ...typography.pageTitle, marginBottom: spacing.lg }}>
+          {t('dashboard.greeting', { name: user.firstName })}
+        </Text>
+        {showAutoPayPromo ? (
+          <PromoBanner
+            title={t('dashboard.autoPayPromoTitle')}
+            subtitle={t('dashboard.autoPayPromoSubtitle', { gb: plan?.autoPayBonusGb ?? 5 })}
+            ctaTitle={t('dashboard.autoPayPromoCta')}
+            onCta={() => router.push('/top-up/auto-pay')}
+          />
+        ) : null}
 
         {usagePercent >= 75 ? (
           <Card style={{ marginBottom: spacing.md, backgroundColor: usagePercent >= 90 ? '#FFEBEE' : '#FFF3E0' }}>
@@ -135,24 +113,25 @@ export default function DashboardScreen() {
               <Text style={{ fontSize: 28, fontFamily: fonts.extraBold, color: colors.black }}>
                 {formatCurrency(user.balance, locale)}
               </Text>
-              <Text style={{ fontFamily: fonts.regular, color: colors.grayDark, marginTop: 4, fontSize: 16 }}>
-                {t('dashboard.anniversary')}: {formatDate(user.anniversaryDate, locale)}
-              </Text>
             </View>
             <Badge
               label={user.autoPayEnabled ? t('dashboard.autoPayOn') : t('dashboard.autoPayOff')}
               color={user.autoPayEnabled ? colors.green : colors.grayDark}
-              style={{ maxWidth: '46%' }}
+              style={{ maxWidth: '46%', flexShrink: 0 }}
             />
           </View>
+          <Text style={{ fontFamily: fonts.regular, color: colors.grayDark, marginTop: 4, fontSize: 16 }}>
+            {t('dashboard.anniversary')}: {formatDate(user.anniversaryDate, locale)}
+          </Text>
         </Card>
 
-        <Card style={{ marginBottom: spacing.md }}>
+        <Card style={{ marginBottom: spacing.xl }}>
           <SectionTitle>{t('dashboard.yourPlan')}</SectionTitle>
           <Text style={{ fontSize: 20, fontFamily: fonts.bold, color: colors.green }}>{planName}</Text>
           {showBonusLine && plan ? (
-            <BonusDataLabel gb={plan.autoPayBonusGb} highlight={highlightBonus} />
+            <BonusDataLabel gb={plan.autoPayBonusGb} highlight={false} />
           ) : null}
+          {plan ? <PlanInclusions plan={plan} /> : null}
           <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: spacing.lg }}>
             <ProgressRing
               percent={usagePercent}

@@ -39,7 +39,7 @@ export const DEMO_USERS: Record<string, UserProfile> = {
     planId: '35gb',
     balance: 29.0,
     anniversaryDate: ANNIVERSARY,
-    autoPayEnabled: true,
+    autoPayEnabled: false,
     autoPayBonusClaimed: false,
     activeAddOns: [],
     paymentMethods: [
@@ -49,7 +49,7 @@ export const DEMO_USERS: Record<string, UserProfile> = {
         last4: '4242',
         expiryMonth: 8,
         expiryYear: 2028,
-        isAutoPay: true,
+        isAutoPay: false,
       },
     ],
     transactions: [
@@ -70,7 +70,7 @@ export const DEMO_USERS: Record<string, UserProfile> = {
         descriptionFr: 'Paiement auto — Forfait 35 Go',
       },
     ],
-    usage: makeUsage(18_432, 35 * 1024),
+    usage: makeUsage(18_432, 30 * 1024),
   },
   'heavy@chatr.ca': {
     id: 'user-heavy',

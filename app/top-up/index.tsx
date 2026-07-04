@@ -2,7 +2,7 @@ import { ScrollView, View, Text, Pressable, useWindowDimensions } from 'react-na
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { CirclePlus, Smartphone, RefreshCw, CreditCard, MessageSquare } from 'lucide-react-native';
-import { Header, PageTitle } from '@/components/layout/Header';
+import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { PageSubtitle } from '@/components/layout/PageSubtitle';
 import { Button, Card } from '@/components/ui/Button';
 import { AddOnSetupDialog } from '@/components/addons/AddOnSetupDialog';
@@ -64,7 +64,7 @@ export default function TopUpLandingScreen() {
       />
       <Header />
       <PageTitle>{t('topUp.landing.pageTitle')}</PageTitle>
-      <ScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: 100 }}>
+      <PageScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: 100 }}>
         <PageSubtitle style={{ marginBottom: spacing.lg }}>{t('topUp.landing.intro')}</PageSubtitle>
 
         <View
@@ -195,7 +195,7 @@ export default function TopUpLandingScreen() {
         </View>
 
         <PublicHomeFooter />
-      </ScrollView>
+      </PageScrollView>
     </View>
   );
 }

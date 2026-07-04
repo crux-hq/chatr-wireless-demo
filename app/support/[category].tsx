@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { ScrollView, View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft } from 'lucide-react-native';
-import { Header, PageTitle } from '@/components/layout/Header';
+import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { HomeAccordion } from '@/components/homepage/HomeAccordion';
 import { getCategoryById, getFaqsForCategory } from '@/lib/mock/support';
 import { useAppStore } from '@/lib/store';
@@ -56,7 +56,7 @@ export default function SupportCategoryScreen() {
     <View style={{ flex: 1, backgroundColor: colors.gray }}>
       <Header />
       <PageTitle>{t('support.pageTitle')}</PageTitle>
-      <ScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: 100 }}>
+      <PageScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: 100 }}>
         <Pressable
           onPress={() => router.back()}
           style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: spacing.md }}>
@@ -76,7 +76,7 @@ export default function SupportCategoryScreen() {
         />
 
         <PublicHomeFooter />
-      </ScrollView>
+      </PageScrollView>
     </View>
   );
 }

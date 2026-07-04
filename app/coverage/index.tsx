@@ -11,7 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import * as Location from 'expo-location';
 import { Search, ChevronDown, Navigation, Map, Smartphone, PiggyBank } from 'lucide-react-native';
-import { Header, PageTitle } from '@/components/layout/Header';
+import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { PageSubtitle } from '@/components/layout/PageSubtitle';
 import { Card } from '@/components/ui/Button';
 import { CoverageMap } from '@/components/coverage/CoverageMap';
@@ -110,7 +110,7 @@ export default function CoverageScreen() {
     <View style={{ flex: 1, backgroundColor: colors.gray }}>
       <Header />
       <PageTitle>{t('coverage.title')}</PageTitle>
-      <ScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: 100 }}>
+      <PageScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: 100 }}>
         <Text style={{ fontFamily: fonts.extraBold, fontSize: 20, marginBottom: spacing.xs }}>
           {t('coverage.mapTitle')}
         </Text>
@@ -329,7 +329,7 @@ export default function CoverageScreen() {
         />
 
         <PublicHomeFooter />
-      </ScrollView>
+      </PageScrollView>
     </View>
   );
 }

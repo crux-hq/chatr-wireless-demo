@@ -40,6 +40,9 @@ const PUBLIC_ROOTS = new Set([
   'stores',
   'support',
   'top-up',
+  'phones',
+  'cart',
+  'checkout',
 ]);
 
 function AuthGate({ children }: { children: React.ReactNode }) {
@@ -129,6 +132,10 @@ export default function RootLayout() {
               <Stack.Screen name="stores/index" options={stackCardOptions} />
               <Stack.Screen name="support/index" options={stackCardOptions} />
               <Stack.Screen name="support/[category]" options={stackCardOptions} />
+              <Stack.Screen name="phones/index" options={stackCardOptions} />
+              <Stack.Screen name="phones/[id]" options={stackCardOptions} />
+              <Stack.Screen name="cart/index" options={stackCardOptions} />
+              <Stack.Screen name="checkout/sim" options={stackCardOptions} />
               <Stack.Screen name="demo" options={{ presentation: 'modal', headerShown: false }} />
               <Stack.Screen name="addons/[id]" options={stackCardOptions} />
             </Stack>

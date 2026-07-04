@@ -2,7 +2,7 @@ import { ScrollView, View, Text, Pressable } from 'react-native';
 import { router, type Href } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ChevronRight } from 'lucide-react-native';
-import { Header, PageTitle } from '@/components/layout/Header';
+import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { Button, Card } from '@/components/ui/Button';
 import { PublicHomeFooter } from '@/components/layout/PublicHomeFooter';
 import { colors, spacing, radius } from '@/lib/theme/colors';
@@ -17,7 +17,7 @@ export default function ActivateIndexScreen() {
     <View style={{ flex: 1, backgroundColor: colors.gray }}>
       <Header />
       <PageTitle>{t('activate.title')}</PageTitle>
-      <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: 100 }}>
+      <PageScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: 100 }}>
         <Pressable
           onPress={() => router.push('/buy-sim' as Href)}
           style={{
@@ -73,7 +73,7 @@ export default function ActivateIndexScreen() {
           <Button title={t('common.continue')} onPress={() => router.push('/activate/sim')} />
         </View>
         <PublicHomeFooter bleedPadding={spacing.lg} />
-      </ScrollView>
+      </PageScrollView>
     </View>
   );
 }

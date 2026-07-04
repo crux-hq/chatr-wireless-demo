@@ -1,7 +1,7 @@
 import { ScrollView, View, Text, Pressable, Switch } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Header, PageTitle } from '@/components/layout/Header';
+import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { Button } from '@/components/ui/Button';
 import { PLANS } from '@/lib/mock/plans';
 import { useAppStore } from '@/lib/store';
@@ -22,7 +22,7 @@ export default function ActivatePlanScreen() {
     <View style={{ flex: 1, backgroundColor: colors.gray }}>
       <Header />
       <PageTitle>{`3. ${t('activate.selectPlan')}`}</PageTitle>
-      <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: 100 }}>
+      <PageScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: 100 }}>
         {dataPlans.slice(0, 4).map((plan) => (
           <Pressable
             key={plan.id}
@@ -55,7 +55,7 @@ export default function ActivatePlanScreen() {
 
         <Button title={t('common.continue')} onPress={() => router.push('/activate/account')} />
         <PublicHomeFooter bleedPadding={spacing.lg} />
-      </ScrollView>
+      </PageScrollView>
     </View>
   );
 }

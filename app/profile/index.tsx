@@ -2,7 +2,7 @@ import { ScrollView, View, Text, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ChevronRight } from 'lucide-react-native';
-import { Header, PageTitle } from '@/components/layout/Header';
+import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { Card } from '@/components/ui/Button';
 import { useAppStore } from '@/lib/store';
 import { colors, spacing } from '@/lib/theme/colors';
@@ -24,7 +24,7 @@ export default function ProfileScreen() {
     <View style={{ flex: 1, backgroundColor: colors.gray }}>
       <Header />
       <PageTitle>{t('profile.title')}</PageTitle>
-      <ScrollView contentContainerStyle={{ padding: spacing.md }}>
+      <PageScrollView contentContainerStyle={{ padding: spacing.md }}>
         <Card style={{ marginBottom: spacing.md }}>
           <Text style={{ fontSize: 22, fontFamily: fonts.extraBold }}>
             {user.firstName} {user.lastName}
@@ -52,7 +52,7 @@ export default function ProfileScreen() {
           <Text style={{ fontFamily: fonts.bold }}>{t('profile.mfa')}</Text>
           <Text style={{ color: colors.green, marginTop: 4 }}>{t('profile.mfaEnabled')}</Text>
         </Card>
-      </ScrollView>
+      </PageScrollView>
     </View>
   );
 }

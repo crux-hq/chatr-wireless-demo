@@ -7,6 +7,8 @@ import { colors, spacing, radius } from '@/lib/theme/colors';
 import { fonts, typography } from '@/lib/theme/typography';
 
 export { LanguageToggle } from '@/components/layout/LanguageToggle';
+export { PageTitle } from '@/components/layout/PageTitle';
+export { PageScrollView } from '@/components/layout/PageScrollView';
 
 export function Header() {
   const isAuthenticated = useAppStore((s) => s.isAuthenticated);
@@ -18,33 +20,25 @@ export function Header() {
   return <PublicHeader />;
 }
 
-export function PageTitle({ children }: { children: React.ReactNode }) {
-  return (
-    <Text
-      style={{
-        ...typography.pageTitle,
-        paddingHorizontal: spacing.lg,
-        marginTop: spacing.xl,
-        marginBottom: spacing.lg,
-      }}>
-      {children}
-    </Text>
-  );
-}
-
 export function PromoBanner({
   title,
   subtitle,
+  ctaTitle,
+  onCta,
   onClaimBonus,
   bonusClaimed = false,
 }: {
   title: string;
   subtitle: string;
+  ctaTitle?: string;
+  onCta?: () => void;
   onClaimBonus?: () => void;
   bonusClaimed?: boolean;
 }) {
   const { t } = useTranslation();
-  const showClaimButton = onClaimBonus && !bonusClaimed;
+  const handleCta = onCta ?? onClaimBonus;
+  const showCta = Boolean(handleCta && !bonusClaimed);
+  const label = ctaTitle ?? t('plans.autoPayBonus');
 
   const pill = (
     <View
@@ -56,7 +50,7 @@ export function PromoBanner({
         borderRadius: radius.pill,
       }}>
       <Text style={{ fontFamily: fonts.bold, fontSize: 13, color: colors.textOnAccent }}>
-        {t('plans.autoPayBonus')}
+        {label}
       </Text>
     </View>
   );
@@ -89,9 +83,9 @@ export function PromoBanner({
         }}>
         {subtitle}
       </Text>
-      {showClaimButton ? (
+      {showCta ? (
         <Pressable
-          onPress={onClaimBonus}
+          onPress={handleCta}
           style={({ pressed }) => ({ marginTop: spacing.md, opacity: pressed ? 0.85 : 1 })}>
           {pill}
         </Pressable>

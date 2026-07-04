@@ -21,29 +21,39 @@ type ProgressRingProps = {
   strokeWidth?: number;
   label: string;
   sublabel?: string;
+  detailSublabel?: string;
   color?: string;
   alert?: boolean;
   animate?: boolean;
   delay?: number;
   replayOnFocus?: boolean;
+  unlimited?: boolean;
+  compact?: boolean;
 };
 
 export function ProgressRing({
   percent,
-  size = 100,
+  size,
   strokeWidth = 10,
   label,
   sublabel,
+  detailSublabel,
   color = colors.primary,
   alert,
   animate = true,
   delay = 0,
   replayOnFocus = false,
+  unlimited = false,
+  compact = false,
 }: ProgressRingProps) {
-  const radius = (size - strokeWidth) / 2;
+  const ringSize = size ?? (compact ? 88 : 100);
+  const radius = (ringSize - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const clamped = Math.min(100, Math.max(0, percent));
+  const clamped = unlimited ? 0 : Math.min(100, Math.max(0, percent));
   const ringColor = alert && clamped >= 75 ? (clamped >= 90 ? colors.red : colors.warning) : color;
+  const labelFontSize = compact ? 14 : 16;
+  const sublabelFontSize = compact ? 13 : 16;
+  const sublabelLineHeight = compact ? 18 : 22;
 
   const progress = useSharedValue(animate ? 0 : clamped);
   const opacity = useSharedValue(animate ? 0 : 1);
@@ -116,37 +126,75 @@ export function ProgressRing({
   }));
 
   return (
-    <Animated.View style={[{ alignItems: 'center' }, containerStyle]}>
-      <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
-        <Svg width={size} height={size} style={{ position: 'absolute' }}>
+    <Animated.View style={[{ alignItems: 'center', flex: compact ? 1 : undefined }, containerStyle]}>
+      <View style={{ width: ringSize, height: ringSize, alignItems: 'center', justifyContent: 'center' }}>
+        <Svg width={ringSize} height={ringSize} style={{ position: 'absolute' }}>
           <Circle
-            cx={size / 2}
-            cy={size / 2}
+            cx={ringSize / 2}
+            cy={ringSize / 2}
             r={radius}
             stroke={colors.grayMid}
             strokeWidth={strokeWidth}
             fill="none"
           />
-          <G transform={`rotate(-90 ${size / 2} ${size / 2})`}>
-            <AnimatedCircle
-              cx={size / 2}
-              cy={size / 2}
-              r={radius}
-              stroke={ringColor}
-              strokeWidth={strokeWidth}
-              fill="none"
-              strokeDasharray={`${circumference} ${circumference}`}
-              strokeLinecap="round"
-              animatedProps={animatedRingProps}
-            />
+          <G transform={`rotate(-90 ${ringSize / 2} ${ringSize / 2})`}>
+            {!unlimited ? (
+              <AnimatedCircle
+                cx={ringSize / 2}
+                cy={ringSize / 2}
+                r={radius}
+                stroke={ringColor}
+                strokeWidth={strokeWidth}
+                fill="none"
+                strokeDasharray={`${circumference} ${circumference}`}
+                strokeLinecap="round"
+                animatedProps={animatedRingProps}
+              />
+            ) : null}
           </G>
         </Svg>
-        <Text style={{ fontFamily: fonts.bold, fontSize: 20, color: colors.text }}>{displayPercent}%</Text>
+        <Text
+          style={{
+            fontFamily: fonts.bold,
+            fontSize: unlimited ? (compact ? 24 : 28) : compact ? 18 : 20,
+            color: colors.text,
+          }}>
+          {unlimited ? '∞' : `${displayPercent}%`}
+        </Text>
       </View>
-      <Animated.View style={[{ alignItems: 'center' }, labelStyle]}>
-        <Text style={{ fontFamily: fonts.bold, marginTop: 8, color: colors.text }}>{label}</Text>
+      <Animated.View
+        style={[
+          { alignItems: 'center', maxWidth: compact ? ringSize + 36 : undefined, paddingHorizontal: compact ? 4 : 0 },
+          labelStyle,
+        ]}>
+        <Text style={{ fontFamily: fonts.bold, marginTop: 8, fontSize: labelFontSize, color: colors.text }}>
+          {label}
+        </Text>
         {sublabel ? (
-          <Text style={{ color: colors.textMuted, fontSize: 16, fontFamily: fonts.regular }}>{sublabel}</Text>
+          <Text
+            style={{
+              color: colors.textMuted,
+              fontSize: sublabelFontSize,
+              lineHeight: sublabelLineHeight,
+              fontFamily: fonts.regular,
+              textAlign: 'center',
+              marginTop: compact ? 2 : 0,
+            }}>
+            {sublabel}
+          </Text>
+        ) : null}
+        {detailSublabel ? (
+          <Text
+            style={{
+              color: colors.textMuted,
+              fontSize: sublabelFontSize,
+              lineHeight: sublabelLineHeight,
+              fontFamily: fonts.regular,
+              marginTop: 4,
+              textAlign: 'center',
+            }}>
+            {detailSublabel}
+          </Text>
         ) : null}
       </Animated.View>
     </Animated.View>

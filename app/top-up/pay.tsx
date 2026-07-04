@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ScrollView, View, Text, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Header, PageTitle } from '@/components/layout/Header';
+import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { PageSubtitle } from '@/components/layout/PageSubtitle';
 import { Button, Card } from '@/components/ui/Button';
 import { AddOnSetupDialog } from '@/components/addons/AddOnSetupDialog';
@@ -56,7 +56,7 @@ export default function TopUpPayScreen() {
       />
       <Header />
       <PageTitle>{t('topUp.title')}</PageTitle>
-      <ScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: isAuthenticated ? spacing.md : 100 }}>
+      <PageScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: isAuthenticated ? spacing.md : 100 }}>
         <Pressable onPress={() => router.push('/top-up/auto-pay')}>
           <Card style={{ marginBottom: spacing.md, backgroundColor: colors.lavenderMid }}>
             <Text style={{ fontFamily: fonts.bold }}>{t('topUp.autoPay')}</Text>
@@ -104,7 +104,7 @@ export default function TopUpPayScreen() {
 
         <Button title={t('common.confirm')} onPress={() => requireAuth(() => void handleTopUp())} loading={loading} />
         {!isAuthenticated ? <PublicHomeFooter /> : null}
-      </ScrollView>
+      </PageScrollView>
     </View>
   );
 }

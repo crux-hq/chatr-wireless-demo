@@ -14,9 +14,10 @@ type AuthScreenShellProps = {
   children: React.ReactNode;
   keyboard?: boolean;
   contentStyle?: StyleProp<ViewStyle>;
+  leading?: React.ReactNode;
 };
 
-export function AuthScreenShell({ title, children, keyboard, contentStyle }: AuthScreenShellProps) {
+export function AuthScreenShell({ title, children, keyboard, contentStyle, leading }: AuthScreenShellProps) {
   const body = (
     <>
       <Header />
@@ -25,7 +26,9 @@ export function AuthScreenShell({ title, children, keyboard, contentStyle }: Aut
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled">
         <View style={{ backgroundColor: colors.white, width: '100%', paddingVertical: spacing.xl }}>
-          <PageTitle>{title}</PageTitle>
+          <PageTitle backgroundColor={colors.white} leading={leading}>
+            {title}
+          </PageTitle>
           <View style={[{ paddingHorizontal: spacing.lg }, contentStyle]}>{children}</View>
         </View>
       </ScrollView>

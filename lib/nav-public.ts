@@ -8,6 +8,7 @@ const PUBLIC_HOMEPAGE_ROUTES: Record<string, string> = {
   activate: '/activate',
   'buy-sim': '/buy-sim',
   'browse-plans': '/plans',
+  'browse-phones': '/phones',
   'change-plan': '/plan/35gb',
   coverage: '/coverage',
   stores: '/stores',
@@ -21,6 +22,11 @@ const PUBLIC_HOMEPAGE_ROUTES: Record<string, string> = {
 
 export function navigateToPublicPlans() {
   launchPublicJourney('browse-plans');
+}
+
+export function startPlanCheckoutAndNavigate(planId: string) {
+  useAppStore.getState().startPlanCheckout(planId);
+  router.push(`/checkout/sim?planId=${planId}` as Href);
 }
 
 /** Sign out and open a public route — never auto-signs in (except sign-in / register). */

@@ -11,7 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import * as Location from 'expo-location';
 import { Search, MapPin, ChevronDown, Navigation } from 'lucide-react-native';
-import { Header, PageTitle } from '@/components/layout/Header';
+import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { Card } from '@/components/ui/Button';
 import { StoreLocatorMap } from '@/components/stores/StoreLocatorMap';
 import { StoreDetailCard } from '@/components/stores/StoreDetailCard';
@@ -110,7 +110,7 @@ export default function StoresScreen() {
     <View style={{ flex: 1, backgroundColor: colors.gray }}>
       <Header />
       <PageTitle>{t('stores.title')}</PageTitle>
-      <ScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: 100 }}>
+      <PageScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: 100 }}>
         <Text style={{ fontFamily: fonts.extraBold, fontSize: 20, marginBottom: spacing.md }}>
           {t('stores.findTitle')}
         </Text>
@@ -316,7 +316,7 @@ export default function StoresScreen() {
 
         <RetailCategoriesSection />
         <PublicHomeFooter />
-      </ScrollView>
+      </PageScrollView>
     </View>
   );
 }
