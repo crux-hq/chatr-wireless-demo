@@ -32,10 +32,6 @@ export function AuthenticatedHeader() {
       label: t('more.support'),
       onPress: () => router.push('/support'),
     },
-    {
-      label: t('more.signOut'),
-      onPress: () => signOut(),
-    },
   ];
 
   const footerActions = [
@@ -72,6 +68,11 @@ export function AuthenticatedHeader() {
       <NavigationDrawer
         items={menuItems}
         footerActions={footerActions}
+        footerSecondaryLink={{
+          prefix: '',
+          label: t('more.signOut'),
+          onPress: () => signOut(),
+        }}
         visible={menuOpen}
         onClose={() => setMenuOpen(false)}
       />

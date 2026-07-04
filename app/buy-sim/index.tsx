@@ -7,6 +7,7 @@ import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { PageSubtitle } from '@/components/layout/PageSubtitle';
 import { SimOrderSuccessDialog } from '@/components/sim/SimOrderSuccessDialog';
 import { SimProductCard } from '@/components/sim/SimProductCard';
+import { Toast } from '@/components/ui/Toast';
 import { ESIM_PRODUCT, SIM_PRODUCT } from '@/lib/mock/sim-product';
 import { useAppStore } from '@/lib/store';
 import { formatCurrency } from '@/lib/i18n';
@@ -20,6 +21,7 @@ export default function BuySimScreen() {
   const addToCart = useAppStore((s) => s.addToCart);
   const [successVisible, setSuccessVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [compatibilityToastVisible, setCompatibilityToastVisible] = useState(false);
 
   const productName = locale === 'fr' ? SIM_PRODUCT.nameFr : SIM_PRODUCT.nameEn;
   const productTag = locale === 'fr' ? SIM_PRODUCT.tagFr : SIM_PRODUCT.tagEn;
@@ -100,7 +102,24 @@ export default function BuySimScreen() {
           }}>
           {t('buySim.esimTitle')}
         </Text>
-        <PageSubtitle style={{ marginBottom: spacing.lg }}>{t('buySim.esimSubtitle')}</PageSubtitle>
+        <PageSubtitle style={{ marginBottom: spacing.sm }}>{t('buySim.esimSubtitle')}</PageSubtitle>
+        <Pressable
+          onPress={() => setCompatibilityToastVisible(true)}
+          style={({ pressed }) => ({
+            opacity: pressed ? 0.8 : 1,
+            alignSelf: 'flex-start',
+            marginBottom: spacing.lg,
+          })}>
+          <Text
+            style={{
+              fontFamily: fonts.semiBold,
+              fontSize: 14,
+              color: colors.accent,
+              textDecorationLine: 'underline',
+            }}>
+            {t('checkout.checkCompatibility')}
+          </Text>
+        </Pressable>
 
         <SimProductCard
           name={esimName}
@@ -115,6 +134,11 @@ export default function BuySimScreen() {
 
         <PublicHomeFooter bleedPadding={spacing.lg} />
       </PageScrollView>
+      <Toast
+        message={t('checkout.phoneCompatible')}
+        visible={compatibilityToastVisible}
+        onHide={() => setCompatibilityToastVisible(false)}
+      />
     </View>
   );
 }

@@ -302,7 +302,7 @@
     "compatibilityTitle": "Vérifier la compatibilité eSIM",
     "compatibilityBody": "La eSIM fonctionne sur iPhone 11 et plus récents, Galaxy S20 et plus récents, Pixel 3 et plus récents, et bien d'autres appareils.",
     "checkPhone": "Vérifier le téléphone",
-    "checkCompatibility": "Vérifier la compatibilité",
+    "checkCompatibility": "Vérifiez si votre téléphone est compatible",
     "phoneCompatible": "Ce téléphone est compatible avec la eSIM.",
     "steps": {
       "selectPlan": "Choisir un forfait",

@@ -302,7 +302,7 @@
     "compatibilityTitle": "Check eSIM compatibility",
     "compatibilityBody": "eSIM works on iPhone 11 and newer, Galaxy S20 and newer, Pixel 3 and newer, and many other devices.",
     "checkPhone": "Check phone",
-    "checkCompatibility": "Check compatibility",
+    "checkCompatibility": "Check your phone is compatible",
     "phoneCompatible": "This phone is compatible with eSIM.",
     "steps": {
       "selectPlan": "Select a plan",
@@ -623,7 +623,7 @@
       }
     },
     "faq": {
-      "titlePurple": "Got some questions for us?",
+      "titlePurple": "Got some questions\nfor us?",
       "titleBlack": "We've got you covered",
       "items": {
         "purchase-sim": {
