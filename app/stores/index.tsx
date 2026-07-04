@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import {
   ScrollView,
   View,
@@ -46,6 +46,8 @@ export default function StoresScreen() {
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(
     null,
   );
+  const scrollRef = useRef<ScrollView>(null);
+  const mapSectionY = useRef(0);
 
   const filteredStores = useMemo(
     () => filterStores(STORES, query, filterType),
@@ -66,9 +68,15 @@ export default function StoresScreen() {
     }
   }, [query, filteredStores, nearbyMode]);
 
-  const handleStoreSelect = (store: Store) => {
+  const handleStoreSelect = (store: Store, scrollToMap = false) => {
     setSelectedStore(store);
     setMapRegion(getStoreRegion(store));
+    if (scrollToMap) {
+      scrollRef.current?.scrollTo({
+        y: Math.max(0, mapSectionY.current - spacing.sm),
+        animated: true,
+      });
+    }
   };
 
   const handleUseLocation = async () => {
@@ -110,7 +118,7 @@ export default function StoresScreen() {
     <View style={{ flex: 1, backgroundColor: colors.gray }}>
       <Header />
       <PageTitle>{t('stores.title')}</PageTitle>
-      <PageScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: 100 }}>
+      <PageScrollView ref={scrollRef} contentContainerStyle={{ padding: spacing.md, paddingBottom: 100 }}>
         <Text style={{ fontFamily: fonts.extraBold, fontSize: 20, marginBottom: spacing.md }}>
           {t('stores.findTitle')}
         </Text>
@@ -276,7 +284,11 @@ export default function StoresScreen() {
         </View>
         </View>
 
-        <View style={{ position: 'relative', zIndex: 1 }}>
+        <View
+          style={{ position: 'relative', zIndex: 1 }}
+          onLayout={(event) => {
+            mapSectionY.current = event.nativeEvent.layout.y;
+          }}>
         <StoreLocatorMap
           stores={filteredStores}
           selectedStoreId={selectedStore?.id ?? null}
@@ -296,7 +308,7 @@ export default function StoresScreen() {
         </Text>
 
         {listStores.map((store) => (
-          <Pressable key={store.id} onPress={() => handleStoreSelect(store)}>
+          <Pressable key={store.id} onPress={() => handleStoreSelect(store, true)}>
             <Card
               style={{
                 marginBottom: spacing.sm,

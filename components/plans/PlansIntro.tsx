@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, Pressable, ScrollView } from 'react-native';
+import { View, Text, Pressable, ScrollView, Dimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { LinearGradient } from 'expo-linear-gradient';
 import { PLAN_VALUE_PROPS } from '@/lib/plans-page-data';
@@ -7,10 +7,22 @@ import { colors, spacing, radius } from '@/lib/theme/colors';
 import { fonts } from '@/lib/theme/typography';
 
 const COLLAPSED_HEIGHT = 56;
+const VALUE_PROP_GAP = spacing.md;
+const VALUE_PROP_PADDING = spacing.lg;
+const VALUE_PROP_PEEK = 44;
+const VISIBLE_VALUE_PROPS = 3;
+
+function getValuePropItemWidth(screenWidth: number) {
+  return Math.floor(
+    (screenWidth - VALUE_PROP_PADDING - VISIBLE_VALUE_PROPS * VALUE_PROP_GAP - VALUE_PROP_PEEK) /
+      VISIBLE_VALUE_PROPS,
+  );
+}
 
 export function PlansIntro() {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
+  const itemWidth = getValuePropItemWidth(Dimensions.get('window').width);
 
   return (
     <View style={{ marginBottom: spacing.lg }}>
@@ -69,11 +81,16 @@ export function PlansIntro() {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: spacing.lg, gap: spacing.lg }}>
+        decelerationRate="fast"
+        contentContainerStyle={{
+          paddingLeft: VALUE_PROP_PADDING,
+          paddingRight: VALUE_PROP_PADDING,
+          gap: VALUE_PROP_GAP,
+        }}>
         {PLAN_VALUE_PROPS.map((item) => {
           const Icon = item.icon;
           return (
-            <View key={item.id} style={{ width: 108, alignItems: 'center' }}>
+            <View key={item.id} style={{ width: itemWidth, alignItems: 'center' }}>
               <View
                 style={{
                   width: 72,

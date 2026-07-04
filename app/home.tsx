@@ -4,27 +4,28 @@ import {
   Text,
   ScrollView,
   Image,
-  Pressable,
   Dimensions,
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from 'react-native';
 import { Stack } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { LinearGradient } from 'expo-linear-gradient';
-import { ChevronRight, ChevronLeft, Star, MapPin, Plus } from 'lucide-react-native';
+import { MapPin, Plus } from 'lucide-react-native';
 import { MarketingHeader } from '@/components/homepage/MarketingHeader';
 import { CarouselPopImage } from '@/components/homepage/CarouselPopImage';
 import { HomeFooter } from '@/components/homepage/HomeFooter';
 import { HomeAccordion } from '@/components/homepage/HomeAccordion';
+import { WhyChatrImageBanner } from '@/components/homepage/WhyChatrImageBanner';
+import { TestimonialCarousel } from '@/components/homepage/TestimonialCarousel';
 import { CtaButton } from '@/components/ui/Button';
+import { CarouselControls } from '@/components/ui/CarouselControls';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import {
   HERO_BADGE_KEY,
   HERO_SLIDES,
   PROMO_CARDS,
   HOW_IT_WORKS_STEPS,
   WHY_CHATR_ITEMS,
-  TESTIMONIALS,
   COVERAGE_FEATURES,
   HOMEPAGE_FAQ,
 } from '@/lib/homepage-data';
@@ -41,97 +42,14 @@ const STEPS_CARD_PEEK = spacing.lg;
 const STEPS_CARD_GAP = spacing.md;
 const STEPS_CARD_WIDTH = SCREEN_WIDTH - spacing.lg * 2 - STEPS_CARD_PEEK;
 
-function CarouselDots({ count, active, tone = 'dark' }: { count: number; active: number; tone?: 'light' | 'dark' }) {
-  const inactiveColor = tone === 'dark' ? 'rgba(255,255,255,0.4)' : colors.grayMid;
-  const activeColor = tone === 'dark' ? colors.white : colors.primary;
-
-  return (
-    <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 8 }}>
-      {Array.from({ length: count }).map((_, i) => (
-        <View
-          key={i}
-          style={{
-            width: i === active ? 20 : 8,
-            height: 8,
-            borderRadius: 4,
-            backgroundColor: i === active ? activeColor : inactiveColor,
-          }}
-        />
-      ))}
-    </View>
-  );
-}
-
-function CarouselControls({
-  count,
-  active,
-  onPrevious,
-  onNext,
-  tone = 'dark',
-  style,
-}: {
-  count: number;
-  active: number;
-  onPrevious: () => void;
-  onNext: () => void;
-  tone?: 'light' | 'dark';
-  style?: object;
-}) {
-  const borderColor = tone === 'dark' ? 'rgba(255,255,255,0.5)' : colors.grayMid;
-  const iconColor = tone === 'dark' ? colors.white : colors.primary;
-
-  return (
-    <View
-      style={[
-        {
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginTop: spacing.md,
-          paddingHorizontal: spacing.lg,
-        },
-        style,
-      ]}>
-      <Pressable
-        onPress={onPrevious}
-        style={{
-          width: 36,
-          height: 36,
-          borderRadius: 8,
-          borderWidth: 1,
-          borderColor,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <ChevronLeft color={iconColor} size={20} />
-      </Pressable>
-      <View style={{ flex: 1, alignItems: 'center' }}>
-        <CarouselDots count={count} active={active} tone={tone} />
-      </View>
-      <Pressable
-        onPress={onNext}
-        style={{
-          width: 36,
-          height: 36,
-          borderRadius: 8,
-          borderWidth: 1,
-          borderColor,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <ChevronRight color={iconColor} size={20} />
-      </Pressable>
-    </View>
-  );
-}
-
 export default function HomeScreen() {
   const { t } = useTranslation();
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [heroIndex, setHeroIndex] = useState(0);
   const [stepsIndex, setStepsIndex] = useState(0);
-  const [testimonialIndex, setTestimonialIndex] = useState(0);
   const [whyExpanded, setWhyExpanded] = useState<string | null>('affordable');
   const [faqExpanded, setFaqExpanded] = useState<string | null>('roaming');
+  const [pageScrollY, setPageScrollY] = useState(0);
 
   const heroRef = useRef<ScrollView>(null);
   const stepsRef = useRef<ScrollView>(null);
@@ -162,7 +80,6 @@ export default function HomeScreen() {
   };
 
   const currentHero = HERO_SLIDES[heroIndex];
-  const currentTestimonial = TESTIMONIALS[testimonialIndex];
 
   return (
     <>
@@ -170,7 +87,11 @@ export default function HomeScreen() {
       <View style={{ flex: 1, backgroundColor: colors.lavender }}>
         <MarketingHeader onLaunchJourney={(id) => void launch(id)} />
 
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          scrollEventThrottle={32}
+          onScroll={(event) => setPageScrollY(event.nativeEvent.contentOffset.y)}
+          contentContainerStyle={{ paddingBottom: 100 }}>
           {/* Hero */}
           <View style={{ backgroundColor: colors.primary, paddingBottom: spacing.xl }}>
             <View
@@ -283,20 +204,20 @@ export default function HomeScreen() {
 
           {/* Promo cards */}
           <View style={{ padding: spacing.lg, gap: spacing.md, backgroundColor: colors.white }}>
-            {PROMO_CARDS.map((card) => (
-              <View
-                key={card.id}
-                style={{
-                  backgroundColor: colors.lavenderLight,
-                  borderRadius: radius.lg,
-                  padding: spacing.lg,
-                  marginVertical: spacing.sm,
-                  shadowColor: colors.primaryCharcoal,
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.06,
-                  shadowRadius: 8,
-                  elevation: 2,
-                }}>
+            {PROMO_CARDS.map((card, index) => (
+              <ScrollReveal key={card.id} scrollY={pageScrollY} delayMs={index * 40}>
+                <View
+                  style={{
+                    backgroundColor: colors.lavenderLight,
+                    borderRadius: radius.lg,
+                    padding: spacing.lg,
+                    marginVertical: spacing.sm,
+                    shadowColor: colors.primaryCharcoal,
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.06,
+                    shadowRadius: 8,
+                    elevation: 2,
+                  }}>
                 <Image
                   source={card.icon}
                   style={{
@@ -333,7 +254,8 @@ export default function HomeScreen() {
                     loading={loadingId === card.journeyId}
                   />
                 </View>
-              </View>
+                </View>
+              </ScrollReveal>
             ))}
           </View>
 
@@ -454,26 +376,7 @@ export default function HomeScreen() {
               onToggle={(id) => setWhyExpanded(whyExpanded === id ? null : id)}
               showThumbsUp
             />
-            <LinearGradient
-              colors={['rgba(222, 201, 255, 0.2)', 'rgba(222, 201, 255, 0.5)']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-              style={{
-                width: '100%',
-                marginTop: spacing.lg,
-                paddingTop: 10,
-                borderRadius: radius.lg,
-                overflow: 'hidden',
-              }}>
-              <Image
-                source={require('@/assets/images/homepage/why-chatr-person.png')}
-                style={{
-                  width: '100%',
-                  height: 320,
-                  resizeMode: 'contain',
-                }}
-              />
-            </LinearGradient>
+            <WhyChatrImageBanner scrollY={pageScrollY} />
             <CtaButton
               title={t('homepage.whyChatr.getStarted')}
               onPress={() => void launch('activate')}
@@ -514,70 +417,10 @@ export default function HomeScreen() {
                 }}>
                 {t('homepage.testimonials.title')}
               </Text>
-              <View
-                style={{
-                  gap: 1,
-                  shadowColor: colors.primaryCharcoal,
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.06,
-                  shadowRadius: 8,
-                  elevation: 2,
-                }}>
-                <View
-                  style={{
-                    backgroundColor: colors.white,
-                    borderTopLeftRadius: radius.lg,
-                    borderTopRightRadius: radius.lg,
-                    padding: spacing.lg,
-                    paddingBottom: spacing.md,
-                  }}>
-                  <Image
-                    source={require('@/assets/images/homepage/quote-icon.png')}
-                    style={{ width: 31.29, height: 22.73, marginBottom: spacing.md }}
-                  />
-                  <Text style={{ fontFamily: fonts.regular, fontSize: 24, lineHeight: 30, color: colors.text }}>
-                    {t(currentTestimonial.quoteKey)}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    backgroundColor: colors.white,
-                    borderBottomLeftRadius: radius.lg,
-                    borderBottomRightRadius: radius.lg,
-                    padding: spacing.lg,
-                    paddingTop: spacing.md,
-                  }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
-                    <Image source={currentTestimonial.avatar} style={{ width: 56, height: 56, borderRadius: 28 }} />
-                    <View style={{ flex: 1 }}>
-                      <Text style={{ fontFamily: fonts.semiBold, fontSize: 15, color: colors.text, marginBottom: spacing.xs }}>
-                        {t(currentTestimonial.nameKey)}
-                      </Text>
-                      <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.textMuted }}>
-                        {t(currentTestimonial.roleKey)}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={{ flexDirection: 'row', gap: 2, marginTop: spacing.sm }}>
-                    {Array.from({ length: currentTestimonial.rating }).map((_, i) => (
-                      <Star key={i} size={16} color={colors.accent} fill={colors.accent} />
-                    ))}
-                  </View>
-                </View>
-              </View>
-
-              <CarouselControls
-                count={TESTIMONIALS.length}
-                active={testimonialIndex}
-                onPrevious={() => setTestimonialIndex((i) => Math.max(0, i - 1))}
-                onNext={() => setTestimonialIndex((i) => Math.min(TESTIMONIALS.length - 1, i + 1))}
-                tone="light"
-                style={{ paddingHorizontal: 0 }}
+              <TestimonialCarousel
+                onAllReviews={() => void launch('support')}
+                loading={loadingId === 'support'}
               />
-
-              <View style={{ marginTop: spacing.lg }}>
-                <CtaButton title={t('homepage.testimonials.allReviews')} onPress={() => void launch('support')} loading={loadingId === 'support'} />
-              </View>
             </View>
           </View>
 
@@ -621,11 +464,15 @@ export default function HomeScreen() {
               {t('homepage.coverage.subtitle')}
             </Text>
             <View>
-              {COVERAGE_FEATURES.map((feature) => {
+              {COVERAGE_FEATURES.map((feature, index) => {
                 const Icon = feature.id === 'nationwide' ? MapPin : Plus;
                 return (
-                <View
+                <ScrollReveal
                   key={feature.id}
+                  scrollY={pageScrollY}
+                  direction={index === 0 ? 'left' : 'right'}
+                  delayMs={index * 40}>
+                <View
                   style={{
                     backgroundColor: '#383046',
                     borderRadius: radius.md,
@@ -658,6 +505,7 @@ export default function HomeScreen() {
                     </Text>
                   </View>
                 </View>
+                </ScrollReveal>
               );
               })}
             </View>

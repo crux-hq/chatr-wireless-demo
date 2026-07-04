@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { View, Text, Pressable } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { View, Text } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { ChevronLeft } from 'lucide-react-native';
 import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
+import { BackToSupport } from '@/components/support/BackToSupport';
 import { HomeAccordion } from '@/components/homepage/HomeAccordion';
 import { getCategoryById, getFaqsForCategory } from '@/lib/mock/support';
 import { useAppStore } from '@/lib/store';
@@ -34,12 +34,10 @@ export default function SupportCategoryScreen() {
     return (
       <View style={{ flex: 1, backgroundColor: colors.gray }}>
         <Header />
-        <View style={{ padding: spacing.md }}>
+        <PageTitle leading={<BackToSupport />}>{t('support.pageTitle')}</PageTitle>
+        <PageScrollView contentContainerStyle={{ padding: spacing.md }}>
           <Text style={{ fontFamily: fonts.semiBold }}>{t('support.categoryNotFound')}</Text>
-          <Pressable onPress={() => router.back()} style={{ marginTop: spacing.md }}>
-            <Text style={{ color: colors.primary, fontFamily: fonts.bold }}>{t('support.backToSupport')}</Text>
-          </Pressable>
-        </View>
+        </PageScrollView>
       </View>
     );
   }
@@ -55,17 +53,8 @@ export default function SupportCategoryScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.gray }}>
       <Header />
-      <PageTitle>{t('support.pageTitle')}</PageTitle>
+      <PageTitle leading={<BackToSupport />}>{t('support.pageTitle')}</PageTitle>
       <PageScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: 100 }}>
-        <Pressable
-          onPress={() => router.back()}
-          style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: spacing.md }}>
-          <ChevronLeft size={20} color={colors.primary} />
-          <Text style={{ color: colors.primary, fontFamily: fonts.semiBold }}>
-            {t('support.backToSupport')}
-          </Text>
-        </Pressable>
-
         <Text style={{ fontFamily: fonts.extraBold, fontSize: 22, marginBottom: spacing.lg }}>{title}</Text>
 
         <HomeAccordion
