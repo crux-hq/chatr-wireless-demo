@@ -6,7 +6,6 @@ import { useAppStore } from '@/lib/store';
 import { AppHeaderBar } from '@/components/layout/AppHeaderBar';
 import { AuthenticatedHeader } from '@/components/layout/AuthenticatedHeader';
 import { LanguageToggle } from '@/components/layout/LanguageToggle';
-import { CartButton } from '@/components/layout/CartButton';
 import { NavigationDrawer, type NavigationDrawerItem } from '@/components/layout/NavigationDrawer';
 import { isAuthScreenRoute, navigateToAuthScreen } from '@/lib/nav-auth';
 import { colors, spacing } from '@/lib/theme/colors';
@@ -69,7 +68,6 @@ export function MarketingHeader({ onLaunchJourney }: MarketingHeaderProps) {
         trailing={
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
             <LanguageToggle onDark={false} />
-            <CartButton />
             <Pressable
               onPress={() => setMenuOpen(true)}
               accessibilityLabel="Open menu"

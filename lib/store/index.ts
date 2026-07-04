@@ -8,6 +8,7 @@ import { getUserForScenario, getUserByEmail } from '../demo-scenarios';
 import { mockApiCall } from '../mock/api';
 import { getPlanById, getTotalDataGb } from '../mock/plans';
 import { getAddOnById } from '../mock/add-ons';
+import { EMPTY_CUSTOMER_DETAILS, type CheckoutCustomerDetails } from '../checkout';
 
 type AppState = {
   isAuthenticated: boolean;
@@ -23,9 +24,14 @@ type AppState = {
   activationDraft: {
     simNumber: string;
     phoneNumber: string;
+    phoneNumberMode: 'new' | 'port';
+    paymentMethodId: string | null;
     planId: string;
     autoPay: boolean;
     simType: SimType | null;
+    checkoutMode: 'plan' | 'sim-only';
+    physicalSimOnly: boolean;
+    customerDetails: CheckoutCustomerDetails;
   };
 
   hydrate: () => Promise<void>;
@@ -52,6 +58,7 @@ type AppState = {
   resetDemoState: () => Promise<void>;
   setActivationDraft: (updates: Partial<AppState['activationDraft']>) => void;
   startPlanCheckout: (planId: string) => void;
+  startPhysicalSimCheckout: () => void;
   completeActivation: (profile: Partial<UserProfile>) => Promise<void>;
 };
 
@@ -71,9 +78,14 @@ export const useAppStore = create<AppState>((set, get) => ({
   activationDraft: {
     simNumber: '',
     phoneNumber: '',
+    phoneNumberMode: 'new',
+    paymentMethodId: null,
     planId: '35gb',
     autoPay: true,
     simType: null,
+    checkoutMode: 'plan',
+    physicalSimOnly: false,
+    customerDetails: { ...EMPTY_CUSTOMER_DETAILS },
   },
 
   persist: async () => {
@@ -353,9 +365,14 @@ export const useAppStore = create<AppState>((set, get) => ({
       activationDraft: {
         simNumber: '',
         phoneNumber: '',
+        phoneNumberMode: 'new',
+        paymentMethodId: null,
         planId: '35gb',
         autoPay: true,
         simType: null,
+        checkoutMode: 'plan',
+        physicalSimOnly: false,
+        customerDetails: { ...EMPTY_CUSTOMER_DETAILS },
       },
     });
   },
@@ -367,7 +384,34 @@ export const useAppStore = create<AppState>((set, get) => ({
   startPlanCheckout: (planId) => {
     set({
       selectedPlanId: planId,
-      activationDraft: { ...get().activationDraft, planId, simType: null },
+      activationDraft: {
+        ...get().activationDraft,
+        checkoutMode: 'plan',
+        physicalSimOnly: false,
+        planId,
+        simType: null,
+        phoneNumber: '',
+        phoneNumberMode: 'new',
+        paymentMethodId: null,
+        customerDetails: { ...EMPTY_CUSTOMER_DETAILS },
+      },
+    });
+    void get().persist();
+  },
+
+  startPhysicalSimCheckout: () => {
+    set({
+      selectedPlanId: null,
+      activationDraft: {
+        ...get().activationDraft,
+        checkoutMode: 'sim-only',
+        physicalSimOnly: true,
+        simType: 'physical-order',
+        phoneNumber: '',
+        phoneNumberMode: 'new',
+        paymentMethodId: null,
+        customerDetails: { ...EMPTY_CUSTOMER_DETAILS },
+      },
     });
     void get().persist();
   },
@@ -378,16 +422,17 @@ export const useAppStore = create<AppState>((set, get) => ({
     const dataLimitMb = plan
       ? (plan.baseDataGb + (activationDraft.autoPay ? plan.autoPayBonusGb : 0)) * 1024
       : 1024;
+    const details = activationDraft.customerDetails;
     const user: UserProfile = {
       id: `user-${Date.now()}`,
-      email: profile.email ?? 'new@chatr.ca',
-      firstName: profile.firstName ?? 'New',
-      lastName: profile.lastName ?? 'User',
+      email: details.email || profile.email || 'new@chatr.ca',
+      firstName: details.firstName || profile.firstName || 'New',
+      lastName: details.lastName || profile.lastName || 'User',
       phone: activationDraft.phoneNumber || profile.phone || '416-555-0000',
-      address: '',
-      city: '',
-      province: 'ON',
-      postalCode: '',
+      address: details.address,
+      city: details.city,
+      province: details.province || 'ON',
+      postalCode: details.postalCode,
       username: profile.email?.split('@')[0] ?? 'newuser',
       planId: activationDraft.planId,
       balance: 0,

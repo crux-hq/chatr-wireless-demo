@@ -136,6 +136,11 @@ export default function RootLayout() {
               <Stack.Screen name="phones/[id]" options={stackCardOptions} />
               <Stack.Screen name="cart/index" options={stackCardOptions} />
               <Stack.Screen name="checkout/sim" options={stackCardOptions} />
+              <Stack.Screen name="checkout/phone-number" options={stackCardOptions} />
+              <Stack.Screen name="checkout/details" options={stackCardOptions} />
+              <Stack.Screen name="checkout/payment" options={stackCardOptions} />
+              <Stack.Screen name="checkout/review" options={stackCardOptions} />
+              <Stack.Screen name="checkout/success" options={{ headerShown: false }} />
               <Stack.Screen name="demo" options={{ presentation: 'modal', headerShown: false }} />
               <Stack.Screen name="addons/[id]" options={stackCardOptions} />
             </Stack>

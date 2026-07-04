@@ -111,6 +111,7 @@
     "bestDeal": "Our best deal",
     "yearlyPlan": "Yearly plan",
     "includesAutoPayBonus": "Includes {{gb}} GB bonus with Auto-Pay",
+    "voicemailIncluded": "Voicemail",
     "getPlan": "Get Plan",
     "backToPlans": "Back to Plans",
     "faq": "FAQ",
@@ -264,12 +265,13 @@
   },
   "buySim": {
     "title": "Buy SIM",
+    "landingSubtitle": "Choose a physical SIM card or eSIM. eSIM requires a plan — physical SIM can be ordered on its own.",
     "subtitlePrefix": "Already have a phone? Buy a",
     "subtitleSuffix": "and get one of our affordable nation-wide Talk, Text and Data plans. Plus, shipping is free.",
     "productName": "chatr SIM card",
-    "addToCart": "Add to cart",
+    "addToCart": "Buy now",
     "freeShipping": "Free shipping",
-    "orderSuccess": "Added to cart!",
+    "orderSuccess": "Order complete",
     "orderSuccessDesc": "Your chatr SIM card will ship for free. Activate it when it arrives.",
     "activateWhenReady": "Activate when ready",
     "browsePlans": "Browse plans",
@@ -304,12 +306,59 @@
     "checkPhone": "Check phone",
     "checkCompatibility": "Check your phone is compatible",
     "phoneCompatible": "This phone is compatible with eSIM.",
+    "phoneNumberTitle": "Phone number & SIM",
+    "paymentTitle": "Payment method",
+    "personalDetailsTitle": "Personal details",
+    "personalDetailsSubtitle": "Enter your name and shipping address to complete your order.",
+    "requiredFieldsNote": "Fields marked with * are required.",
+    "validation": {
+      "requiredHeading": "Required information",
+      "required": "This field is required.",
+      "invalidEmail": "Enter a valid email address.",
+      "invalidPostalCode": "Enter a valid postal code (e.g. M5V 2T6).",
+      "missingFields": "To continue, complete: {{fields}}.",
+      "completeRequiredFields": "Complete all required fields to continue."
+    },
+    "selectPhoneNumber": "Choose your phone number",
+    "selectPhoneSubtitle": "Pick a new Canadian number or bring your existing one.",
+    "useExistingNumber": "Use my existing number",
+    "useExistingNumberDesc": "Transfer your current Canadian mobile number to chatr",
+    "existingNumberLabel": "Your existing phone number",
+    "existingNumberPlaceholder": "416-555-1234",
+    "selectPayment": "Select payment method",
+    "paymentCardLabel": "{{brand}} ending in {{last4}}",
+    "paymentCardExpiry": "Expires {{expiry}}",
+    "reviewTitle": "Order review",
+    "reviewCustomer": "Customer",
+    "reviewEmail": "Email",
+    "reviewAddress": "Shipping address",
+    "reviewSim": "SIM type",
+    "reviewPhone": "Phone number",
+    "reviewPayment": "Payment method",
+    "reviewExistingPhone": "{{number}} (number transfer)",
+    "placeOrder": "Place order",
+    "orderComplete": "Order complete",
+    "orderCompleteSimPhysical": "Your chatr SIM card will ship for free. Activate it when it arrives.",
+    "orderCompleteSimEsim": "Your eSIM order is confirmed. Browse plans to get started.",
+    "orderCompletePlanPhysical": "Your plan is confirmed and your SIM card will ship for free. Activate when it arrives.",
+    "orderCompletePlanEsim": "Your plan is confirmed. Finish activation to start using your service.",
+    "continueActivation": "Continue activation",
+    "phoneOptions": {
+      "416": { "area": "Toronto area" },
+      "647": { "area": "Greater Toronto area" },
+      "905": { "area": "Greater Toronto / Hamilton area" }
+    },
     "steps": {
       "selectPlan": "Select a plan",
+      "selectSim": "Select SIM",
+      "selectNumber": "Select number",
       "phoneSim": "Phone number & SIM",
+      "personalDetails": "Personal details",
       "payment": "Payment method",
       "review": "Order review"
     },
+    "simFreeShipping": "Free delivery within 5 days",
+    "signInForFasterCheckout": "Sign in for faster checkout",
     "simOptions": {
       "esim": {
         "title": "eSIM",
@@ -321,7 +370,7 @@
       },
       "physical-order": {
         "title": "Order physical SIM",
-        "description": "Order a physical SIM card"
+        "description": "Best if your phone isn't eSIM-compatible. Our Multi SIM supports talk, text, and data on most unlocked devices. Free delivery in about 5 days."
       }
     }
   },

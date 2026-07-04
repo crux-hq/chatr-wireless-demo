@@ -4,8 +4,8 @@ import { colors, spacing } from '@/lib/theme/colors';
 import { fonts } from '@/lib/theme/typography';
 
 type CheckoutProgressProps = {
-  currentStep: 1 | 2 | 3 | 4;
-  labels: [string, string, string, string];
+  currentStep: number;
+  labels: readonly string[];
 };
 
 export function CheckoutProgress({ currentStep, labels }: CheckoutProgressProps) {
@@ -16,7 +16,7 @@ export function CheckoutProgress({ currentStep, labels }: CheckoutProgressProps)
         const completed = step < currentStep;
         const active = step === currentStep;
         return (
-          <View key={label} style={{ flex: 1, alignItems: 'center' }}>
+          <View key={`${label}-${step}`} style={{ flex: 1, alignItems: 'center' }}>
             <View
               style={{
                 width: 28,

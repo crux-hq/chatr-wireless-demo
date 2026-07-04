@@ -111,6 +111,7 @@
     "bestDeal": "Notre meilleure offre",
     "yearlyPlan": "Forfait annuel",
     "includesAutoPayBonus": "Comprend {{gb}} Go bonus avec paiement auto",
+    "voicemailIncluded": "Messagerie vocale",
     "getPlan": "Obtenir le forfait",
     "backToPlans": "Retour aux forfaits",
     "faq": "FAQ",
@@ -264,12 +265,13 @@
   },
   "buySim": {
     "title": "Acheter une SIM",
+    "landingSubtitle": "Choisissez une carte SIM physique ou une eSIM. La eSIM nécessite un forfait — la carte SIM physique peut être commandée seule.",
     "subtitlePrefix": "Vous avez déjà un téléphone? Achetez une",
     "subtitleSuffix": "et choisissez l'un de nos forfaits abordables partout au pays. De plus, la livraison est gratuite.",
     "productName": "carte SIM chatr",
-    "addToCart": "Ajouter au panier",
+    "addToCart": "Acheter",
     "freeShipping": "Livraison gratuite",
-    "orderSuccess": "Ajouté au panier!",
+    "orderSuccess": "Commande complétée",
     "orderSuccessDesc": "Votre carte SIM chatr sera expédiée gratuitement. Activez-la à réception.",
     "activateWhenReady": "Activer quand prêt",
     "browsePlans": "Voir les forfaits",
@@ -304,12 +306,59 @@
     "checkPhone": "Vérifier le téléphone",
     "checkCompatibility": "Vérifiez si votre téléphone est compatible",
     "phoneCompatible": "Ce téléphone est compatible avec la eSIM.",
+    "phoneNumberTitle": "Numéro et carte SIM",
+    "paymentTitle": "Mode de paiement",
+    "personalDetailsTitle": "Coordonnées",
+    "personalDetailsSubtitle": "Entrez votre nom et votre adresse de livraison pour compléter votre commande.",
+    "requiredFieldsNote": "Les champs marqués d'un * sont obligatoires.",
+    "validation": {
+      "requiredHeading": "Information requise",
+      "required": "Ce champ est obligatoire.",
+      "invalidEmail": "Entrez une adresse courriel valide.",
+      "invalidPostalCode": "Entrez un code postal valide (p. ex. M5V 2T6).",
+      "missingFields": "Pour continuer, complétez : {{fields}}.",
+      "completeRequiredFields": "Complétez tous les champs obligatoires pour continuer."
+    },
+    "selectPhoneNumber": "Choisissez votre numéro de téléphone",
+    "selectPhoneSubtitle": "Choisissez un nouveau numéro canadien ou conservez le vôtre.",
+    "useExistingNumber": "Utiliser mon numéro existant",
+    "useExistingNumberDesc": "Transférez votre numéro mobile canadien actuel chez chatr",
+    "existingNumberLabel": "Votre numéro de téléphone existant",
+    "existingNumberPlaceholder": "416-555-1234",
+    "selectPayment": "Choisir un mode de paiement",
+    "paymentCardLabel": "{{brand}} se terminant par {{last4}}",
+    "paymentCardExpiry": "Expire le {{expiry}}",
+    "reviewTitle": "Révision de la commande",
+    "reviewCustomer": "Client",
+    "reviewEmail": "Courriel",
+    "reviewAddress": "Adresse de livraison",
+    "reviewSim": "Type de SIM",
+    "reviewPhone": "Numéro de téléphone",
+    "reviewPayment": "Mode de paiement",
+    "reviewExistingPhone": "{{number}} (transfert de numéro)",
+    "placeOrder": "Passer la commande",
+    "orderComplete": "Commande complétée",
+    "orderCompleteSimPhysical": "Votre carte SIM chatr sera expédiée gratuitement. Activez-la à réception.",
+    "orderCompleteSimEsim": "Votre commande eSIM est confirmée. Parcourez les forfaits pour commencer.",
+    "orderCompletePlanPhysical": "Votre forfait est confirmé et votre carte SIM sera expédiée gratuitement. Activez-la à réception.",
+    "orderCompletePlanEsim": "Votre forfait est confirmé. Terminez l'activation pour commencer à utiliser votre service.",
+    "continueActivation": "Continuer l'activation",
+    "phoneOptions": {
+      "416": { "area": "Région de Toronto" },
+      "647": { "area": "Grand Toronto" },
+      "905": { "area": "Grand Toronto / Hamilton" }
+    },
     "steps": {
       "selectPlan": "Choisir un forfait",
+      "selectSim": "Choisir une SIM",
+      "selectNumber": "Choisir un numéro",
       "phoneSim": "Numéro et carte SIM",
+      "personalDetails": "Coordonnées",
       "payment": "Mode de paiement",
       "review": "Révision de la commande"
     },
+    "simFreeShipping": "Livraison gratuite sous 5 jours",
+    "signInForFasterCheckout": "Connectez-vous pour un paiement plus rapide",
     "simOptions": {
       "esim": {
         "title": "eSIM",
@@ -321,7 +370,7 @@
       },
       "physical-order": {
         "title": "Commander une carte SIM physique",
-        "description": "Commandez une carte SIM physique"
+        "description": "Idéal si votre téléphone n'est pas compatible eSIM. Notre Multi SIM prend en charge appels, textos et données sur la plupart des appareils déverrouillés. Livraison gratuite en environ 5 jours."
       }
     }
   },

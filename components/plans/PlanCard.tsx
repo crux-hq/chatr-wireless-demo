@@ -2,13 +2,14 @@ import { View, Text, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import type { Plan } from '@/lib/mock/types';
-import { useAppStore, useLocalizedPlan } from '@/lib/store';
+import { useAppStore } from '@/lib/store';
 import { formatCurrency } from '@/lib/i18n';
 import { startPlanCheckoutAndNavigate } from '@/lib/nav-public';
 import { colors, spacing, radius } from '@/lib/theme/colors';
 import { fonts } from '@/lib/theme/typography';
 import { Badge, Button } from '@/components/ui/Button';
 import { getPlanHighlight, PlanHighlightRibbon } from '@/components/plans/PlanHighlightRibbon';
+import { PlanInclusions } from '@/components/plans/PlanInclusions';
 
 type PlanCardProps = {
   plan: Plan;
@@ -20,7 +21,6 @@ type PlanCardProps = {
 export function PlanCard({ plan, isCurrent, onSelect, showBuyActions }: PlanCardProps) {
   const { t } = useTranslation();
   const locale = useAppStore((s) => s.locale);
-  const { talk, text } = useLocalizedPlan(plan);
   const totalGb = plan.baseDataGb + plan.autoPayBonusGb;
   const highlight = getPlanHighlight(plan);
   const isBestDeal = highlight === 'best-deal';
@@ -75,8 +75,7 @@ export function PlanCard({ plan, isCurrent, onSelect, showBuyActions }: PlanCard
               {t('plans.includesAutoPayBonus', { gb: plan.autoPayBonusGb })}
             </Text>
           ) : null}
-          <Text style={{ color: colors.text, marginTop: spacing.sm, fontFamily: fonts.regular }}>{talk}</Text>
-          <Text style={{ color: colors.text, marginTop: 4, fontFamily: fonts.regular }}>{text}</Text>
+          <PlanInclusions plan={plan} />
         </View>
       </Pressable>
       {showBuyActions ? (

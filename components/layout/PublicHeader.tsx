@@ -6,7 +6,6 @@ import { Menu } from 'lucide-react-native';
 import { AppHeaderBar } from '@/components/layout/AppHeaderBar';
 import { NavigationDrawer, type NavigationDrawerItem } from '@/components/layout/NavigationDrawer';
 import { LanguageToggle } from '@/components/layout/LanguageToggle';
-import { CartButton } from '@/components/layout/CartButton';
 import { navigateToAuthScreen } from '@/lib/nav-auth';
 import { colors, spacing } from '@/lib/theme/colors';
 
@@ -54,7 +53,6 @@ export function PublicHeader() {
         trailing={
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
             <LanguageToggle onDark={false} />
-            <CartButton />
             <Pressable
               onPress={() => setMenuOpen(true)}
               accessibilityLabel="Open menu"

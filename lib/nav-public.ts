@@ -29,6 +29,11 @@ export function startPlanCheckoutAndNavigate(planId: string) {
   router.push(`/checkout/sim?planId=${planId}` as Href);
 }
 
+export function startPhysicalSimCheckoutAndNavigate() {
+  useAppStore.getState().startPhysicalSimCheckout();
+  router.push('/checkout/phone-number' as Href);
+}
+
 /** Sign out and open a public route — never auto-signs in (except sign-in / register). */
 export function launchPublicJourney(journeyId: string) {
   if (isAuthJourneyId(journeyId)) {
@@ -37,6 +42,11 @@ export function launchPublicJourney(journeyId: string) {
   }
 
   useAppStore.getState().signOut();
+
+  if (journeyId === 'buy-sim') {
+    router.push('/buy-sim' as Href);
+    return;
+  }
 
   const route =
     PUBLIC_HOMEPAGE_ROUTES[journeyId] ??

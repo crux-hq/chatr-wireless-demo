@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { AppHeaderBar } from '@/components/layout/AppHeaderBar';
 import { NavigationDrawer, type NavigationDrawerItem } from '@/components/layout/NavigationDrawer';
 import { LanguageToggle } from '@/components/layout/LanguageToggle';
-import { CartButton } from '@/components/layout/CartButton';
 import { useAppStore } from '@/lib/store';
 import { colors, spacing } from '@/lib/theme/colors';
 import { fonts } from '@/lib/theme/typography';
@@ -48,7 +47,6 @@ export function AuthenticatedHeader() {
         trailing={
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
             <LanguageToggle onDark={false} />
-            <CartButton />
             <Pressable
               onPress={() => setMenuOpen(true)}
               accessibilityLabel={t('header.openAccountMenu')}

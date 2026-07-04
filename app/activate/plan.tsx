@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { Button } from '@/components/ui/Button';
+import { PlanInclusions } from '@/components/plans/PlanInclusions';
 import { PLANS } from '@/lib/mock/plans';
 import { useAppStore } from '@/lib/store';
 import { formatCurrency } from '@/lib/i18n';
@@ -41,6 +42,7 @@ export default function ActivatePlanScreen() {
             <Text style={{ color: colors.grayDark, marginTop: 4 }}>
               {locale === 'fr' ? plan.nameFr : plan.nameEn}
             </Text>
+            <PlanInclusions plan={plan} />
           </Pressable>
         ))}
 

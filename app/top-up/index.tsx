@@ -115,7 +115,7 @@ export default function TopUpLandingScreen() {
             style={{
               marginBottom: spacing.md,
               flexDirection: 'row',
-              alignItems: 'center',
+              alignItems: 'flex-start',
               gap: spacing.md,
               borderWidth: 1,
               borderColor: colors.grayMid,
@@ -136,8 +136,10 @@ export default function TopUpLandingScreen() {
                 {t('topUp.landing.autoPayBannerTitle')}
               </Text>
               <Text style={{ color: colors.textMuted, lineHeight: 20 }}>{t('topUp.landing.autoPayBannerBody')}</Text>
+              <Text style={{ fontFamily: fonts.bold, color: colors.primary, marginTop: spacing.sm }}>
+                {t('topUp.landing.learnMore')} →
+              </Text>
             </View>
-            <Text style={{ fontFamily: fonts.bold, color: colors.primary }}>{t('topUp.landing.learnMore')} →</Text>
           </Card>
         </Pressable>
 

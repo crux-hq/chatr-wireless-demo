@@ -9,6 +9,7 @@ import { Button, Card, SectionTitle } from '@/components/ui/Button';
 import { PhoneCard } from '@/components/phones/PhoneCard';
 import { HomeAccordion } from '@/components/homepage/HomeAccordion';
 import { PHONES, PHONE_FAQ_ITEMS } from '@/lib/mock/phones';
+import { startPhysicalSimCheckoutAndNavigate } from '@/lib/nav-public';
 import { useAppStore } from '@/lib/store';
 import { PublicHomeFooter } from '@/components/layout/PublicHomeFooter';
 import { colors, spacing, radius } from '@/lib/theme/colors';
@@ -47,7 +48,7 @@ export default function PhonesScreen() {
             {t('phones.physicalSim.body')}
           </Text>
           <View style={{ flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap' }}>
-            <Button title={t('phones.physicalSim.buyNow')} onPress={() => router.push('/buy-sim')} />
+            <Button title={t('phones.physicalSim.buyNow')} onPress={() => startPhysicalSimCheckoutAndNavigate()} />
             <Button title={t('phones.physicalSim.findStore')} variant="secondary" onPress={() => router.push('/stores')} />
           </View>
         </Card>

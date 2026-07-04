@@ -86,7 +86,7 @@ export const DEMO_JOURNEYS: DemoJourney[] = [
   {
     id: 'buy-sim',
     title: 'Buy a SIM card',
-    description: 'Order a chatr Multi SIM online — $10 with free shipping, or shop eSIM plans.',
+    description: 'Choose physical SIM ($10, free shipping) or eSIM (requires a plan). Physical SIM goes straight to checkout.',
     route: '/buy-sim',
     signOutFirst: true,
     audiences: ['new'],
