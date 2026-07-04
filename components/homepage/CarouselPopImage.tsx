@@ -9,8 +9,8 @@ type CarouselPopImageProps = {
 };
 
 export function CarouselPopImage({ source, active, style }: CarouselPopImageProps) {
-  const scale = useSharedValue(0.96);
-  const opacity = useSharedValue(0);
+  const scale = useSharedValue(active ? 1 : 0.96);
+  const opacity = useSharedValue(active ? 1 : 0);
 
   useEffect(() => {
     if (!active) {

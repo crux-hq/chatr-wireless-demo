@@ -142,9 +142,13 @@ export default function HomeScreen() {
     setLoadingId(null);
   };
 
+  const updateHeroIndex = (offsetX: number) => {
+    const index = Math.max(0, Math.min(HERO_SLIDES.length - 1, Math.round(offsetX / SCREEN_WIDTH)));
+    setHeroIndex(index);
+  };
+
   const onHeroScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const x = e.nativeEvent.contentOffset.x;
-    setHeroIndex(Math.round(x / SCREEN_WIDTH));
+    updateHeroIndex(e.nativeEvent.contentOffset.x);
   };
 
   const onStepsScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -200,6 +204,9 @@ export default function HomeScreen() {
               horizontal
               pagingEnabled
               showsHorizontalScrollIndicator={false}
+              scrollEventThrottle={16}
+              onScroll={onHeroScroll}
+              onScrollEndDrag={onHeroScroll}
               onMomentumScrollEnd={onHeroScroll}
               style={{ width: SCREEN_WIDTH }}>
               {HERO_SLIDES.map((slide, index) => (
