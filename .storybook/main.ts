@@ -5,6 +5,7 @@ import { expoModulesCoreShimPlugin } from './expo-modules-core-shim.ts';
 import { svgReactNativePlugin } from './svg-react-native-plugin.ts';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
+const storybookBase = process.env.STORYBOOK_BASE ?? '/';
 
 const config: StorybookConfig = {
   stories: ['../stories/**/*.mdx', '../stories/**/*.stories.@(js|jsx|ts|tsx)'],
@@ -36,6 +37,7 @@ const config: StorybookConfig = {
   async viteFinal(config) {
     const { mergeConfig } = await import('vite');
     return mergeConfig(config, {
+      base: storybookBase,
       plugins: [expoModulesCoreShimPlugin(dirname), svgReactNativePlugin()],
       resolve: {
         alias: [

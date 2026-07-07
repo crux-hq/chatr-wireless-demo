@@ -57,13 +57,17 @@
   },
   "scripts": {
     "start": "expo start",
+    "preweb": "node scripts/ensure-storybook-public.mjs",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "web:fresh": "expo start --web --clear",
     "export:web": "expo export --platform web",
+    "build:web": "node scripts/build-web.mjs",
+    "build-storybook": "node scripts/build-storybook-static.mjs",
+    "preview:web": "node scripts/build-web.mjs && npx serve dist",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook:dev": "storybook build"
   },
   "private": true
 }
