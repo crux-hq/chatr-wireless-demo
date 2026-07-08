@@ -76,9 +76,9 @@ export default function DashboardScreen() {
   const showBonusLine = Boolean(plan && plan.autoPayBonusGb > 0 && bonusClaimed);
 
   const quickLinks = [
-    { label: t('dashboard.topUp'), onPress: () => router.push('/top-up/pay') },
+    { label: t('dashboard.topUp'), onPress: () => router.push('/(tabs)/top-up/pay') },
     { label: t('dashboard.addData'), onPress: () => router.push('/(tabs)/add-ons') },
-    { label: t('dashboard.manageCard'), onPress: () => router.push('/top-up/cards') },
+    { label: t('dashboard.manageCard'), onPress: () => router.push('/(tabs)/top-up/cards') },
     { label: t('dashboard.viewUsage'), onPress: () => router.push('/(tabs)/usage') },
   ];
 
@@ -94,7 +94,7 @@ export default function DashboardScreen() {
             title={t('dashboard.autoPayPromoTitle')}
             subtitle={t('dashboard.autoPayPromoSubtitle', { gb: plan?.autoPayBonusGb ?? 5 })}
             ctaTitle={t('dashboard.autoPayPromoCta')}
-            onCta={() => router.push('/top-up/auto-pay')}
+            onCta={() => router.push('/(tabs)/top-up/auto-pay')}
           />
         ) : null}
 
@@ -168,7 +168,7 @@ export default function DashboardScreen() {
 
         <Section title={t('dashboard.promos')}>
           {PROMOS.map((promo) => (
-            <Pressable key={promo.id} onPress={() => router.push(promo.route as '/support')}>
+            <Pressable key={promo.id} onPress={() => router.push('/(tabs)/support')}>
               <Card style={{ marginBottom: spacing.sm }}>
                 <Text style={{ fontFamily: fonts.bold }}>{locale === 'fr' ? promo.titleFr : promo.titleEn}</Text>
                 <Text style={{ fontFamily: fonts.regular, color: colors.grayDark, marginTop: 4 }}>

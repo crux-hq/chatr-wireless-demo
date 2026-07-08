@@ -7,7 +7,15 @@ import { Card } from '@/components/ui/Button';
 import { CheckoutProgress } from './_components/CheckoutProgress';
 import { CheckoutOrderSummary } from './_components/CheckoutOrderSummary';
 import { CheckoutNav } from './_components/CheckoutNav';
-import { CHECKOUT_PAYMENT_OPTIONS, formatCustomerAddress, getCheckoutStepLabels, getInitialCustomerDetails, isSimOnlyCheckout } from '@/lib/checkout';
+import {
+  CHECKOUT_PAYMENT_OPTIONS,
+  formatCustomerAddress,
+  getCheckoutStepLabels,
+  getCheckoutVoucherCode,
+  getInitialCustomerDetails,
+  isCheckoutVoucherPayment,
+  isSimOnlyCheckout,
+} from '@/lib/checkout';
 import { getPlanById } from '@/lib/mock/plans';
 import { useAppStore } from '@/lib/store';
 import { PublicHomeFooter } from '@/components/layout/PublicHomeFooter';
@@ -34,7 +42,12 @@ export default function CheckoutReviewScreen() {
   const plan = simOnly ? null : getPlanById(draft.planId);
   const stepLabels = getCheckoutStepLabels(draft.checkoutMode, t);
   const currentStep = 5;
+  const voucherPayment = isCheckoutVoucherPayment(draft.paymentMethodId);
+  const voucherCode = getCheckoutVoucherCode(draft.paymentMethodId);
   const payment = CHECKOUT_PAYMENT_OPTIONS.find((option) => option.id === draft.paymentMethodId) ?? CHECKOUT_PAYMENT_OPTIONS[0];
+  const paymentLabel = voucherPayment
+    ? t('checkout.paymentVoucherReview', { code: voucherCode || '••••' })
+    : t('checkout.paymentCardLabel', { brand: payment.brand, last4: payment.last4 });
   const simLabel =
     draft.simType === 'physical-order'
       ? t('checkout.simOptions.physical-order.title')
@@ -80,10 +93,7 @@ export default function CheckoutReviewScreen() {
                 : draft.phoneNumber
             }
           />
-          <ReviewRow
-            label={t('checkout.reviewPayment')}
-            value={t('checkout.paymentCardLabel', { brand: payment.brand, last4: payment.last4 })}
-          />
+          <ReviewRow label={t('checkout.reviewPayment')} value={paymentLabel} />
         </Card>
 
         <CheckoutNav

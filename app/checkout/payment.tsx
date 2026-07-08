@@ -2,15 +2,20 @@ import { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { CreditCard } from 'lucide-react-native';
+import { CreditCard, Ticket } from 'lucide-react-native';
 import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
+import { Input } from '@/components/ui/Input';
 import { CheckoutProgress } from './_components/CheckoutProgress';
 import { CheckoutOrderSummary } from './_components/CheckoutOrderSummary';
 import { CheckoutNav } from './_components/CheckoutNav';
 import { SimOptionCard } from './_components/SimOptionCard';
 import {
+  buildCheckoutVoucherPaymentId,
   CHECKOUT_PAYMENT_OPTIONS,
+  CHECKOUT_VOUCHER_PAYMENT_ID,
   getCheckoutStepLabels,
+  getCheckoutVoucherCode,
+  isCheckoutVoucherPayment,
   isCustomerDetailsComplete,
   isSimOnlyCheckout,
 } from '@/lib/checkout';
@@ -25,11 +30,17 @@ export default function CheckoutPaymentScreen() {
   const draft = useAppStore((s) => s.activationDraft);
   const setActivationDraft = useAppStore((s) => s.setActivationDraft);
   const simOnly = isSimOnlyCheckout(draft.checkoutMode);
-  const [selected, setSelected] = useState(draft.paymentMethodId ?? CHECKOUT_PAYMENT_OPTIONS[0].id);
+  const initialVoucher = isCheckoutVoucherPayment(draft.paymentMethodId);
+  const [selected, setSelected] = useState(
+    initialVoucher ? CHECKOUT_VOUCHER_PAYMENT_ID : (draft.paymentMethodId ?? CHECKOUT_PAYMENT_OPTIONS[0].id),
+  );
+  const [voucherCode, setVoucherCode] = useState(getCheckoutVoucherCode(draft.paymentMethodId));
+  const [voucherError, setVoucherError] = useState('');
 
   const plan = simOnly ? null : getPlanById(draft.planId);
   const stepLabels = getCheckoutStepLabels(draft.checkoutMode, t);
   const currentStep = 4;
+  const voucherSelected = selected === CHECKOUT_VOUCHER_PAYMENT_ID;
 
   useEffect(() => {
     if (!isCustomerDetailsComplete(draft.customerDetails)) {
@@ -52,6 +63,17 @@ export default function CheckoutPaymentScreen() {
   }
 
   const handleContinue = () => {
+    if (voucherSelected) {
+      const trimmed = voucherCode.trim();
+      if (!trimmed) {
+        setVoucherError(t('checkout.paymentVoucherCodeRequired'));
+        return;
+      }
+      setActivationDraft({ paymentMethodId: buildCheckoutVoucherPaymentId(trimmed) });
+      router.push('/checkout/review');
+      return;
+    }
+
     setActivationDraft({ paymentMethodId: selected });
     router.push('/checkout/review');
   };
@@ -72,10 +94,38 @@ export default function CheckoutPaymentScreen() {
             title={t('checkout.paymentCardLabel', { brand: option.brand, last4: option.last4 })}
             description={t('checkout.paymentCardExpiry', { expiry: option.expiry })}
             selected={selected === option.id}
-            onPress={() => setSelected(option.id)}
+            onPress={() => {
+              setSelected(option.id);
+              setVoucherError('');
+            }}
             icon={<CreditCard color={colors.primary} size={24} />}
           />
         ))}
+
+        <SimOptionCard
+          title={t('checkout.paymentVoucherTitle')}
+          description={t('checkout.paymentVoucherDesc')}
+          selected={voucherSelected}
+          onPress={() => setSelected(CHECKOUT_VOUCHER_PAYMENT_ID)}
+          icon={<Ticket color={colors.primary} size={24} />}
+          extra={
+            voucherSelected ? (
+              <Input
+                label={t('checkout.paymentVoucherCodeLabel')}
+                required
+                value={voucherCode}
+                onChangeText={(value) => {
+                  setVoucherCode(value);
+                  if (voucherError) setVoucherError('');
+                }}
+                placeholder={t('checkout.paymentVoucherCodePlaceholder')}
+                autoCapitalize="characters"
+                autoCorrect={false}
+                error={voucherError}
+              />
+            ) : null
+          }
+        />
 
         <CheckoutNav continueLabel={t('common.continue')} onContinue={handleContinue} />
         <PublicHomeFooter bleedPadding={spacing.lg} />

@@ -30,7 +30,7 @@ export function Header() {
           <LanguageToggle onDark={false} />
           {isAuthenticated && user ? (
             <Pressable
-              onPress={() => router.push('/profile')}
+              onPress={() => router.push('/(tabs)/profile')}
               accessibilityLabel={t('more.profile')}
               style={{
                 width: 44,

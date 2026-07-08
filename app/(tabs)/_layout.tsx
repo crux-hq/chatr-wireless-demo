@@ -56,6 +56,14 @@ export default function TabLayout() {
           tabBarIcon: ({ color, size }) => <Menu color={color} size={size} />,
         }}
       />
+      <Tabs.Screen name="profile" options={{ href: null }} />
+      <Tabs.Screen name="support" options={{ href: null }} />
+      <Tabs.Screen name="coverage" options={{ href: null }} />
+      <Tabs.Screen name="stores" options={{ href: null }} />
+      <Tabs.Screen name="phones" options={{ href: null }} />
+      <Tabs.Screen name="top-up" options={{ href: null }} />
+      <Tabs.Screen name="plan" options={{ href: null }} />
+      <Tabs.Screen name="addons" options={{ href: null }} />
     </Tabs>
   );
 }

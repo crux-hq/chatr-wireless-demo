@@ -21,11 +21,13 @@ type PlanCardProps = {
 export function PlanCard({ plan, isCurrent, onSelect, showBuyActions }: PlanCardProps) {
   const { t } = useTranslation();
   const locale = useAppStore((s) => s.locale);
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
   const totalGb = plan.baseDataGb + plan.autoPayBonusGb;
   const highlight = getPlanHighlight(plan);
   const isBestDeal = highlight === 'best-deal';
   const isYearly = highlight === 'yearly';
   const isYearlyBilling = plan.billingPeriod === 'yearly';
+  const planHref = isAuthenticated ? `/(tabs)/plan/${plan.id}` : `/plan/${plan.id}`;
 
   return (
     <View
@@ -46,7 +48,7 @@ export function PlanCard({ plan, isCurrent, onSelect, showBuyActions }: PlanCard
       <Pressable
         onPress={() => {
           if (onSelect) onSelect();
-          else router.push(`/plan/${plan.id}`);
+          else router.push(planHref as `/plan/${string}`);
         }}>
         <View style={{ padding: spacing.lg }}>
           {isCurrent ? <Badge label={t('plans.currentPlan')} color={colors.primary} /> : null}
@@ -80,7 +82,7 @@ export function PlanCard({ plan, isCurrent, onSelect, showBuyActions }: PlanCard
       </Pressable>
       {showBuyActions ? (
         <View style={{ padding: spacing.lg, paddingTop: 0 }}>
-          <Pressable onPress={() => router.push(`/plan/${plan.id}`)} style={{ marginBottom: spacing.md }}>
+          <Pressable onPress={() => router.push(planHref as `/plan/${string}`)} style={{ marginBottom: spacing.md }}>
             <Text style={{ color: colors.primary, fontFamily: fonts.semiBold, fontSize: 16 }}>{t('plans.viewDetails')}</Text>
           </Pressable>
           <Button title={t('plans.getPlan')} onPress={() => startPlanCheckoutAndNavigate(plan.id)} variant="secondary" />

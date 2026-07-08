@@ -1,3 +1,5 @@
+import { useAppStore } from '@/lib/store';
+import { Redirect } from 'expo-router';
 import { useMemo, useState } from 'react';
 import {
   ScrollView,
@@ -105,6 +107,12 @@ export default function CoverageScreen() {
       body: t('coverage.featurePlansBody'),
     },
   ];
+
+
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
+  if (isAuthenticated) {
+    return <Redirect href={'/(tabs)/coverage'} />;
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.gray }}>

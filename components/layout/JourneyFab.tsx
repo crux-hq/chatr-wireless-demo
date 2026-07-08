@@ -19,8 +19,8 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import { useRouter, useSegments } from 'expo-router';
-import { ChevronLeft, Map, Search } from 'lucide-react-native';
+import { useRouter } from 'expo-router';
+import { ChevronLeft, Search } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   filterDemoJourneys,
@@ -31,6 +31,7 @@ import {
 } from '@/lib/demo-journeys';
 import { launchJourney } from '@/lib/launch-journey';
 import { isAuthJourneyId, navigateAuthJourney } from '@/lib/nav-auth';
+import { onJourneyExplorerOpen } from '@/lib/journey-explorer';
 import { DemoAppStatePanel } from '@/components/layout/DemoAppStatePanel';
 import { useAppStore } from '@/lib/store';
 import { colors, spacing, radius } from '@/lib/theme/colors';
@@ -120,8 +121,6 @@ export function JourneyFab() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { height: windowHeight } = useWindowDimensions();
-  const segments = useSegments();
-  const onTabs = segments[0] === '(tabs)';
   const [open, setOpen] = useState(false);
   const [renderModal, setRenderModal] = useState(false);
   const [panelMode, setPanelMode] = useState<PanelMode>('journeys');
@@ -133,6 +132,8 @@ export function JourneyFab() {
   const signOut = useAppStore((s) => s.signOut);
   const applyScenario = useAppStore((s) => s.applyScenario);
   const resetDemoState = useAppStore((s) => s.resetDemoState);
+
+  useEffect(() => onJourneyExplorerOpen(() => setOpen(true)), []);
 
   const filteredJourneys = useMemo(
     () => filterDemoJourneys(audience, [], searchQuery),
@@ -169,13 +170,12 @@ export function JourneyFab() {
     try {
       await resetDemoState();
       handleClose();
-        router.replace('/(tabs)');
+      router.replace('/(tabs)');
     } finally {
       setResetting(false);
     }
   };
 
-  const bottomOffset = Math.max(insets.bottom, 16) + (onTabs ? 64 : 16);
   const sheetHeight = windowHeight * SHEET_HEIGHT_RATIO;
   const backdropOpacity = useSharedValue(0);
   const translateY = useSharedValue(sheetHeight);
@@ -219,201 +219,176 @@ export function JourneyFab() {
   }));
 
   return (
-    <>
-      <Pressable
-        onPress={() => setOpen(true)}
-        accessibilityLabel="Open demo journeys"
-        style={{
-          position: 'absolute',
-          right: spacing.md,
-          bottom: bottomOffset,
-          width: 52,
-          height: 52,
-          borderRadius: radius.pill,
-          backgroundColor: colors.accent,
-          alignItems: 'center',
-          justifyContent: 'center',
-          shadowColor: colors.primaryCharcoal,
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.25,
-          shadowRadius: 8,
-          elevation: 8,
-          zIndex: 9999,
-        }}>
-        <Map color={colors.textOnAccent} size={24} strokeWidth={2.5} />
-      </Pressable>
-
-      <Modal visible={renderModal} animationType="none" transparent onRequestClose={handleClose}>
-        <View style={styles.modalRoot}>
-          <AnimatedPressable
-            style={[styles.backdrop, backdropStyle]}
-            onPress={handleClose}
-            accessibilityLabel="Close demo journeys"
-          />
-          <Animated.View
-            onStartShouldSetResponder={() => true}
-            style={[
-              styles.sheet,
-              {
-                height: sheetHeight,
-                paddingBottom: Math.max(insets.bottom, spacing.md),
-              },
-              sheetStyle,
-            ]}>
-            <View style={{ padding: spacing.md }}>
-              {panelMode === 'journeys' ? (
-                <>
-                  <View style={styles.searchToolbarRow}>
-                    <View style={styles.searchRow}>
-                      <Search color={colors.textMuted} size={20} />
-                      <TextInput
-                        value={searchQuery}
-                        onChangeText={setSearchQuery}
-                        placeholder={t('demo.searchPlaceholder')}
-                        placeholderTextColor={colors.textMuted}
-                        style={styles.searchInput}
-                        autoCorrect={false}
-                        autoCapitalize="none"
-                        returnKeyType="search"
-                        accessibilityLabel={t('demo.searchPlaceholder')}
-                      />
-                    </View>
-                    <Pressable
-                      onPress={() => setPanelMode('state')}
-                      disabled={loadingId !== null}
-                      style={[styles.footerButtonCompact, { opacity: loadingId ? 0.6 : 1 }]}>
-                      <Text style={styles.footerButtonText}>{t('demo.viewAppState')}</Text>
-                    </Pressable>
-                  </View>
-                  <AudienceTabs active={audience} onChange={handleAudienceChange} />
-                </>
-              ) : (
-                <Pressable
-                  onPress={() => setPanelMode('journeys')}
-                  style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
-                  accessibilityLabel={t('demo.backToJourneys')}>
-                  <ChevronLeft color={colors.primary} size={22} />
-                  <Text style={{ fontFamily: fonts.bold, fontSize: 20, color: colors.text }}>
-                    {t('demo.appStateTitle')}
-                  </Text>
-                </Pressable>
-              )}
-            </View>
-
+    <Modal visible={renderModal} animationType="none" transparent onRequestClose={handleClose}>
+      <View style={styles.modalRoot}>
+        <AnimatedPressable
+          style={[styles.backdrop, backdropStyle]}
+          onPress={handleClose}
+          accessibilityLabel="Close demo journeys"
+        />
+        <Animated.View
+          onStartShouldSetResponder={() => true}
+          style={[
+            styles.sheet,
+            {
+              height: sheetHeight,
+              paddingBottom: Math.max(insets.bottom, spacing.md),
+            },
+            sheetStyle,
+          ]}>
+          <View style={{ padding: spacing.md }}>
             {panelMode === 'journeys' ? (
-              <ScrollView
-                style={{ flex: 1 }}
-                contentContainerStyle={{ padding: spacing.md, flexGrow: 1 }}
-                keyboardShouldPersistTaps="handled">
-                {filteredJourneys.length === 0 ? (
-                  <View
-                    style={{
-                      padding: spacing.lg,
-                      alignItems: 'center',
-                      backgroundColor: colors.lavender,
-                      borderRadius: radius.md,
-                    }}>
-                    <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.textMuted, textAlign: 'center' }}>
-                      {searchQuery.trim()
-                        ? t('demo.noSearchResults')
-                        : t('demo.noJourneysAudience')}
-                    </Text>
+              <>
+                <View style={styles.searchToolbarRow}>
+                  <View style={styles.searchRow}>
+                    <Search color={colors.textMuted} size={20} />
+                    <TextInput
+                      value={searchQuery}
+                      onChangeText={setSearchQuery}
+                      placeholder={t('demo.searchPlaceholder')}
+                      placeholderTextColor={colors.textMuted}
+                      style={styles.searchInput}
+                      autoCorrect={false}
+                      autoCapitalize="none"
+                      returnKeyType="search"
+                      accessibilityLabel={t('demo.searchPlaceholder')}
+                    />
                   </View>
-                ) : (
-                  filteredJourneys.map((journey) => {
-                    const isLoading = loadingId === journey.id;
-                    return (
-                      <Pressable
-                        key={journey.id}
-                        onPress={() => void handleLaunchJourney(journey)}
-                        disabled={loadingId !== null}
-                        style={{
-                          backgroundColor: colors.lavender,
-                          borderRadius: radius.md,
-                          padding: spacing.md,
-                          marginBottom: spacing.sm,
-                          borderWidth: 1,
-                          borderColor: colors.grayMid,
-                          opacity: loadingId && !isLoading ? 0.5 : 1,
-                        }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                          <Text style={{ fontFamily: fonts.bold, fontSize: 16, color: colors.text, flex: 1 }}>
-                            {journey.title}
-                          </Text>
-                          {isLoading ? <ActivityIndicator color={colors.primary} size="small" /> : null}
-                        </View>
-                        <Text
-                          style={{
-                            fontFamily: fonts.regular,
-                            fontSize: 16,
-                            color: colors.textMuted,
-                            marginTop: 4,
-                            lineHeight: 24,
-                          }}>
-                          {journey.description}
-                        </Text>
-                        <JourneyThemeBadges themes={journey.themes} />
-                        {(journey.email || journey.password) && (
-                          <View
-                            style={{
-                              marginTop: spacing.sm,
-                              backgroundColor: colors.surfaceElevated,
-                              borderRadius: radius.sm,
-                              padding: spacing.sm,
-                            }}>
-                            {journey.email ? (
-                              <Text style={{ fontFamily: fonts.medium, fontSize: 12, color: colors.primary }}>
-                                Email: {journey.email}
-                              </Text>
-                            ) : null}
-                            {journey.password ? (
-                              <Text
-                                style={{
-                                  fontFamily: fonts.medium,
-                                  fontSize: 12,
-                                  color: colors.textMuted,
-                                  marginTop: journey.email ? 2 : 0,
-                                }}>
-                                Password: {journey.password}
-                              </Text>
-                            ) : null}
-                          </View>
-                        )}
-                      </Pressable>
-                    );
-                  })
-                )}
-              </ScrollView>
+                  <Pressable
+                    onPress={() => setPanelMode('state')}
+                    disabled={loadingId !== null}
+                    style={[styles.footerButtonCompact, { opacity: loadingId ? 0.6 : 1 }]}>
+                    <Text style={styles.footerButtonText}>{t('demo.viewAppState')}</Text>
+                  </Pressable>
+                </View>
+                <AudienceTabs active={audience} onChange={handleAudienceChange} />
+              </>
             ) : (
-              <DemoAppStatePanel />
-            )}
-
-            {panelMode === 'state' ? (
               <Pressable
-                onPress={() => void handleResetState()}
-                disabled={resetting}
-                style={{
-                  marginHorizontal: spacing.md,
-                  marginTop: spacing.xs,
-                  padding: spacing.md,
-                  borderRadius: radius.md,
-                  borderWidth: 1,
-                  borderColor: colors.red,
-                  backgroundColor: colors.white,
-                  alignItems: 'center',
-                  opacity: resetting ? 0.6 : 1,
-                }}>
-                {resetting ? (
-                  <ActivityIndicator color={colors.red} size="small" />
-                ) : (
-                  <Text style={{ fontFamily: fonts.semiBold, color: colors.red }}>{t('demo.resetState')}</Text>
-                )}
+                onPress={() => setPanelMode('journeys')}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+                accessibilityLabel={t('demo.backToJourneys')}>
+                <ChevronLeft color={colors.primary} size={22} />
+                <Text style={{ fontFamily: fonts.bold, fontSize: 20, color: colors.text }}>
+                  {t('demo.appStateTitle')}
+                </Text>
               </Pressable>
-            ) : null}
-          </Animated.View>
-        </View>
-      </Modal>
-    </>
+            )}
+          </View>
+
+          {panelMode === 'journeys' ? (
+            <ScrollView
+              style={{ flex: 1 }}
+              contentContainerStyle={{ padding: spacing.md, flexGrow: 1 }}
+              keyboardShouldPersistTaps="handled">
+              {filteredJourneys.length === 0 ? (
+                <View
+                  style={{
+                    padding: spacing.lg,
+                    alignItems: 'center',
+                    backgroundColor: colors.lavender,
+                    borderRadius: radius.md,
+                  }}>
+                  <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.textMuted, textAlign: 'center' }}>
+                    {searchQuery.trim()
+                      ? t('demo.noSearchResults')
+                      : t('demo.noJourneysAudience')}
+                  </Text>
+                </View>
+              ) : (
+                filteredJourneys.map((journey) => {
+                  const isLoading = loadingId === journey.id;
+                  return (
+                    <Pressable
+                      key={journey.id}
+                      onPress={() => void handleLaunchJourney(journey)}
+                      disabled={loadingId !== null}
+                      style={{
+                        backgroundColor: colors.lavender,
+                        borderRadius: radius.md,
+                        padding: spacing.md,
+                        marginBottom: spacing.sm,
+                        borderWidth: 1,
+                        borderColor: colors.grayMid,
+                        opacity: loadingId && !isLoading ? 0.5 : 1,
+                      }}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Text style={{ fontFamily: fonts.bold, fontSize: 16, color: colors.text, flex: 1 }}>
+                          {journey.title}
+                        </Text>
+                        {isLoading ? <ActivityIndicator color={colors.primary} size="small" /> : null}
+                      </View>
+                      <Text
+                        style={{
+                          fontFamily: fonts.regular,
+                          fontSize: 16,
+                          color: colors.textMuted,
+                          marginTop: 4,
+                          lineHeight: 24,
+                        }}>
+                        {journey.description}
+                      </Text>
+                      <JourneyThemeBadges themes={journey.themes} />
+                      {(journey.email || journey.password) && (
+                        <View
+                          style={{
+                            marginTop: spacing.sm,
+                            backgroundColor: colors.surfaceElevated,
+                            borderRadius: radius.sm,
+                            padding: spacing.sm,
+                          }}>
+                          {journey.email ? (
+                            <Text style={{ fontFamily: fonts.medium, fontSize: 12, color: colors.primary }}>
+                              Email: {journey.email}
+                            </Text>
+                          ) : null}
+                          {journey.password ? (
+                            <Text
+                              style={{
+                                fontFamily: fonts.medium,
+                                fontSize: 12,
+                                color: colors.textMuted,
+                                marginTop: journey.email ? 2 : 0,
+                              }}>
+                              Password: {journey.password}
+                            </Text>
+                          ) : null}
+                        </View>
+                      )}
+                    </Pressable>
+                  );
+                })
+              )}
+            </ScrollView>
+          ) : (
+            <DemoAppStatePanel />
+          )}
+
+          {panelMode === 'state' ? (
+            <Pressable
+              onPress={() => void handleResetState()}
+              disabled={resetting}
+              style={{
+                marginHorizontal: spacing.md,
+                marginTop: spacing.xs,
+                padding: spacing.md,
+                borderRadius: radius.md,
+                borderWidth: 1,
+                borderColor: colors.red,
+                backgroundColor: colors.white,
+                alignItems: 'center',
+                opacity: resetting ? 0.6 : 1,
+              }}>
+              {resetting ? (
+                <ActivityIndicator color={colors.red} size="small" />
+              ) : (
+                <Text style={{ fontFamily: fonts.semiBold, color: colors.red }}>{t('demo.resetState')}</Text>
+              )}
+            </Pressable>
+          ) : null}
+        </Animated.View>
+      </View>
+    </Modal>
   );
 }
 

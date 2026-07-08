@@ -71,13 +71,28 @@ export const PREVIEW_JOURNEYS: PreviewJourney[] = [
     steps: [
       {
         title: 'Start activation',
-        highlight: 'A guided wizard: SIM number, plan choice with Auto-Pay bonus, then account setup.',
+        highlight: 'Overview of the four-step wizard — order or enter a SIM, choose a plan, then create an account.',
         route: '/activate',
       },
       {
-        title: 'Buy a SIM instead',
-        highlight: 'Physical SIM for $10 with free shipping, or an instant eSIM with a plan.',
-        route: '/buy-sim',
+        title: 'Enter SIM',
+        highlight: 'Enter the 19-digit SIM card number from the physical card or eSIM pack.',
+        route: '/activate/sim',
+      },
+      {
+        title: 'Select your plan',
+        highlight: 'Pick a prepaid plan and optionally enable Auto-Pay for bonus data.',
+        route: '/activate/plan',
+      },
+      {
+        title: 'Create account',
+        highlight: 'Set up the My chatr profile that will manage the newly activated line.',
+        route: '/activate/account',
+      },
+      {
+        title: 'Activation complete',
+        highlight: 'Service is live — next steps include topping up and exploring the app.',
+        route: '/activate/success',
       },
     ],
   },

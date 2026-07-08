@@ -12,6 +12,7 @@ import { applyDefaultFontFamily } from '@/lib/setup-fonts';
 import { useAppStore } from '@/lib/store';
 import { colors } from '@/lib/theme/colors';
 import { fontAssets } from '@/lib/theme/typography';
+import { JourneyFab } from '@/components/layout/JourneyFab';
 SplashScreen.preventAutoHideAsync();
 
 const stackScreenOptions = {
@@ -147,6 +148,7 @@ export default function RootLayout() {
               <Stack.Screen name="demo" options={{ presentation: 'modal', headerShown: false }} />
               <Stack.Screen name="addons/[id]" options={stackCardOptions} />
             </Stack>
+            <JourneyFab />
           </View>
         </AuthGate>
       </I18nextProvider>

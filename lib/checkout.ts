@@ -85,9 +85,24 @@ export const CHECKOUT_PHONE_OPTIONS = [
 ] as const;
 
 export const CHECKOUT_PAYMENT_OPTIONS = [
-  { id: 'visa-4242', brand: 'Visa', last4: '4242', expiry: '12/28' },
-  { id: 'mc-5555', brand: 'Mastercard', last4: '5555', expiry: '09/27' },
+  { id: 'visa-4242', type: 'card' as const, brand: 'Visa', last4: '4242', expiry: '12/28' },
+  { id: 'mc-5555', type: 'card' as const, brand: 'Mastercard', last4: '5555', expiry: '09/27' },
 ] as const;
+
+export const CHECKOUT_VOUCHER_PAYMENT_ID = 'voucher';
+
+export function isCheckoutVoucherPayment(paymentMethodId: string | null | undefined) {
+  return paymentMethodId === CHECKOUT_VOUCHER_PAYMENT_ID || (paymentMethodId?.startsWith('voucher:') ?? false);
+}
+
+export function getCheckoutVoucherCode(paymentMethodId: string | null | undefined) {
+  if (!paymentMethodId?.startsWith('voucher:')) return '';
+  return paymentMethodId.slice('voucher:'.length);
+}
+
+export function buildCheckoutVoucherPaymentId(code: string) {
+  return `${CHECKOUT_VOUCHER_PAYMENT_ID}:${code.trim().toUpperCase()}`;
+}
 
 export function isSimOnlyCheckout(checkoutMode: CheckoutMode) {
   return checkoutMode === 'sim-only';

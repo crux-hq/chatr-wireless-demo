@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View, Text } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, Redirect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { BackToSupport } from '@/components/support/BackToSupport';
@@ -49,6 +49,12 @@ export default function SupportCategoryScreen() {
     body: locale === 'fr' ? faq.answerFr : faq.answerEn,
     journeyId: FAQ_JOURNEY_LINKS[faq.id],
   }));
+
+
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
+  if (isAuthenticated) {
+    return <Redirect href={`/(tabs)/support/${category}`} />;
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.gray }}>

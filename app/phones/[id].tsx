@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ScrollView, View, Text, Linking, Pressable } from 'react-native';
-import { useLocalSearchParams, router } from 'expo-router';
+import { useLocalSearchParams, router, Redirect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft } from 'lucide-react-native';
 import { Header } from '@/components/layout/Header';
@@ -36,6 +36,12 @@ export default function PhoneDetailScreen() {
   const name = locale === 'fr' ? phone.nameFr : phone.nameEn;
   const description = locale === 'fr' ? phone.descriptionFr : phone.descriptionEn;
   const inBox = locale === 'fr' ? phone.inBoxFr : phone.inBoxEn;
+
+
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
+  if (isAuthenticated) {
+    return <Redirect href={`/(tabs)/phones/${id}`} />;
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.gray }}>

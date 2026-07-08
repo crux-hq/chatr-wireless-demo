@@ -188,11 +188,11 @@ export default function TopUpLandingScreen() {
           <LinkRow label={t('topUp.landing.linkHelp')} onPress={() => router.push('/support/topup-payment')} />
           <LinkRow
             label={t('topUp.landing.linkCards')}
-            onPress={() => requireAuth(() => router.push('/top-up/cards'))}
+            onPress={() => requireAuth(() => router.push('/(tabs)/top-up/cards'))}
           />
           <LinkRow
             label={t('topUp.landing.linkAutoPayCard')}
-            onPress={() => requireAuth(() => router.push('/top-up/auto-pay'))}
+            onPress={() => requireAuth(() => router.push('/(tabs)/top-up/auto-pay'))}
           />
         </View>
 

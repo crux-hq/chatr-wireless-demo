@@ -1,3 +1,5 @@
+import { useAppStore } from '@/lib/store';
+import { Redirect } from 'expo-router';
 import { useMemo, useState, useEffect, useRef } from 'react';
 import {
   ScrollView,
@@ -113,6 +115,12 @@ export default function StoresScreen() {
     if (type === 'chatr') return t('stores.filterChatr');
     return t('stores.filterRetail');
   };
+
+
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
+  if (isAuthenticated) {
+    return <Redirect href={'/(tabs)/stores'} />;
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.gray }}>

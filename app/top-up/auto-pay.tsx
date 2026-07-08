@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ScrollView, View, Text, Switch } from 'react-native';
-import { router } from 'expo-router';
+import { router, Redirect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { Button, Card } from '@/components/ui/Button';
@@ -28,6 +28,11 @@ export default function AutoPayScreen() {
     }
     action();
   };
+
+
+  if (isAuthenticated) {
+    return <Redirect href={'/(tabs)/top-up/auto-pay'} />;
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.gray }}>

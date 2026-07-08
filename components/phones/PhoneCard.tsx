@@ -11,11 +11,14 @@ import { fonts } from '@/lib/theme/typography';
 export function PhoneCard({ phone }: { phone: Phone }) {
   const { t } = useTranslation();
   const locale = useAppStore((s) => s.locale);
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
   const name = locale === 'fr' ? phone.nameFr : phone.nameEn;
 
   return (
     <Pressable
-      onPress={() => router.push(`/phones/${phone.id}` as Href)}
+      onPress={() =>
+        router.push((isAuthenticated ? `/(tabs)/phones/${phone.id}` : `/phones/${phone.id}`) as Href)
+      }
       style={{
         backgroundColor: colors.surfaceElevated,
         borderRadius: radius.lg,

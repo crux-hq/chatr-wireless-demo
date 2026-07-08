@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
-import { router } from 'expo-router';
+import { router, Redirect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { AuthScreenShell } from '@/components/layout/AuthScreenShell';
@@ -87,6 +87,11 @@ export default function CardsScreen() {
       {!isAuthenticated ? <PublicHomeFooter /> : null}
     </>
   );
+
+
+  if (isAuthenticated) {
+    return <Redirect href={'/(tabs)/top-up/cards'} />;
+  }
 
   return (
     <>

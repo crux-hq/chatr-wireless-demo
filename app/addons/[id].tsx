@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
-import { useLocalSearchParams, router } from 'expo-router';
+import { useLocalSearchParams, router, Redirect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { BackToAddOns } from '@/components/addons/BackToAddOns';
@@ -91,6 +91,11 @@ export default function AddOnDetailScreen() {
     setSuccessVisible(false);
     router.replace('/(tabs)');
   };
+
+
+  if (isAuthenticated) {
+    return <Redirect href={`/(tabs)/addons/${id}`} />;
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.gray }}>

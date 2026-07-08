@@ -19,6 +19,7 @@ type AddOnsBrowseProps = {
 export function AddOnsBrowse({ variant = 'authenticated' }: AddOnsBrowseProps) {
   const { t } = useTranslation();
   const locale = useAppStore((s) => s.locale);
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
   const categories = Object.keys(ADD_ON_CATEGORY_LABELS) as AddOnCategory[];
 
   return (
@@ -40,7 +41,13 @@ export function AddOnsBrowse({ variant = 'authenticated' }: AddOnsBrowseProps) {
                 {t(`addons.categories.${cat}`)}
               </Text>
               {items.map((addOn) => (
-                <Pressable key={addOn.id} onPress={() => router.push(`/addons/${addOn.id}`)}>
+                <Pressable
+                  key={addOn.id}
+                  onPress={() =>
+                    router.push(
+                      (isAuthenticated ? `/(tabs)/addons/${addOn.id}` : `/addons/${addOn.id}`) as `/addons/${string}`,
+                    )
+                  }>
                   <Card style={{ marginBottom: spacing.sm }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                       <View style={{ flex: 1, paddingRight: spacing.sm }}>

@@ -1,7 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { View, Text, Image, Pressable, StyleSheet, useWindowDimensions } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import { Wifi, SignalHigh, BatteryFull, Home, ArrowRight, ArrowLeft } from 'lucide-react-native';
 import { colors, spacing } from '@/lib/theme/colors';
 import { fonts } from '@/lib/theme/typography';
@@ -22,6 +28,35 @@ import {
   getPreviewIframeSrc,
   queuePreviewBootstrap,
 } from '@/lib/preview-frame';
+
+type TransitionDirection = 'forward' | 'back';
+
+const PANEL_TRANSITION_MS = 320;
+const PANEL_SLIDE_PX = 28;
+const easeOut = Easing.out(Easing.cubic);
+
+function AnimatedPanel({
+  direction,
+  children,
+}: {
+  direction: TransitionDirection;
+  children: ReactNode;
+}) {
+  const opacity = useSharedValue(0);
+  const translateX = useSharedValue(direction === 'forward' ? PANEL_SLIDE_PX : -PANEL_SLIDE_PX);
+
+  useEffect(() => {
+    opacity.value = withTiming(1, { duration: PANEL_TRANSITION_MS, easing: easeOut });
+    translateX.value = withTiming(0, { duration: PANEL_TRANSITION_MS, easing: easeOut });
+  }, [opacity, translateX]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+    transform: [{ translateX: translateX.value }],
+  }));
+
+  return <Animated.View style={animatedStyle}>{children}</Animated.View>;
+}
 
 const HIDE_SCROLLBAR_CSS = `
   ::-webkit-scrollbar { display: none; width: 0; height: 0; }
@@ -82,10 +117,37 @@ function PreviewIframe({ src }: { src: string }) {
   );
 }
 
+function formatLocalStatusBarTime(date = new Date()) {
+  return date.toLocaleTimeString(undefined, {
+    hour: 'numeric',
+    minute: '2-digit',
+  });
+}
+
 function StatusBar() {
+  const [time, setTime] = useState(formatLocalStatusBarTime);
+
+  useEffect(() => {
+    const tick = () => setTime(formatLocalStatusBarTime());
+    tick();
+
+    const now = new Date();
+    const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+    let intervalId: ReturnType<typeof setInterval> | undefined;
+    const timeoutId = setTimeout(() => {
+      tick();
+      intervalId = setInterval(tick, 60_000);
+    }, msUntilNextMinute);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, []);
+
   return (
     <View style={styles.statusBar}>
-      <Text style={styles.statusBarTime}>9:41</Text>
+      <Text style={styles.statusBarTime}>{time}</Text>
       <View style={styles.statusBarIcons}>
         <SignalHigh color={colors.text} size={16} strokeWidth={2.5} />
         <Wifi color={colors.text} size={16} strokeWidth={2.5} />
@@ -108,8 +170,7 @@ function JourneyMenu({ onSelect }: { onSelect: (journey: PreviewJourney) => void
       <Text style={styles.overline}>Interactive walkthrough</Text>
       <Text style={styles.heading}>chatr app</Text>
       <Text style={styles.subheading}>
-        A prepaid self-serve experience for Canada. Pick a journey to walk through it on the
-        device.
+        Pick a journey to walk through it on the device.
       </Text>
       <View style={styles.menuList}>
         {PREVIEW_JOURNEYS.map((journey) => (
@@ -206,10 +267,14 @@ export function DeviceFramePreview() {
   const { path } = useLocalSearchParams<{ path?: string }>();
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
   const [walkthrough, setWalkthrough] = useState<WalkthroughState | null>(null);
+  const [direction, setDirection] = useState<TransitionDirection>('forward');
 
   const defaultSrc = useMemo(() => getPreviewIframeSrc(path), [path]);
   const iframeSrc = walkthrough ? walkthrough.journey.steps[walkthrough.stepIndex].route : defaultSrc;
   const iframeKey = walkthrough ? `journey-${walkthrough.session}-${iframeSrc}` : `default-${iframeSrc}`;
+  const panelKey = walkthrough
+    ? `${walkthrough.journey.id}-${walkthrough.stepIndex}-${walkthrough.session}`
+    : 'menu';
 
   const startJourney = useCallback((journey: PreviewJourney) => {
     // Apply scenario/sign-out inside the iframe only — mutating the parent store
@@ -218,24 +283,31 @@ export function DeviceFramePreview() {
       scenarioId: journey.scenarioId,
       signOutFirst: journey.signOutFirst,
     });
+    setDirection('forward');
     setWalkthrough((prev) => ({ journey, stepIndex: 0, session: (prev?.session ?? 0) + 1 }));
   }, []);
 
   const handleProceed = useCallback(() => {
-    setWalkthrough((prev) => {
-      if (!prev) return prev;
-      if (prev.stepIndex >= prev.journey.steps.length - 1) return null;
-      return { ...prev, stepIndex: prev.stepIndex + 1 };
-    });
-  }, []);
+    if (!walkthrough) return;
+    if (walkthrough.stepIndex >= walkthrough.journey.steps.length - 1) {
+      setDirection('back');
+      setWalkthrough(null);
+      return;
+    }
+    setDirection('forward');
+    setWalkthrough({ ...walkthrough, stepIndex: walkthrough.stepIndex + 1 });
+  }, [walkthrough]);
 
   const handleBack = useCallback(() => {
-    setWalkthrough((prev) =>
-      prev && prev.stepIndex > 0 ? { ...prev, stepIndex: prev.stepIndex - 1 } : prev,
-    );
-  }, []);
+    if (!walkthrough || walkthrough.stepIndex <= 0) return;
+    setDirection('back');
+    setWalkthrough({ ...walkthrough, stepIndex: walkthrough.stepIndex - 1 });
+  }, [walkthrough]);
 
-  const handleHome = useCallback(() => setWalkthrough(null), []);
+  const handleHome = useCallback(() => {
+    setDirection('back');
+    setWalkthrough(null);
+  }, []);
 
   const stacked = windowWidth < 980;
 
@@ -250,16 +322,18 @@ export function DeviceFramePreview() {
 
       <View style={[styles.stageInner, stacked && styles.stageInnerStacked]}>
         <View style={[styles.panel, stacked && styles.panelStacked]}>
-          {walkthrough ? (
-            <JourneyStep
-              walkthrough={walkthrough}
-              onProceed={handleProceed}
-              onBack={handleBack}
-              onHome={handleHome}
-            />
-          ) : (
-            <JourneyMenu onSelect={startJourney} />
-          )}
+          <AnimatedPanel key={panelKey} direction={direction}>
+            {walkthrough ? (
+              <JourneyStep
+                walkthrough={walkthrough}
+                onProceed={handleProceed}
+                onBack={handleBack}
+                onHome={handleHome}
+              />
+            ) : (
+              <JourneyMenu onSelect={startJourney} />
+            )}
+          </AnimatedPanel>
         </View>
 
         <View style={[styles.device, { width: DEVICE_WIDTH, height: DEVICE_HEIGHT }]}>

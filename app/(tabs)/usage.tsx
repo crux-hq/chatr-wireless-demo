@@ -50,7 +50,7 @@ export default function UsageScreen() {
             </Text>
             <Button
               title={t('usage.addDataCta', { price: formatCurrency(10, locale) })}
-              onPress={() => router.push('/addons/extra-data-5gb')}
+              onPress={() => router.push('/(tabs)/addons/extra-data-5gb')}
               variant="secondary"
             />
           </Card>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
-import { router } from 'expo-router';
+import { router, Redirect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Smartphone, CreditCard } from 'lucide-react-native';
 import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
@@ -25,6 +25,12 @@ export default function PhonesScreen() {
     title: locale === 'fr' ? item.questionFr : item.questionEn,
     body: locale === 'fr' ? item.answerFr : item.answerEn,
   }));
+
+
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
+  if (isAuthenticated) {
+    return <Redirect href={'/(tabs)/phones'} />;
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.gray }}>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ScrollView, View, Text, Pressable } from 'react-native';
-import { router, type Href } from 'expo-router';
+import { router, type Href, Redirect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { Button, Card, CtaButton } from '@/components/ui/Button';
@@ -28,6 +28,12 @@ export default function SupportScreen() {
       body: locale === 'fr' ? faq.answerFr : faq.answerEn,
     };
   });
+
+
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
+  if (isAuthenticated) {
+    return <Redirect href={'/(tabs)/support'} />;
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.gray }}>

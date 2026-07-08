@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ScrollView, View, Text, Pressable } from 'react-native';
-import { useLocalSearchParams, router } from 'expo-router';
+import { useLocalSearchParams, router, Redirect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft } from 'lucide-react-native';
 import { Header } from '@/components/layout/Header';
@@ -65,6 +65,11 @@ export default function PlanDetailScreen() {
     setSuccess(true);
     setTimeout(() => router.replace('/(tabs)'), 1500);
   };
+
+
+  if (isAuthenticated) {
+    return <Redirect href={`/(tabs)/plan/${id}`} />;
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.gray }}>

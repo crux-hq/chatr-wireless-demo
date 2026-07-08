@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ScrollView, View, Text, Pressable } from 'react-native';
-import { router } from 'expo-router';
+import { router, Redirect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Header, PageTitle, PageScrollView } from '@/components/layout/Header';
 import { PageSubtitle } from '@/components/layout/PageSubtitle';
@@ -39,6 +39,11 @@ export default function TopUpPayScreen() {
     setLoading(false);
     router.push('/top-up/success');
   };
+
+
+  if (isAuthenticated) {
+    return <Redirect href={'/top-up/pay'} />;
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }}>
