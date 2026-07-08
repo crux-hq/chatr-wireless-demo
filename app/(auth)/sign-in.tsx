@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { Link, router, type Href } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import { ChevronLeft } from 'lucide-react-native';
 import { AuthScreenShell } from '@/components/layout/AuthScreenShell';
 import { PageSubtitle } from '@/components/layout/PageSubtitle';
 import { Button } from '@/components/ui/Button';
@@ -25,7 +26,18 @@ export default function SignInScreen() {
   };
 
   return (
-    <AuthScreenShell title={t('auth.welcome')} keyboard>
+    <AuthScreenShell
+      title={t('auth.welcome')}
+      keyboard
+      leading={
+        <Pressable
+          onPress={() => (router.canGoBack() ? router.back() : router.replace('/(auth)'))}
+          accessibilityLabel={t('common.back')}
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: spacing.sm }}>
+          <ChevronLeft color={colors.primary} size={22} />
+          <Text style={{ fontFamily: fonts.semiBold, color: colors.primary, fontSize: 16 }}>{t('common.back')}</Text>
+        </Pressable>
+      }>
       <PageSubtitle>{t('auth.signInSubtitle')}</PageSubtitle>
 
       <Input label={t('auth.email')} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" />

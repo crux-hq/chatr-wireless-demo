@@ -12,8 +12,6 @@ import { applyDefaultFontFamily } from '@/lib/setup-fonts';
 import { useAppStore } from '@/lib/store';
 import { colors } from '@/lib/theme/colors';
 import { fontAssets } from '@/lib/theme/typography';
-import { JourneyFab } from '@/components/layout/JourneyFab';
-
 SplashScreen.preventAutoHideAsync();
 
 const stackScreenOptions = {
@@ -27,7 +25,6 @@ const stackCardOptions = {
 };
 
 const PUBLIC_ROOTS = new Set([
-  'home',
   '(auth)',
   'activate',
   'buy-sim',
@@ -57,7 +54,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
     const inPublic = PUBLIC_ROOTS.has(segments[0] ?? '');
 
     if (!isAuthenticated && !inPublic) {
-      router.replace('/home');
+      router.replace('/(auth)');
     } else if (isAuthenticated && inAuth) {
       router.replace('/(tabs)');
     }
@@ -144,9 +141,6 @@ export default function RootLayout() {
               <Stack.Screen name="demo" options={{ presentation: 'modal', headerShown: false }} />
               <Stack.Screen name="addons/[id]" options={stackCardOptions} />
             </Stack>
-            <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
-              <JourneyFab />
-            </View>
           </View>
         </AuthGate>
       </I18nextProvider>

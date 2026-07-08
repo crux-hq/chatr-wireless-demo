@@ -169,7 +169,7 @@ export function JourneyFab() {
     try {
       await resetDemoState();
       handleClose();
-      router.replace('/home');
+        router.replace('/(tabs)');
     } finally {
       setResetting(false);
     }

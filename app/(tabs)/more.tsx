@@ -60,7 +60,10 @@ export default function MoreScreen() {
         ))}
 
         <Pressable
-          onPress={() => signOut()}
+          onPress={() => {
+            signOut();
+            router.replace('/(auth)');
+          }}
           style={{
             marginTop: spacing.lg,
             padding: spacing.md,

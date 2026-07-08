@@ -29,7 +29,7 @@ export default function CheckoutSuccessScreen() {
         actions: [
           { label: t('buySim.activateWhenReady'), onPress: () => router.replace('/activate'), variant: 'primary' },
           { label: t('buySim.browsePlans'), onPress: () => router.replace('/plans'), variant: 'outline' },
-          { label: t('common.done'), onPress: () => router.replace('/home'), variant: 'outline' },
+          { label: t('common.done'), onPress: () => router.replace('/(tabs)'), variant: 'outline' },
         ] satisfies SuccessAction[],
       };
     }
@@ -39,7 +39,7 @@ export default function CheckoutSuccessScreen() {
         description: t('checkout.orderCompleteSimEsim'),
         actions: [
           { label: t('buySim.browsePlans'), onPress: () => router.replace('/plans'), variant: 'primary' },
-          { label: t('common.done'), onPress: () => router.replace('/home'), variant: 'outline' },
+          { label: t('common.done'), onPress: () => router.replace('/(tabs)'), variant: 'outline' },
         ] satisfies SuccessAction[],
       };
     }
@@ -50,7 +50,7 @@ export default function CheckoutSuccessScreen() {
         actions: [
           { label: t('buySim.activateWhenReady'), onPress: () => router.replace('/activate'), variant: 'primary' },
           { label: t('buySim.browsePlans'), onPress: () => router.replace('/plans'), variant: 'outline' },
-          { label: t('common.done'), onPress: () => router.replace('/home'), variant: 'outline' },
+          { label: t('common.done'), onPress: () => router.replace('/(tabs)'), variant: 'outline' },
         ] satisfies SuccessAction[],
       };
     }
@@ -59,7 +59,7 @@ export default function CheckoutSuccessScreen() {
       description: t('checkout.orderCompletePlanEsim'),
       actions: [
         { label: t('checkout.continueActivation'), onPress: () => router.replace('/activate/account'), variant: 'primary' },
-        { label: t('common.done'), onPress: () => router.replace('/home'), variant: 'outline' },
+        { label: t('common.done'), onPress: () => router.replace('/(tabs)'), variant: 'outline' },
       ] satisfies SuccessAction[],
     };
   }, [isPhysical, simOnly, t]);

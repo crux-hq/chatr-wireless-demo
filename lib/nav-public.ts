@@ -51,7 +51,7 @@ export function launchPublicJourney(journeyId: string) {
   const route =
     PUBLIC_HOMEPAGE_ROUTES[journeyId] ??
     DEMO_JOURNEYS.find((j) => j.id === journeyId)?.route ??
-    '/home';
+    '/(tabs)';
 
   router.push(route as Href);
 }

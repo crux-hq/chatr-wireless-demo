@@ -3,5 +3,5 @@ import { useAppStore } from '@/lib/store';
 
 export default function Index() {
   const isAuthenticated = useAppStore((s) => s.isAuthenticated);
-  return <Redirect href={isAuthenticated ? '/(tabs)' : '/home'} />;
+  return <Redirect href={isAuthenticated ? '/(tabs)' : '/(auth)'} />;
 }

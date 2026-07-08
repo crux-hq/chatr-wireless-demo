@@ -29,7 +29,7 @@ export default function RegisterScreen() {
     if (router.canGoBack()) {
       router.back();
     } else {
-      router.replace('/(auth)/sign-in');
+      router.replace('/(auth)');
     }
   };
 

@@ -33,6 +33,8 @@
   },
   "auth": {
     "welcome": "Welcome to My chatr",
+    "landingSubtitle": "Sign in to manage your prepaid account, or create one to get started.",
+    "landingGuestPrompt": "New to chatr?",
     "signInSubtitle": "Manage your prepaid account in a few simple taps",
     "email": "Email",
     "password": "Password",
