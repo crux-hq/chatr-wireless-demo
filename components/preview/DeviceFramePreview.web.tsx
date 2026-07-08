@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { View, Text, Image, Pressable, StyleSheet, useWindowDimensions } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -26,6 +26,7 @@ import {
   SCREEN_LAYOUT,
   STATUS_BAR_HEIGHT,
   getPreviewIframeSrc,
+  postPreviewNavigate,
   queuePreviewBootstrap,
 } from '@/lib/preview-frame';
 
@@ -65,14 +66,21 @@ const HIDE_SCROLLBAR_CSS = `
 
 const PANEL_WIDTH = 320;
 
-function PreviewIframe({ src }: { src: string }) {
+function PreviewIframe({ src, remountKey }: { src: string; remountKey: string }) {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const appliedSrcRef = useRef<string | null>(null);
+  const readyRef = useRef(false);
+  const srcRef = useRef(src);
+  srcRef.current = src;
 
   useEffect(() => {
     if (!container) return;
 
+    readyRef.current = false;
     const iframe = document.createElement('iframe');
-    iframe.src = src;
+    iframe.src = srcRef.current;
+    appliedSrcRef.current = srcRef.current;
     iframe.title = 'My chatr app preview';
     iframe.setAttribute('allow', 'geolocation');
     // Render at the real device's logical viewport (430px) and scale down to fit
@@ -91,22 +99,45 @@ function PreviewIframe({ src }: { src: string }) {
       'background:#fff',
     ].join(';');
 
-    const hideScrollbars = () => {
+    const onLoad = () => {
+      readyRef.current = true;
       const doc = iframe.contentDocument;
-      if (!doc?.head) return;
-      const style = doc.createElement('style');
-      style.textContent = HIDE_SCROLLBAR_CSS;
-      doc.head.appendChild(style);
+      if (doc?.head) {
+        const style = doc.createElement('style');
+        style.textContent = HIDE_SCROLLBAR_CSS;
+        doc.head.appendChild(style);
+      }
+      // Apply any step change that arrived before the iframe finished loading.
+      if (appliedSrcRef.current !== srcRef.current && iframe.contentWindow) {
+        appliedSrcRef.current = srcRef.current;
+        postPreviewNavigate(iframe.contentWindow, srcRef.current);
+      }
     };
 
-    iframe.addEventListener('load', hideScrollbars);
+    iframe.addEventListener('load', onLoad);
+    iframeRef.current = iframe;
     container.appendChild(iframe);
 
     return () => {
-      iframe.removeEventListener('load', hideScrollbars);
+      iframe.removeEventListener('load', onLoad);
       iframe.remove();
+      iframeRef.current = null;
+      appliedSrcRef.current = null;
+      readyRef.current = false;
     };
-  }, [container, src]);
+  }, [container, remountKey]);
+
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    const win = iframe?.contentWindow;
+    if (!iframe || !win || appliedSrcRef.current === src) return;
+    if (!readyRef.current) {
+      // Keep desired src; onLoad will soft-navigate once the bridge is up.
+      return;
+    }
+    appliedSrcRef.current = src;
+    postPreviewNavigate(win, src);
+  }, [src]);
 
   return (
     <View
@@ -271,7 +302,9 @@ export function DeviceFramePreview() {
 
   const defaultSrc = useMemo(() => getPreviewIframeSrc(path), [path]);
   const iframeSrc = walkthrough ? walkthrough.journey.steps[walkthrough.stepIndex].route : defaultSrc;
-  const iframeKey = walkthrough ? `journey-${walkthrough.session}-${iframeSrc}` : `default-${iframeSrc}`;
+  // Remount only when starting a journey (fresh bootstrap). Step changes navigate
+  // the existing iframe so AuthGate hydrate cannot drop the deep link.
+  const iframeRemountKey = walkthrough ? `journey-${walkthrough.session}` : `default-${defaultSrc}`;
   const panelKey = walkthrough
     ? `${walkthrough.journey.id}-${walkthrough.stepIndex}-${walkthrough.session}`
     : 'menu';
@@ -358,7 +391,7 @@ export function DeviceFramePreview() {
             ]}>
             <StatusBar />
             <View style={styles.appArea}>
-              <PreviewIframe key={iframeKey} src={iframeSrc} />
+              <PreviewIframe remountKey={iframeRemountKey} src={iframeSrc} />
             </View>
           </View>
 

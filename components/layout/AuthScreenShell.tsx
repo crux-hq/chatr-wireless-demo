@@ -29,7 +29,7 @@ export function AuthScreenShell({ title, children, keyboard, contentStyle, leadi
           style={{
             backgroundColor: colors.white,
             width: '100%',
-            paddingTop: spacing.md,
+            paddingTop: leading ? 0 : spacing.md,
             paddingBottom: spacing.xl,
           }}>
           <PageTitle backgroundColor={colors.white} leading={leading}>

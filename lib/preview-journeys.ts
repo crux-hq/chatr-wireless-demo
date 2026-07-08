@@ -62,6 +62,26 @@ export const PREVIEW_JOURNEYS: PreviewJourney[] = [
         highlight: 'Pick an eSIM with a compatibility check, or order a physical SIM to the door.',
         route: '/checkout/sim?planId=35gb',
       },
+      {
+        title: 'Choose a number',
+        highlight: 'Select a new Canadian number or bring an existing one into the checkout.',
+        route: '/checkout/phone-number?planId=35gb',
+      },
+      {
+        title: 'Personal details',
+        highlight: 'Name, email and shipping address for the order and account setup.',
+        route: '/checkout/details',
+      },
+      {
+        title: 'Payment method',
+        highlight: 'Pay with a saved card or redeem a prepaid voucher / top-up PIN.',
+        route: '/checkout/payment',
+      },
+      {
+        title: 'Order review',
+        highlight: 'Confirm SIM, number, customer details and payment before placing the order.',
+        route: '/checkout/review',
+      },
     ],
   },
   {

@@ -104,6 +104,96 @@ export function buildCheckoutVoucherPaymentId(code: string) {
   return `${CHECKOUT_VOUCHER_PAYMENT_ID}:${code.trim().toUpperCase()}`;
 }
 
+/** Demo customer used when /preview soft-navigates into mid-checkout steps. */
+export const PREVIEW_CHECKOUT_CUSTOMER: CheckoutCustomerDetails = {
+  firstName: 'Alex',
+  lastName: 'Nguyen',
+  email: 'alex.nguyen@email.com',
+  address: '100 Queen St W',
+  city: 'Toronto',
+  province: 'ON',
+  postalCode: 'M5H 2N2',
+};
+
+/**
+ * Seed activation draft far enough for a checkout deep link so step guards
+ * (missing plan / details / payment) do not bounce the preview iframe.
+ */
+export type PreviewCheckoutDraftSeed = Partial<{
+  checkoutMode: CheckoutMode;
+  physicalSimOnly: boolean;
+  planId: string;
+  autoPay: boolean;
+  simType: SimType | null;
+  phoneNumber: string;
+  phoneNumberMode: PhoneNumberMode;
+  paymentMethodId: string | null;
+  customerDetails: CheckoutCustomerDetails;
+}>;
+
+export function getPreviewCheckoutDraftSeed(href: string): PreviewCheckoutDraftSeed | null {
+  let path = href;
+  let planId = '35gb';
+  try {
+    const url = new URL(href, 'https://preview.local');
+    path = url.pathname;
+    planId = url.searchParams.get('planId') ?? planId;
+  } catch {
+    // keep defaults
+  }
+
+  if (!path.startsWith('/checkout')) return null;
+
+  const seed: PreviewCheckoutDraftSeed = {
+    checkoutMode: 'plan',
+    physicalSimOnly: false,
+    planId,
+    autoPay: true,
+  };
+
+  if (path === '/checkout/sim' || path.startsWith('/checkout/sim')) {
+    return {
+      ...seed,
+      simType: null,
+      phoneNumber: '',
+      phoneNumberMode: 'new',
+      paymentMethodId: null,
+      customerDetails: { ...EMPTY_CUSTOMER_DETAILS },
+    };
+  }
+
+  seed.simType = 'esim';
+
+  if (path.startsWith('/checkout/phone-number')) {
+    return {
+      ...seed,
+      phoneNumber: '',
+      phoneNumberMode: 'new',
+      paymentMethodId: null,
+      customerDetails: { ...EMPTY_CUSTOMER_DETAILS },
+    };
+  }
+
+  seed.phoneNumber = CHECKOUT_PHONE_OPTIONS[0].id;
+  seed.phoneNumberMode = 'new';
+
+  if (path.startsWith('/checkout/details')) {
+    return { ...seed, paymentMethodId: null, customerDetails: { ...EMPTY_CUSTOMER_DETAILS } };
+  }
+
+  seed.customerDetails = { ...PREVIEW_CHECKOUT_CUSTOMER };
+
+  if (path.startsWith('/checkout/payment')) {
+    return { ...seed, paymentMethodId: null };
+  }
+
+  if (path.startsWith('/checkout/review') || path.startsWith('/checkout/success')) {
+    return { ...seed, paymentMethodId: CHECKOUT_PAYMENT_OPTIONS[0].id };
+  }
+
+  return seed;
+}
+
 export function isSimOnlyCheckout(checkoutMode: CheckoutMode) {
   return checkoutMode === 'sim-only';
 }

@@ -36,7 +36,7 @@ export default function PlanDetailScreen() {
         <View style={{ padding: spacing.md }}>
           <Pressable
             onPress={() => router.push(isAuthenticated ? '/(tabs)/plans' : '/plans')}
-            style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: spacing.md }}>
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: spacing.lg }}>
             <ChevronLeft size={20} color={colors.primary} />
             <Text style={{ color: colors.primary, fontFamily: fonts.semiBold }}>{t('plans.backToPlans')}</Text>
           </Pressable>
@@ -88,7 +88,7 @@ export default function PlanDetailScreen() {
       <ScrollView contentContainerStyle={{ padding: spacing.md, paddingTop: spacing.lg, paddingBottom: isAuthenticated ? spacing.md : 100 }}>
         <Pressable
           onPress={() => router.push(isAuthenticated ? '/(tabs)/plans' : '/plans')}
-          style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: spacing.md }}>
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: spacing.lg }}>
           <ChevronLeft size={20} color={colors.primary} />
           <Text style={{ color: colors.primary, fontFamily: fonts.semiBold }}>{t('plans.backToPlans')}</Text>
         </Pressable>

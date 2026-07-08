@@ -3,35 +3,58 @@ import type { DemoScenarioId } from './mock/types';
 export const IPHONE_FRAME_SOURCE = require('@/assets/images/iPhone15ProMax.png');
 export const CAMERA_SOURCE = require('@/assets/images/Camera.png');
 
-/** sessionStorage key: parent /preview writes, iframe hydrate consumes. */
+/** sessionStorage/localStorage key: parent /preview writes, iframe hydrate consumes. */
 export const PREVIEW_BOOTSTRAP_KEY = 'chatr-preview-bootstrap';
+
+/** postMessage type: parent /preview asks the device iframe to soft-navigate. */
+export const PREVIEW_NAVIGATE_MESSAGE = 'chatr-preview-navigate';
 
 export type PreviewBootstrap = {
   scenarioId?: DemoScenarioId;
   signOutFirst?: boolean;
 };
 
-/** Queue auth/scenario setup for the next iframe load (same-origin sessionStorage). */
+export type PreviewNavigateMessage = {
+  type: typeof PREVIEW_NAVIGATE_MESSAGE;
+  href: string;
+};
+
+/** Queue auth/scenario setup for the next iframe load (same-origin localStorage —
+ * sessionStorage is not shared between the /preview parent and the device iframe). */
 export function queuePreviewBootstrap(bootstrap: PreviewBootstrap) {
-  if (typeof sessionStorage === 'undefined') return;
+  if (typeof localStorage === 'undefined') return;
   if (!bootstrap.scenarioId && !bootstrap.signOutFirst) {
-    sessionStorage.removeItem(PREVIEW_BOOTSTRAP_KEY);
+    localStorage.removeItem(PREVIEW_BOOTSTRAP_KEY);
     return;
   }
-  sessionStorage.setItem(PREVIEW_BOOTSTRAP_KEY, JSON.stringify(bootstrap));
+  localStorage.setItem(PREVIEW_BOOTSTRAP_KEY, JSON.stringify(bootstrap));
 }
 
 /** Read and clear a pending preview bootstrap, if any. */
 export function consumePreviewBootstrap(): PreviewBootstrap | null {
-  if (typeof sessionStorage === 'undefined') return null;
-  const raw = sessionStorage.getItem(PREVIEW_BOOTSTRAP_KEY);
+  if (typeof localStorage === 'undefined') return null;
+  const raw = localStorage.getItem(PREVIEW_BOOTSTRAP_KEY);
   if (!raw) return null;
-  sessionStorage.removeItem(PREVIEW_BOOTSTRAP_KEY);
+  localStorage.removeItem(PREVIEW_BOOTSTRAP_KEY);
   try {
     return JSON.parse(raw) as PreviewBootstrap;
   } catch {
     return null;
   }
+}
+
+export function isPreviewNavigateMessage(data: unknown): data is PreviewNavigateMessage {
+  if (!data || typeof data !== 'object') return false;
+  const message = data as Partial<PreviewNavigateMessage>;
+  return message.type === PREVIEW_NAVIGATE_MESSAGE && typeof message.href === 'string';
+}
+
+/** Ask a same-origin preview iframe to router.replace without a full reload. */
+export function postPreviewNavigate(target: Window, href: string) {
+  target.postMessage(
+    { type: PREVIEW_NAVIGATE_MESSAGE, href } satisfies PreviewNavigateMessage,
+    window.location.origin,
+  );
 }
 
 /** Pixel dimensions of assets/images/Camera.png */

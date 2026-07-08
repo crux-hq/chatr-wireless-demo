@@ -116,7 +116,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         }
       }
 
-      // Device iframe only: parent /preview queues scenario/sign-out via sessionStorage.
+      // Device iframe only: parent /preview queues scenario/sign-out via localStorage.
       // Skip when this window is the presenter shell (path /preview), even if nested in Cursor's browser frame.
       if (typeof window !== 'undefined' && window.self !== window.top) {
         const path = window.location.pathname.replace(/\/$/, '') || '/';

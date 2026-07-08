@@ -1,6 +1,6 @@
 import '../global.css';
-import { useEffect } from 'react';
-import { Stack, useRouter, useSegments } from 'expo-router';
+import { useEffect, useRef } from 'react';
+import { Stack, useRouter, useSegments, type Href } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { I18nextProvider } from 'react-i18next';
 import { View, ActivityIndicator } from 'react-native';
@@ -9,6 +9,8 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import i18n from '@/lib/i18n';
 import { applyDefaultFontFamily } from '@/lib/setup-fonts';
+import { getPreviewCheckoutDraftSeed } from '@/lib/checkout';
+import { isPreviewNavigateMessage } from '@/lib/preview-frame';
 import { useAppStore } from '@/lib/store';
 import { colors } from '@/lib/theme/colors';
 import { fontAssets } from '@/lib/theme/typography';
@@ -44,17 +46,72 @@ const PUBLIC_ROOTS = new Set([
   'checkout',
 ]);
 
+function applyPreviewNavigate(href: string, router: ReturnType<typeof useRouter>) {
+  const seed = getPreviewCheckoutDraftSeed(href);
+  if (seed) {
+    useAppStore.getState().setActivationDraft(seed);
+  }
+  router.replace(href as Href);
+}
+
+function PreviewNavigateBridge() {
+  const router = useRouter();
+  const isLoading = useAppStore((s) => s.isLoading);
+  const pendingHref = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || window.self === window.top) return;
+    // Only the device iframe should soft-navigate. The /preview presenter may also
+    // be nested (e.g. Cursor browser) and must ignore these messages.
+    const path = window.location.pathname.replace(/\/$/, '') || '/';
+    if (path === '/preview') return;
+
+    const onMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+      if (!isPreviewNavigateMessage(event.data)) return;
+      if (useAppStore.getState().isLoading) {
+        pendingHref.current = event.data.href;
+        return;
+      }
+      applyPreviewNavigate(event.data.href, router);
+    };
+
+    window.addEventListener('message', onMessage);
+    return () => window.removeEventListener('message', onMessage);
+  }, [router]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || window.self === window.top) return;
+    const path = window.location.pathname.replace(/\/$/, '') || '/';
+    if (path === '/preview') return;
+    if (isLoading || !pendingHref.current) return;
+    const href = pendingHref.current;
+    pendingHref.current = null;
+    applyPreviewNavigate(href, router);
+  }, [isLoading, router]);
+
+  return null;
+}
+
 function AuthGate({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const segments = useSegments();
   const isAuthenticated = useAppStore((s) => s.isAuthenticated);
   const isLoading = useAppStore((s) => s.isLoading);
   const inPreview = segments[0] === 'preview';
+  const inIframe = typeof window !== 'undefined' && window.self !== window.top;
 
   useEffect(() => {
     if (isLoading) return;
     // Keep the presenter shell mounted — never redirect away from /preview.
     if (inPreview) return;
+    // The device iframe is driven by /preview soft-nav + bootstrap. AuthGate
+    // redirects here race Expo Router segment updates and bounce guests to /(auth).
+    if (inIframe) return;
+    // Wait until Expo Router has resolved the initial route; empty segments would
+    // incorrectly look "private" and bounce guests to the auth landing.
+    if (segments.length === 0) return;
+
     const inAuth = segments[0] === '(auth)';
     const inPublic = PUBLIC_ROOTS.has(segments[0] ?? '');
 
@@ -63,10 +120,11 @@ function AuthGate({ children }: { children: React.ReactNode }) {
     } else if (isAuthenticated && inAuth) {
       router.replace('/(tabs)');
     }
-  }, [isAuthenticated, isLoading, segments, router, inPreview]);
+  }, [isAuthenticated, isLoading, segments, router, inPreview, inIframe]);
 
-  // Unmounting the Stack while on /preview drops the route and remounts at /.
-  if (isLoading && !inPreview) {
+  // Unmounting the Stack while loading drops deep links (e.g. /plan/35gb → / → auth).
+  // Keep the tree mounted for /preview and for the device iframe used by /preview.
+  if (isLoading && !inPreview && !inIframe) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.surface }}>
         <ActivityIndicator size="large" color={colors.primary} />
@@ -74,7 +132,12 @@ function AuthGate({ children }: { children: React.ReactNode }) {
     );
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <PreviewNavigateBridge />
+      {children}
+    </>
+  );
 }
 
 export default function RootLayout() {

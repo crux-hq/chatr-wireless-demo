@@ -44,7 +44,7 @@ export default function PhoneDetailScreen() {
       <ScrollView contentContainerStyle={{ padding: spacing.md, paddingTop: spacing.lg, paddingBottom: 100 }}>
         <Pressable
           onPress={() => router.push('/(tabs)/phones')}
-          style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: spacing.md }}>
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: spacing.lg }}>
           <ChevronLeft size={20} color={colors.primary} />
           <Text style={{ color: colors.primary, fontFamily: fonts.semiBold }}>{t('phones.backToPhones')}</Text>
         </Pressable>

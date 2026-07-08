@@ -13,7 +13,7 @@ export function BackToAddOns() {
   return (
     <Pressable
       onPress={() => router.push(isAuthenticated ? '/(tabs)/add-ons' : '/add-ons')}
-      style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: spacing.md }}>
+      style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: spacing.lg }}>
       <ChevronLeft size={20} color={colors.primary} />
       <Text style={{ color: colors.primary, fontFamily: fonts.semiBold }}>{t('addons.backToAddOns')}</Text>
     </Pressable>
