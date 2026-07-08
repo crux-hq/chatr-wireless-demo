@@ -33,6 +33,7 @@
   },
   "auth": {
     "welcome": "Bienvenue sur My chatr",
+    "landingHeadline": "Commençons",
     "landingSubtitle": "Connectez-vous pour gérer votre compte prépayé ou créez-en un pour commencer.",
     "landingGuestPrompt": "Nouveau chez chatr?",
     "signInSubtitle": "Gérez votre compte prépayé en quelques clics",
@@ -40,6 +41,7 @@
     "password": "Mot de passe",
     "forgotPassword": "Mot de passe oublié?",
     "noAccount": "Pas de compte?",
+    "hasAccount": "Vous avez déjà un compte?",
     "createAccount": "Créer un compte",
     "demoAccounts": "Comptes démo",
     "registerTitle": "Créer un compte",

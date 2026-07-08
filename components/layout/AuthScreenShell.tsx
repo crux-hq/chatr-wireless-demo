@@ -25,7 +25,13 @@ export function AuthScreenShell({ title, children, keyboard, contentStyle, leadi
         style={{ flex: 1, backgroundColor: colors.surface }}
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled">
-        <View style={{ backgroundColor: colors.white, width: '100%', paddingVertical: spacing.xl }}>
+        <View
+          style={{
+            backgroundColor: colors.white,
+            width: '100%',
+            paddingTop: spacing.md,
+            paddingBottom: spacing.xl,
+          }}>
           <PageTitle backgroundColor={colors.white} leading={leading}>
             {title}
           </PageTitle>

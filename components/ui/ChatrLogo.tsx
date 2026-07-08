@@ -6,7 +6,6 @@ import { colors } from '@/lib/theme/colors';
 
 type ChatrLogoProps = {
   width?: number;
-  variant?: 'light' | 'dark';
 };
 
 const LOGO_ASPECT = 107 / 50;

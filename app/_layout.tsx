@@ -26,6 +26,7 @@ const stackCardOptions = {
 
 const PUBLIC_ROOTS = new Set([
   '(auth)',
+  'preview',
   'activate',
   'buy-sim',
   'demo',
@@ -47,9 +48,12 @@ function AuthGate({ children }: { children: React.ReactNode }) {
   const segments = useSegments();
   const isAuthenticated = useAppStore((s) => s.isAuthenticated);
   const isLoading = useAppStore((s) => s.isLoading);
+  const inPreview = segments[0] === 'preview';
 
   useEffect(() => {
     if (isLoading) return;
+    // Keep the presenter shell mounted — never redirect away from /preview.
+    if (inPreview) return;
     const inAuth = segments[0] === '(auth)';
     const inPublic = PUBLIC_ROOTS.has(segments[0] ?? '');
 
@@ -58,9 +62,10 @@ function AuthGate({ children }: { children: React.ReactNode }) {
     } else if (isAuthenticated && inAuth) {
       router.replace('/(tabs)');
     }
-  }, [isAuthenticated, isLoading, segments, router]);
+  }, [isAuthenticated, isLoading, segments, router, inPreview]);
 
-  if (isLoading) {
+  // Unmounting the Stack while on /preview drops the route and remounts at /.
+  if (isLoading && !inPreview) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.surface }}>
         <ActivityIndicator size="large" color={colors.primary} />
@@ -138,6 +143,7 @@ export default function RootLayout() {
               <Stack.Screen name="checkout/payment" options={stackCardOptions} />
               <Stack.Screen name="checkout/review" options={stackCardOptions} />
               <Stack.Screen name="checkout/success" options={{ headerShown: false }} />
+              <Stack.Screen name="preview" options={{ headerShown: false }} />
               <Stack.Screen name="demo" options={{ presentation: 'modal', headerShown: false }} />
               <Stack.Screen name="addons/[id]" options={stackCardOptions} />
             </Stack>

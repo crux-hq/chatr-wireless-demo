@@ -34,7 +34,7 @@ export function PageTitle({
         pointerEvents="box-none"
         style={{
           paddingHorizontal: spacing.lg,
-          paddingTop: hasTitle ? spacing.xl : spacing.lg,
+          paddingTop: leading ? spacing.sm : hasTitle ? spacing.xl : spacing.lg,
           paddingBottom: hasTitle ? spacing.lg + PAGE_TITLE_FADE_HEIGHT : spacing.md + PAGE_TITLE_FADE_HEIGHT,
         }}>
         {leading}

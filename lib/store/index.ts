@@ -115,6 +115,26 @@ export const useAppStore = create<AppState>((set, get) => ({
           if (user) set({ isAuthenticated: true, user });
         }
       }
+
+      // Device iframe only: parent /preview queues scenario/sign-out via sessionStorage.
+      // Skip when this window is the presenter shell (path /preview), even if nested in Cursor's browser frame.
+      if (typeof window !== 'undefined' && window.self !== window.top) {
+        const path = window.location.pathname.replace(/\/$/, '') || '/';
+        if (path !== '/preview') {
+          const { consumePreviewBootstrap } = await import('@/lib/preview-frame');
+          const bootstrap = consumePreviewBootstrap();
+          if (bootstrap?.signOutFirst) {
+            set({ isAuthenticated: false, user: null });
+          }
+          if (bootstrap?.scenarioId) {
+            const user = getUserForScenario(bootstrap.scenarioId);
+            set({ isAuthenticated: true, user, currentScenario: bootstrap.scenarioId });
+          }
+          if (bootstrap?.signOutFirst || bootstrap?.scenarioId) {
+            void get().persist();
+          }
+        }
+      }
     } finally {
       set({ isLoading: false });
     }

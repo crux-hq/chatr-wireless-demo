@@ -33,7 +33,7 @@ export default function SignInScreen() {
         <Pressable
           onPress={() => (router.canGoBack() ? router.back() : router.replace('/(auth)'))}
           accessibilityLabel={t('common.back')}
-          style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: spacing.sm }}>
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: spacing.lg }}>
           <ChevronLeft color={colors.primary} size={22} />
           <Text style={{ fontFamily: fonts.semiBold, color: colors.primary, fontSize: 16 }}>{t('common.back')}</Text>
         </Pressable>

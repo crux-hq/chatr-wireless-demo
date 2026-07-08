@@ -24,7 +24,10 @@ function writeServeConfig(distDir) {
     JSON.stringify(
       {
         cleanUrls: false,
-        rewrites: [{ source: '/storybook', destination: '/storybook/index.html' }],
+        rewrites: [
+          { source: '/storybook', destination: '/storybook/index.html' },
+          { source: '/preview', destination: '/preview.html' },
+        ],
       },
       null,
       2,
