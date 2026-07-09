@@ -178,4 +178,23 @@ export const PREVIEW_JOURNEYS: PreviewJourney[] = [
       },
     ],
   },
+  {
+    id: 'ai-support',
+    title: 'AI support',
+    scenarioId: 'happy-path',
+    steps: [
+      {
+        title: 'Ask with AI',
+        highlight:
+          'Type a question or tap a suggested account or FAQ prompt — the agent answers in plain language with links into the app.',
+        route: '/support/ai',
+      },
+      {
+        title: 'Guided next step',
+        highlight:
+          'Dynamic links take the customer straight to usage, top-up, Auto-Pay, or a help article to resolve the issue.',
+        route: '/support/ai',
+      },
+    ],
+  },
 ];

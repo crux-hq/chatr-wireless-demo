@@ -264,6 +264,7 @@ export default function RootLayout() {
                 <Stack.Screen name="stores/index" options={stackCardOptions} />
                 <Stack.Screen name="support/index" options={stackCardOptions} />
                 <Stack.Screen name="support/[category]" options={stackCardOptions} />
+                <Stack.Screen name="support/ai" options={stackCardOptions} />
                 <Stack.Screen name="phones/index" options={stackCardOptions} />
                 <Stack.Screen name="phones/[id]" options={stackCardOptions} />
                 <Stack.Screen name="cart/index" options={stackCardOptions} />

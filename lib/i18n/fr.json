@@ -544,7 +544,16 @@
     "phone": "Nous appeler",
     "visitStore": "Visiter un magasin",
     "chatWelcome": "Bonjour! Comment puis-je vous aider?",
-    "chatResponse": "Merci pour votre message. Un représentant chatr vous assisterait ici. Pour cette démo, consultez la FAQ ou visitez un magasin."
+    "chatResponse": "Merci pour votre message. Un représentant chatr vous assisterait ici. Pour cette démo, consultez la FAQ ou visitez un magasin.",
+    "aiPageTitle": "Comment pouvons-nous vous aider?",
+    "aiPlaceholder": "Posez votre question",
+    "aiFollowUpPlaceholder": "Posez une question de suivi",
+    "aiSend": "Envoyer",
+    "aiAccountSection": "Compte",
+    "aiFaqSection": "Questions populaires",
+    "aiResponseLabel": "Assistant IA",
+    "aiThinking": "Réflexion",
+    "aiNewChat": "Nouveau chat"
   },
   "demo": {
     "title": "Mode démo",
