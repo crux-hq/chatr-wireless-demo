@@ -27,7 +27,7 @@ export const PREVIEW_JOURNEYS: PreviewJourney[] = [
         title: 'Home at a glance',
         highlight:
           'Balance with Auto-Pay status, plan inclusions and a live data ring greet the customer the moment they sign in.',
-        route: '/',
+        route: '/(tabs)',
       },
       {
         title: 'Usage monitoring',

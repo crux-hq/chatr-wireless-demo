@@ -14,6 +14,7 @@ import { isPreviewNavigateMessage } from '@/lib/preview-frame';
 import { useAppStore } from '@/lib/store';
 import { colors } from '@/lib/theme/colors';
 import { fontAssets } from '@/lib/theme/typography';
+import { DemoAccessGate } from '@/components/layout/DemoAccessGate';
 import { JourneyFab } from '@/components/layout/JourneyFab';
 SplashScreen.preventAutoHideAsync();
 
@@ -105,9 +106,16 @@ function AuthGate({ children }: { children: React.ReactNode }) {
     if (isLoading) return;
     // Keep the presenter shell mounted — never redirect away from /preview.
     if (inPreview) return;
-    // The device iframe is driven by /preview soft-nav + bootstrap. AuthGate
-    // redirects here race Expo Router segment updates and bounce guests to /(auth).
-    if (inIframe) return;
+    // The device iframe is driven by /preview soft-nav + bootstrap. Skip guest
+    // guards so parent-driven navigation is not overridden — but still promote
+    // signed-in users off the auth landing after bootstrap hydrate completes.
+    if (inIframe) {
+      const inAuth = segments[0] === '(auth)';
+      if (isAuthenticated && inAuth) {
+        router.replace('/(tabs)');
+      }
+      return;
+    }
     // Wait until Expo Router has resolved the initial route; empty segments would
     // incorrectly look "private" and bounce guests to the auth landing.
     if (segments.length === 0) return;
@@ -168,52 +176,54 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <I18nextProvider i18n={i18n}>
-        <AuthGate>
-          <View style={{ flex: 1 }}>
-            <StatusBar style="light" />
-            <Stack screenOptions={stackScreenOptions}>
-              <Stack.Screen name="index" />
-              <Stack.Screen name="home" options={{ headerShown: false }} />
-              <Stack.Screen name="plans/index" options={stackCardOptions} />
-              <Stack.Screen name="add-ons/index" options={stackCardOptions} />
-              <Stack.Screen name="(auth)" />
-              <Stack.Screen name="(tabs)" />
-              <Stack.Screen name="plan/[id]" options={stackCardOptions} />
-              <Stack.Screen name="top-up/index" options={stackCardOptions} />
-              <Stack.Screen name="top-up/guest" options={stackCardOptions} />
-              <Stack.Screen name="top-up/pay" options={stackCardOptions} />
-              <Stack.Screen name="top-up/auto-pay" options={stackCardOptions} />
-              <Stack.Screen name="top-up/cards" options={stackCardOptions} />
-              <Stack.Screen name="top-up/success" options={{ presentation: 'modal', headerShown: false }} />
-              <Stack.Screen name="activate/index" options={{ headerShown: false }} />
-              <Stack.Screen name="buy-sim/index" options={stackCardOptions} />
-              <Stack.Screen name="activate/sim" options={{ headerShown: false }} />
-              <Stack.Screen name="activate/plan" options={{ headerShown: false }} />
-              <Stack.Screen name="activate/account" options={{ headerShown: false }} />
-              <Stack.Screen name="activate/success" options={{ headerShown: false }} />
-              <Stack.Screen name="profile/index" options={stackCardOptions} />
-              <Stack.Screen name="profile/edit" options={stackCardOptions} />
-              <Stack.Screen name="profile/password" options={stackCardOptions} />
-              <Stack.Screen name="coverage/index" options={stackCardOptions} />
-              <Stack.Screen name="stores/index" options={stackCardOptions} />
-              <Stack.Screen name="support/index" options={stackCardOptions} />
-              <Stack.Screen name="support/[category]" options={stackCardOptions} />
-              <Stack.Screen name="phones/index" options={stackCardOptions} />
-              <Stack.Screen name="phones/[id]" options={stackCardOptions} />
-              <Stack.Screen name="cart/index" options={stackCardOptions} />
-              <Stack.Screen name="checkout/sim" options={stackCardOptions} />
-              <Stack.Screen name="checkout/phone-number" options={stackCardOptions} />
-              <Stack.Screen name="checkout/details" options={stackCardOptions} />
-              <Stack.Screen name="checkout/payment" options={stackCardOptions} />
-              <Stack.Screen name="checkout/review" options={stackCardOptions} />
-              <Stack.Screen name="checkout/success" options={{ headerShown: false }} />
-              <Stack.Screen name="preview" options={{ headerShown: false }} />
-              <Stack.Screen name="demo" options={{ presentation: 'modal', headerShown: false }} />
-              <Stack.Screen name="addons/[id]" options={stackCardOptions} />
-            </Stack>
-            <JourneyFab />
-          </View>
-        </AuthGate>
+        <DemoAccessGate>
+          <AuthGate>
+            <View style={{ flex: 1 }}>
+              <StatusBar style="light" />
+              <Stack screenOptions={stackScreenOptions}>
+                <Stack.Screen name="index" />
+                <Stack.Screen name="home" options={{ headerShown: false }} />
+                <Stack.Screen name="plans/index" options={stackCardOptions} />
+                <Stack.Screen name="add-ons/index" options={stackCardOptions} />
+                <Stack.Screen name="(auth)" />
+                <Stack.Screen name="(tabs)" />
+                <Stack.Screen name="plan/[id]" options={stackCardOptions} />
+                <Stack.Screen name="top-up/index" options={stackCardOptions} />
+                <Stack.Screen name="top-up/guest" options={stackCardOptions} />
+                <Stack.Screen name="top-up/pay" options={stackCardOptions} />
+                <Stack.Screen name="top-up/auto-pay" options={stackCardOptions} />
+                <Stack.Screen name="top-up/cards" options={stackCardOptions} />
+                <Stack.Screen name="top-up/success" options={{ presentation: 'modal', headerShown: false }} />
+                <Stack.Screen name="activate/index" options={{ headerShown: false }} />
+                <Stack.Screen name="buy-sim/index" options={stackCardOptions} />
+                <Stack.Screen name="activate/sim" options={{ headerShown: false }} />
+                <Stack.Screen name="activate/plan" options={{ headerShown: false }} />
+                <Stack.Screen name="activate/account" options={{ headerShown: false }} />
+                <Stack.Screen name="activate/success" options={{ headerShown: false }} />
+                <Stack.Screen name="profile/index" options={stackCardOptions} />
+                <Stack.Screen name="profile/edit" options={stackCardOptions} />
+                <Stack.Screen name="profile/password" options={stackCardOptions} />
+                <Stack.Screen name="coverage/index" options={stackCardOptions} />
+                <Stack.Screen name="stores/index" options={stackCardOptions} />
+                <Stack.Screen name="support/index" options={stackCardOptions} />
+                <Stack.Screen name="support/[category]" options={stackCardOptions} />
+                <Stack.Screen name="phones/index" options={stackCardOptions} />
+                <Stack.Screen name="phones/[id]" options={stackCardOptions} />
+                <Stack.Screen name="cart/index" options={stackCardOptions} />
+                <Stack.Screen name="checkout/sim" options={stackCardOptions} />
+                <Stack.Screen name="checkout/phone-number" options={stackCardOptions} />
+                <Stack.Screen name="checkout/details" options={stackCardOptions} />
+                <Stack.Screen name="checkout/payment" options={stackCardOptions} />
+                <Stack.Screen name="checkout/review" options={stackCardOptions} />
+                <Stack.Screen name="checkout/success" options={{ headerShown: false }} />
+                <Stack.Screen name="preview" options={{ headerShown: false }} />
+                <Stack.Screen name="demo" options={{ presentation: 'modal', headerShown: false }} />
+                <Stack.Screen name="addons/[id]" options={stackCardOptions} />
+              </Stack>
+              <JourneyFab />
+            </View>
+          </AuthGate>
+        </DemoAccessGate>
       </I18nextProvider>
     </SafeAreaProvider>
   );

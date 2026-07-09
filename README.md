@@ -10,6 +10,10 @@ npm start          # Expo dev server — scan QR for device
 npm run web        # Web browser
 ```
 
+## Access password
+
+The app and `/preview` are gated on every page load. Enter password: `andro1dapp`
+
 ## Demo accounts
 
 | Email | Scenario |

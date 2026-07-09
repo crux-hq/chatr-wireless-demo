@@ -28,6 +28,7 @@ import {
   getPreviewIframeSrc,
   postPreviewNavigate,
   queuePreviewBootstrap,
+  withPreviewEmbed,
 } from '@/lib/preview-frame';
 
 type TransitionDirection = 'forward' | 'back';
@@ -107,8 +108,8 @@ function PreviewIframe({ src, remountKey }: { src: string; remountKey: string })
         style.textContent = HIDE_SCROLLBAR_CSS;
         doc.head.appendChild(style);
       }
-      // Apply any step change that arrived before the iframe finished loading.
-      if (appliedSrcRef.current !== srcRef.current && iframe.contentWindow) {
+      // Always soft-navigate after load so bootstrap auth finishes before routing.
+      if (iframe.contentWindow) {
         appliedSrcRef.current = srcRef.current;
         postPreviewNavigate(iframe.contentWindow, srcRef.current);
       }
@@ -301,7 +302,10 @@ export function DeviceFramePreview() {
   const [direction, setDirection] = useState<TransitionDirection>('forward');
 
   const defaultSrc = useMemo(() => getPreviewIframeSrc(path), [path]);
-  const iframeSrc = walkthrough ? walkthrough.journey.steps[walkthrough.stepIndex].route : defaultSrc;
+  const iframeSrc = useMemo(() => {
+    const route = walkthrough ? walkthrough.journey.steps[walkthrough.stepIndex].route : defaultSrc;
+    return withPreviewEmbed(route);
+  }, [walkthrough, defaultSrc]);
   // Remount only when starting a journey (fresh bootstrap). Step changes navigate
   // the existing iframe so AuthGate hydrate cannot drop the deep link.
   const iframeRemountKey = walkthrough ? `journey-${walkthrough.session}` : `default-${defaultSrc}`;

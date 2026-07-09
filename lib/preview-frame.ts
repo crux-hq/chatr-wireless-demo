@@ -9,6 +9,9 @@ export const PREVIEW_BOOTSTRAP_KEY = 'chatr-preview-bootstrap';
 /** postMessage type: parent /preview asks the device iframe to soft-navigate. */
 export const PREVIEW_NAVIGATE_MESSAGE = 'chatr-preview-navigate';
 
+/** Query flag: device iframe loads — skip the demo password gate. */
+export const PREVIEW_EMBED_PARAM = 'embed';
+
 export type PreviewBootstrap = {
   scenarioId?: DemoScenarioId;
   signOutFirst?: boolean;
@@ -57,6 +60,23 @@ export function postPreviewNavigate(target: Window, href: string) {
   );
 }
 
+/** Mark a URL as the /preview device iframe so DemoAccessGate never paints. */
+export function withPreviewEmbed(href: string): string {
+  const hashIndex = href.indexOf('#');
+  const withoutHash = hashIndex >= 0 ? href.slice(0, hashIndex) : href;
+  const hash = hashIndex >= 0 ? href.slice(hashIndex) : '';
+  const [path, query = ''] = withoutHash.split('?');
+  const params = new URLSearchParams(query);
+  params.set(PREVIEW_EMBED_PARAM, '1');
+  return `${path}?${params.toString()}${hash}`;
+}
+
+export function hasPreviewEmbedParam(search?: string): boolean {
+  if (typeof window === 'undefined' && search == null) return false;
+  const query = search ?? window.location.search;
+  return new URLSearchParams(query).get(PREVIEW_EMBED_PARAM) === '1';
+}
+
 /** Pixel dimensions of assets/images/Camera.png */
 export const CAMERA_WIDTH = 96;
 export const CAMERA_HEIGHT = 28;
@@ -101,8 +121,8 @@ export const IFRAME_VIEWPORT_HEIGHT = (SCREEN_LAYOUT.height - STATUS_BAR_HEIGHT)
 export function getPreviewIframeSrc(path?: string | string[]) {
   const route = Array.isArray(path) ? path[0] : path;
   if (!route || route === '/') {
-    return '/';
+    return withPreviewEmbed('/');
   }
   const normalized = route.startsWith('/') ? route : `/${route}`;
-  return normalized;
+  return withPreviewEmbed(normalized);
 }
