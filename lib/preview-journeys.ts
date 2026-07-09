@@ -128,7 +128,8 @@ export const PREVIEW_JOURNEYS: PreviewJourney[] = [
       },
       {
         title: 'Enroll in Auto-Pay',
-        highlight: 'One toggle unlocks +5 GB of bonus data and hands-off renewals with saved cards.',
+        highlight:
+          'Overview of how Auto-Pay works, then confirm enrollment — payment on file is charged on the anniversary date.',
         route: '/top-up/auto-pay',
       },
     ],
