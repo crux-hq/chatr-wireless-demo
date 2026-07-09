@@ -27,9 +27,11 @@ import {
   STATUS_BAR_HEIGHT,
   getPreviewIframeSrc,
   postPreviewNavigate,
-  queuePreviewBootstrap,
+  postPreviewSession,
   withPreviewEmbed,
+  withoutPreviewEmbed,
 } from '@/lib/preview-frame';
+import type { DemoScenarioId } from '@/lib/mock/types';
 
 type TransitionDirection = 'forward' | 'back';
 
@@ -67,25 +69,48 @@ const HIDE_SCROLLBAR_CSS = `
 
 const PANEL_WIDTH = 320;
 
-function PreviewIframe({ src, remountKey }: { src: string; remountKey: string }) {
+function PreviewIframe({
+  src,
+  bootSrc,
+  sessionRequest,
+}: {
+  /** Soft-nav target (no embed flag). */
+  src: string;
+  /** Initial iframe document URL (with embed=1). */
+  bootSrc: string;
+  /** When set, apply scenario/sign-out then navigate without remounting. */
+  sessionRequest: {
+    id: number;
+    href: string;
+    scenarioId?: DemoScenarioId;
+    signOutFirst?: boolean;
+  } | null;
+}) {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
+  const [visible, setVisible] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const appliedSrcRef = useRef<string | null>(null);
   const readyRef = useRef(false);
+  const appliedSessionIdRef = useRef(0);
   const srcRef = useRef(src);
   srcRef.current = src;
+  const bootSrcRef = useRef(bootSrc);
+  bootSrcRef.current = bootSrc;
+  const sessionRef = useRef(sessionRequest);
+  sessionRef.current = sessionRequest;
 
+  // Mount once — never remount on journey changes (that recreated DemoAccessGate).
   useEffect(() => {
     if (!container) return;
 
     readyRef.current = false;
+    setVisible(false);
     const iframe = document.createElement('iframe');
-    iframe.src = srcRef.current;
-    appliedSrcRef.current = srcRef.current;
+    iframe.src = bootSrcRef.current;
+    appliedSrcRef.current = withoutPreviewEmbed(bootSrcRef.current);
     iframe.title = 'My chatr app preview';
     iframe.setAttribute('allow', 'geolocation');
-    // Render at the real device's logical viewport (430px) and scale down to fit
-    // the frame, so element sizes match a physical iPhone.
+    // Keep opacity 0 until load so a remounted gate cannot flash through.
     iframe.style.cssText = [
       'position:absolute',
       'top:0',
@@ -98,6 +123,7 @@ function PreviewIframe({ src, remountKey }: { src: string; remountKey: string })
       'margin:0',
       'padding:0',
       'background:#fff',
+      'opacity:0',
     ].join(';');
 
     const onLoad = () => {
@@ -108,11 +134,23 @@ function PreviewIframe({ src, remountKey }: { src: string; remountKey: string })
         style.textContent = HIDE_SCROLLBAR_CSS;
         doc.head.appendChild(style);
       }
-      // Always soft-navigate after load so bootstrap auth finishes before routing.
-      if (iframe.contentWindow) {
+
+      const pendingSession = sessionRef.current;
+      if (pendingSession && iframe.contentWindow && pendingSession.id !== appliedSessionIdRef.current) {
+        appliedSessionIdRef.current = pendingSession.id;
+        appliedSrcRef.current = pendingSession.href;
+        postPreviewSession(iframe.contentWindow, {
+          href: pendingSession.href,
+          scenarioId: pendingSession.scenarioId,
+          signOutFirst: pendingSession.signOutFirst,
+        });
+      } else if (iframe.contentWindow && appliedSrcRef.current !== srcRef.current) {
         appliedSrcRef.current = srcRef.current;
         postPreviewNavigate(iframe.contentWindow, srcRef.current);
       }
+
+      iframe.style.opacity = '1';
+      setVisible(true);
     };
 
     iframe.addEventListener('load', onLoad);
@@ -126,16 +164,31 @@ function PreviewIframe({ src, remountKey }: { src: string; remountKey: string })
       appliedSrcRef.current = null;
       readyRef.current = false;
     };
-  }, [container, remountKey]);
+  }, [container]);
 
+  // Live session bootstrap (journey start) without remounting the iframe.
+  useEffect(() => {
+    if (!sessionRequest) return;
+    if (sessionRequest.id === appliedSessionIdRef.current) return;
+    const win = iframeRef.current?.contentWindow;
+    if (!readyRef.current || !win) return;
+    appliedSessionIdRef.current = sessionRequest.id;
+    appliedSrcRef.current = sessionRequest.href;
+    postPreviewSession(win, {
+      href: sessionRequest.href,
+      scenarioId: sessionRequest.scenarioId,
+      signOutFirst: sessionRequest.signOutFirst,
+    });
+  }, [sessionRequest]);
+
+  // Soft-navigate step changes on the existing iframe.
   useEffect(() => {
     const iframe = iframeRef.current;
     const win = iframe?.contentWindow;
     if (!iframe || !win || appliedSrcRef.current === src) return;
-    if (!readyRef.current) {
-      // Keep desired src; onLoad will soft-navigate once the bridge is up.
-      return;
-    }
+    if (!readyRef.current) return;
+    // A pending session owns navigation until applied.
+    if (sessionRef.current && sessionRef.current.id !== appliedSessionIdRef.current) return;
     appliedSrcRef.current = src;
     postPreviewNavigate(win, src);
   }, [src]);
@@ -144,7 +197,7 @@ function PreviewIframe({ src, remountKey }: { src: string; remountKey: string })
     <View
       // @ts-expect-error — web-only ref to mount a DOM iframe
       ref={setContainer}
-      style={StyleSheet.absoluteFill}
+      style={[StyleSheet.absoluteFill, { opacity: visible ? 1 : 0 }]}
     />
   );
 }
@@ -192,8 +245,15 @@ function StatusBar() {
 type WalkthroughState = {
   journey: PreviewJourney;
   stepIndex: number;
-  /** Bumped on every journey start so the iframe reloads with fresh app state. */
+  /** Bumped on every journey start so the panel animates and session applies. */
   session: number;
+};
+
+type SessionRequest = {
+  id: number;
+  href: string;
+  scenarioId?: DemoScenarioId;
+  signOutFirst?: boolean;
 };
 
 function JourneyMenu({ onSelect }: { onSelect: (journey: PreviewJourney) => void }) {
@@ -300,26 +360,26 @@ export function DeviceFramePreview() {
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
   const [walkthrough, setWalkthrough] = useState<WalkthroughState | null>(null);
   const [direction, setDirection] = useState<TransitionDirection>('forward');
+  const [sessionRequest, setSessionRequest] = useState<SessionRequest | null>(null);
 
   const defaultSrc = useMemo(() => getPreviewIframeSrc(path), [path]);
-  const iframeSrc = useMemo(() => {
-    const route = walkthrough ? walkthrough.journey.steps[walkthrough.stepIndex].route : defaultSrc;
-    return withPreviewEmbed(route);
-  }, [walkthrough, defaultSrc]);
-  // Remount only when starting a journey (fresh bootstrap). Step changes navigate
-  // the existing iframe so AuthGate hydrate cannot drop the deep link.
-  const iframeRemountKey = walkthrough ? `journey-${walkthrough.session}` : `default-${defaultSrc}`;
+  const navSrc = useMemo(() => {
+    const route = walkthrough ? walkthrough.journey.steps[walkthrough.stepIndex].route : '/';
+    return withoutPreviewEmbed(route.startsWith('/') ? route : `/${route}`);
+  }, [walkthrough]);
   const panelKey = walkthrough
     ? `${walkthrough.journey.id}-${walkthrough.stepIndex}-${walkthrough.session}`
     : 'menu';
 
   const startJourney = useCallback((journey: PreviewJourney) => {
-    // Apply scenario/sign-out inside the iframe only — mutating the parent store
-    // flips AuthGate isLoading and unmounts /preview (looks like a redirect to /).
-    queuePreviewBootstrap({
+    // Soft-bootstrap inside the live iframe — never remount (that flashed DemoAccessGate).
+    const href = journey.steps[0]?.route ?? '/';
+    setSessionRequest((prev) => ({
+      id: (prev?.id ?? 0) + 1,
+      href,
       scenarioId: journey.scenarioId,
       signOutFirst: journey.signOutFirst,
-    });
+    }));
     setDirection('forward');
     setWalkthrough((prev) => ({ journey, stepIndex: 0, session: (prev?.session ?? 0) + 1 }));
   }, []);
@@ -395,7 +455,7 @@ export function DeviceFramePreview() {
             ]}>
             <StatusBar />
             <View style={styles.appArea}>
-              <PreviewIframe remountKey={iframeRemountKey} src={iframeSrc} />
+              <PreviewIframe src={navSrc} bootSrc={defaultSrc} sessionRequest={sessionRequest} />
             </View>
           </View>
 

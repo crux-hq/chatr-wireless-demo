@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/Button';
 import { ChatrLogo } from '@/components/ui/ChatrLogo';
 import {
   isDemoAccessUnlocked,
+  shouldSkipDemoAccessGate,
   unlockDemoAccess,
   verifyDemoAccessPassword,
 } from '@/lib/demo-access';
@@ -28,10 +29,19 @@ type DemoAccessGateProps = {
 };
 
 export function DemoAccessGate({ children }: DemoAccessGateProps) {
+  // Skip paths (iframe / embed / session) unlock immediately so the gate never paints.
   const [unlocked, setUnlocked] = useState(() => isDemoAccessUnlocked());
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  // Recover if the first paint raced ahead of embed/iframe detection.
+  useEffect(() => {
+    if (unlocked) return;
+    if (shouldSkipDemoAccessGate() || isDemoAccessUnlocked()) {
+      setUnlocked(true);
+    }
+  }, [unlocked]);
 
   const handleSubmit = useCallback(() => {
     if (submitting) return;

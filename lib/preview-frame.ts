@@ -9,6 +9,9 @@ export const PREVIEW_BOOTSTRAP_KEY = 'chatr-preview-bootstrap';
 /** postMessage type: parent /preview asks the device iframe to soft-navigate. */
 export const PREVIEW_NAVIGATE_MESSAGE = 'chatr-preview-navigate';
 
+/** postMessage type: apply scenario/sign-out then soft-navigate without remounting. */
+export const PREVIEW_SESSION_MESSAGE = 'chatr-preview-session';
+
 /** Query flag: device iframe loads — skip the demo password gate. */
 export const PREVIEW_EMBED_PARAM = 'embed';
 
@@ -20,6 +23,13 @@ export type PreviewBootstrap = {
 export type PreviewNavigateMessage = {
   type: typeof PREVIEW_NAVIGATE_MESSAGE;
   href: string;
+};
+
+export type PreviewSessionMessage = {
+  type: typeof PREVIEW_SESSION_MESSAGE;
+  href: string;
+  scenarioId?: DemoScenarioId;
+  signOutFirst?: boolean;
 };
 
 /** Queue auth/scenario setup for the next iframe load (same-origin localStorage —
@@ -52,10 +62,27 @@ export function isPreviewNavigateMessage(data: unknown): data is PreviewNavigate
   return message.type === PREVIEW_NAVIGATE_MESSAGE && typeof message.href === 'string';
 }
 
+export function isPreviewSessionMessage(data: unknown): data is PreviewSessionMessage {
+  if (!data || typeof data !== 'object') return false;
+  const message = data as Partial<PreviewSessionMessage>;
+  return message.type === PREVIEW_SESSION_MESSAGE && typeof message.href === 'string';
+}
+
 /** Ask a same-origin preview iframe to router.replace without a full reload. */
 export function postPreviewNavigate(target: Window, href: string) {
   target.postMessage(
     { type: PREVIEW_NAVIGATE_MESSAGE, href } satisfies PreviewNavigateMessage,
+    window.location.origin,
+  );
+}
+
+/** Apply auth/scenario in the live iframe, then soft-navigate — no remount. */
+export function postPreviewSession(
+  target: Window,
+  session: Omit<PreviewSessionMessage, 'type'>,
+) {
+  target.postMessage(
+    { type: PREVIEW_SESSION_MESSAGE, ...session } satisfies PreviewSessionMessage,
     window.location.origin,
   );
 }
@@ -69,6 +96,19 @@ export function withPreviewEmbed(href: string): string {
   const params = new URLSearchParams(query);
   params.set(PREVIEW_EMBED_PARAM, '1');
   return `${path}?${params.toString()}${hash}`;
+}
+
+/** Strip the embed flag so Expo Router soft-nav gets a clean path. */
+export function withoutPreviewEmbed(href: string): string {
+  const hashIndex = href.indexOf('#');
+  const withoutHash = hashIndex >= 0 ? href.slice(0, hashIndex) : href;
+  const hash = hashIndex >= 0 ? href.slice(hashIndex) : '';
+  const [path, query = ''] = withoutHash.split('?');
+  if (!query) return `${path}${hash}`;
+  const params = new URLSearchParams(query);
+  params.delete(PREVIEW_EMBED_PARAM);
+  const next = params.toString();
+  return `${path}${next ? `?${next}` : ''}${hash}`;
 }
 
 export function hasPreviewEmbedParam(search?: string): boolean {

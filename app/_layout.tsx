@@ -10,8 +10,14 @@ import * as SplashScreen from 'expo-splash-screen';
 import i18n from '@/lib/i18n';
 import { applyDefaultFontFamily } from '@/lib/setup-fonts';
 import { getPreviewCheckoutDraftSeed } from '@/lib/checkout';
-import { isPreviewNavigateMessage } from '@/lib/preview-frame';
+import {
+  isPreviewNavigateMessage,
+  isPreviewSessionMessage,
+  withoutPreviewEmbed,
+} from '@/lib/preview-frame';
 import { useAppStore } from '@/lib/store';
+import { getUserForScenario } from '@/lib/demo-scenarios';
+import type { DemoScenarioId } from '@/lib/mock/types';
 import { colors } from '@/lib/theme/colors';
 import { fontAssets } from '@/lib/theme/typography';
 import { DemoAccessGate } from '@/components/layout/DemoAccessGate';
@@ -48,17 +54,44 @@ const PUBLIC_ROOTS = new Set([
 ]);
 
 function applyPreviewNavigate(href: string, router: ReturnType<typeof useRouter>) {
-  const seed = getPreviewCheckoutDraftSeed(href);
+  const cleanHref = withoutPreviewEmbed(href);
+  const seed = getPreviewCheckoutDraftSeed(cleanHref);
   if (seed) {
     useAppStore.getState().setActivationDraft(seed);
   }
-  router.replace(href as Href);
+  router.replace(cleanHref as Href);
+}
+
+function applyPreviewSession(
+  data: { href: string; scenarioId?: DemoScenarioId; signOutFirst?: boolean },
+  router: ReturnType<typeof useRouter>,
+) {
+  const store = useAppStore.getState();
+  if (data.signOutFirst) {
+    store.signOut();
+  }
+  if (data.scenarioId) {
+    const user = getUserForScenario(data.scenarioId);
+    useAppStore.setState({
+      isAuthenticated: true,
+      user,
+      currentScenario: data.scenarioId,
+      isLoading: false,
+    });
+    void store.persist();
+  }
+  applyPreviewNavigate(data.href, router);
 }
 
 function PreviewNavigateBridge() {
   const router = useRouter();
   const isLoading = useAppStore((s) => s.isLoading);
   const pendingHref = useRef<string | null>(null);
+  const pendingSession = useRef<{
+    href: string;
+    scenarioId?: DemoScenarioId;
+    signOutFirst?: boolean;
+  } | null>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined' || window.self === window.top) return;
@@ -69,6 +102,20 @@ function PreviewNavigateBridge() {
 
     const onMessage = (event: MessageEvent) => {
       if (event.origin !== window.location.origin) return;
+
+      if (isPreviewSessionMessage(event.data)) {
+        if (useAppStore.getState().isLoading) {
+          pendingSession.current = {
+            href: event.data.href,
+            scenarioId: event.data.scenarioId,
+            signOutFirst: event.data.signOutFirst,
+          };
+          return;
+        }
+        applyPreviewSession(event.data, router);
+        return;
+      }
+
       if (!isPreviewNavigateMessage(event.data)) return;
       if (useAppStore.getState().isLoading) {
         pendingHref.current = event.data.href;
@@ -85,7 +132,17 @@ function PreviewNavigateBridge() {
     if (typeof window === 'undefined' || window.self === window.top) return;
     const path = window.location.pathname.replace(/\/$/, '') || '/';
     if (path === '/preview') return;
-    if (isLoading || !pendingHref.current) return;
+    if (isLoading) return;
+
+    if (pendingSession.current) {
+      const session = pendingSession.current;
+      pendingSession.current = null;
+      pendingHref.current = null;
+      applyPreviewSession(session, router);
+      return;
+    }
+
+    if (!pendingHref.current) return;
     const href = pendingHref.current;
     pendingHref.current = null;
     applyPreviewNavigate(href, router);
